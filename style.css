@@ -1,0 +1,133 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  height: 100vh;
+  background: linear-gradient(135deg, #2b5876, #4e4376);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.login-container {
+  background: #ffffff;
+  padding: 40px 50px;
+  border-radius: 16px;
+  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.2);
+  width: 380px;
+  max-width: 90%;
+  text-align: center;
+}
+
+.logo {
+  font-size: 2.2rem;       
+  font-weight: 800;
+  color: #2b5876;
+  margin-bottom: 20px;
+  letter-spacing: 1px;
+}
+
+.login-container h2 {
+  font-size: 1.4rem;
+  color: #444;
+  margin-bottom: 30px;
+}
+
+.input-group {
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.input-group label {
+  display: block;
+  font-weight: 600;
+  margin-bottom: 8px;
+  color: #555;
+}
+
+.input-group input {
+  width: 100%;
+  padding: 12px 15px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 1rem;
+  transition: 0.3s ease;
+}
+
+.input-group input:focus {
+  border-color: #2b5876;
+  outline: none;
+  box-shadow: 0 0 6px rgba(43, 88, 118, 0.3);
+}
+
+.login-btn {
+  background: #2b5876;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  width: 100%;
+  padding: 12px 0;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s ease;
+}
+
+.login-btn:hover {
+  background: #4e4376;
+}
+
+.alert {
+  margin-bottom: 15px;
+  padding: 12px;
+  border-radius: 6px;
+  font-weight: 600;
+  text-align: center;
+}
+
+.alert.success {
+  background-color: #e6ffed;
+  color: #2b7a0b;
+  border: 1px solid #2b7a0b;
+}
+
+.alert.error {
+  background-color: #ffeaea;
+  color: #a30000;
+  border: 1px solid #a30000;
+}
+
+
+.footer-text {
+  margin-top: 25px;
+  font-size: 0.9rem;
+  color: #777;
+}
+
+.footer-text a {
+  color: #2b5876;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.footer-text a:hover {
+  text-decoration: underline;
+}
+
+@media (max-width: 480px) {
+  .login-container {
+    padding: 30px 25px;
+  }
+
+  .logo {
+    font-size: 1.8rem;
+  }
+
+  .login-container h2 {
+    font-size: 1.2rem;
+  }
+}
