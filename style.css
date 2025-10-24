@@ -21,6 +21,7 @@ body {
   width: 380px;
   max-width: 90%;
   text-align: center;
+  size: 0px;
 }
 
 .logo {
@@ -75,6 +76,7 @@ body {
   font-weight: 600;
   cursor: pointer;
   transition: 0.3s ease;
+  text-decoration: none;
 }
 
 .login-btn:hover {
