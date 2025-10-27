@@ -19,9 +19,10 @@ body {
   border-radius: 16px;
   box-shadow: 0 6px 25px rgba(0, 0, 0, 0.2);
   width: 380px;
+  height: 500px;
   max-width: 90%;
   text-align: center;
-  size: 0px;
+  font-size: smaller;
 }
 
 .logo {
@@ -82,27 +83,6 @@ body {
 .login-btn:hover {
   background: #4e4376;
 }
-
-.alert {
-  margin-bottom: 15px;
-  padding: 12px;
-  border-radius: 6px;
-  font-weight: 600;
-  text-align: center;
-}
-
-.alert.success {
-  background-color: #e6ffed;
-  color: #2b7a0b;
-  border: 1px solid #2b7a0b;
-}
-
-.alert.error {
-  background-color: #ffeaea;
-  color: #a30000;
-  border: 1px solid #a30000;
-}
-
 
 .footer-text {
   margin-top: 25px;

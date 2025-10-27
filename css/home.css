@@ -1,69 +1,56 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: Arial, sans-serif;
 }
 
 body {
-    background: #ffffff; 
-    color: #000000; 
-    display: flex;
-    flex-direction: column;
-    min-height: 100vh;
-}
-
-header {
-    display: flex;
-    align-items: center;
-    gap: 25px;
-    padding: 20px 50px;
-    background: linear-gradient(90deg, #1e3c72, #2a5298);
-    color: #fff;
-}
-
-header .logo {
-    width: 180px; 
-    height: auto;
-}
-
-.committee-name {
-    font-size: 36px; 
-    font-weight: bold;
+  background: #ffffff;
+  color: #000000;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
 }
 
 main {
-    flex: 1; 
+  flex: 1;
 }
 
 .hero {
-    text-align: center;
-    padding: 80px 20px;
+  text-align: center;
+  padding: 80px 20px;
 }
 
 .hero h2 {
-    font-size: 32px;
-    color: #1e3c72;
-    margin-bottom: 20px;
+  font-size: 25px;
+  color: #1e3c72;
+  margin-bottom: 20px;
 }
 
 .hero p {
-    font-size: 18px;
-    max-width: 600px;
-    margin: 0 auto 30px auto;
+  font-size: 15px;
+  max-width: 600px;
+  margin: 0 auto 30px;
+}
+
+.image {
+width: 150px;
+height: 200px;
+padding-bottom:60px ;
 }
 
 .cta-btn {
-    background-color: #ff9900;
-    color: #000;
-    padding: 15px 30px;
-    border-radius: 8px;
-    font-size: 18px;
-    font-weight: bold;
-    text-decoration: none;
-    transition: background 0.3s;
+  background-color: #ff9900;
+  color: #000;
+  padding: 15px 30px;
+  border-radius: 8px;
+  font-size: 15px;
+  font-weight: bold;
+  text-decoration: none;
+  transition: background 0.3s;
 }
 
 .cta-btn:hover {
-    background-color: #e67e22;
+  background-color: #e67e22;
 }
