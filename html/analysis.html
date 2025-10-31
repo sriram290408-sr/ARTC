@@ -3,10 +3,12 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Analysis-page</title>
-    <link rel="icon" href="./assets/icon.png" />
+    <title>Analysis - ARTC</title>
+    <link rel="icon" href="../assets/icon.png" />
     <link rel="stylesheet" href="../css/nav-bar.css" />
+    <link rel="stylesheet" href="../css/analysis.css" />
   </head>
+
   <body>
     <header>
       <div class="header-left">
@@ -20,7 +22,7 @@
         <li><a href="./about.html">About</a></li>
         <li><a href="./laws.html">Laws</a></li>
         <li><a href="./committee.html">Committee</a></li>
-        <li><a href="./analysis.html">Analysis</a></li>
+        <li><a href="./analysis.html" class="active">Analysis</a></li>
         <li><a href="./schedule.html">Schedule</a></li>
         <li><a href="./article.html">Article</a></li>
         <li><a href="./report.html">Report</a></li>
@@ -29,12 +31,25 @@
       </ul>
     </nav>
 
-      <h2>Welcome to ARTC</h2>
+    <main class="analysis-container">
+      <section class="intro-card">
+        <h2>Complaint Analysis Dashboard</h2>
         <p>
-          Your safety and comfort are our priority. Report any ragging or
-          teasing incidents confidentially.
+          Here you can view the anti-ragging reports, visualize complaint
+          statistics, and download analysis data for reference.
         </p>
-        
+      </section>
+
+      <section class="download-section">
+        <h3>Download Reports</h3>
+        <div class="download-buttons">
+          <button class="btn btn-primary" onclick="downloadPDF()">Download PDF</button>
+          <button class="btn btn-ghost" onclick="downloadCSV()">Download CSV</button>
+        </div>
+      </section>
+    </main>
+
+    <footer>&copy; 2025 Anti-Ragging Committee. All Rights Reserved.</footer>
+
   </body>
-  <footer>&copy; 2025 Anti-Ragging Committee. All Rights Reserved.</footer>
 </html>

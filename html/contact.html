@@ -6,6 +6,7 @@
     <title>Contact-page</title>
     <link rel="icon" href="./assets/icon.png" />
     <link rel="stylesheet" href="../css/nav-bar.css" />
+    <link rel="stylesheet" href="../css/contact.css"/>
   </head>
   <body>
     <header>
@@ -28,13 +29,27 @@
         <li><a href="../index.html">Logout</a></li>
       </ul>
     </nav>
-
-      <h2>Welcome to ARTC</h2>
-        <p>
-          Your safety and comfort are our priority. Report any ragging or
-          teasing incidents confidentially.
-        </p>
         
+<section class="hero">
+  <div class="container">
+    <div class="card">
+      <div class="title">Contact & Complaint</div>
+      <div class="subtitle">Use this form to report incidents confidentially. Your safety is our priority.</div>
+    </div>
+  </div>
+</section>
+<main class="container" aria-label="Contact and complaint" style="margin-top:18px;">
+  <div class="card">
+    <form action="#" method="post" role="form" aria-label="Complaint form">
+      <div class="form-row"><label for="name">Your name (optional)</label><input id="name" name="name" placeholder="Student name"></div>
+      <div class="form-row"><label for="email">Email (optional)</label><input id="email" name="email" type="email" placeholder="you@example.com"></div>
+      <div class="form-row"><label for="details">Describe incident</label><textarea id="details" name="details" rows="5"></textarea></div>
+      <div style="display:flex; gap:10px;"><button class="btn btn-primary" type="submit">Submit</button><button class="btn btn-ghost" type="reset">Reset</button></div>
+    </form>
+    <p class="form-note">If you are in immediate danger, contact local authorities and speak to a trusted adult.</p>
+  </div>
+</main>
+
   </body>
   <footer>&copy; 2025 Anti-Ragging Committee. All Rights Reserved.</footer>
 </html>
