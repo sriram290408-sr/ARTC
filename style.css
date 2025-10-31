@@ -1,115 +1,112 @@
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  font-family: "Poppins", sans-serif;
+.hero-section {
+  height: 100vh;
+  background: url("./assets/no-ragging.png") center center / cover no-repeat;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
 }
 
-body {
-  height: 100vh;
-  background: linear-gradient(135deg, #2b5876, #4e4376);
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.55);
+}
+
+.hero-content {
+  position: relative;
+  z-index: 1;
+  padding: 20px;
+  max-width: 600px;
+  animation: fadeIn 1.5s ease;
+}
+
+.hero-content .logo {
+  width: 350px;
+  height: 350px;
+  margin-bottom: 15px;
+  border-radius: 50%;
+  box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+.hero-content h1 {
+  font-size: 36px;
+  margin-bottom: 10px;
+  letter-spacing: 1px;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+}
+
+.hero-content p {
+  font-size: 16px;
+  margin-bottom: 30px;
+  color: #f0f0f0;
+  line-height: 1.5;
+}
+
+.hero-buttons {
   display: flex;
   justify-content: center;
-  align-items: center;
+  gap: 14px;
 }
 
-.login-container {
-  background: #ffffff;
-  padding: 40px 50px;
-  border-radius: 16px;
-  box-shadow: 0 6px 25px rgba(0, 0, 0, 0.2);
-  width: 380px;
-  height: 500px;
-  max-width: 90%;
-  text-align: center;
-  font-size: smaller;
+.btn {
+  text-decoration: none;
+  padding: 10px 22px;
+  border-radius: 6px;
+  font-size: 15px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  transition: all 0.3s ease;
+  display: inline-block;
 }
 
-.logo {
-  font-size: 2.2rem;
-  font-weight: 800;
-  color: #2b5876;
-  margin-bottom: 20px;
-  letter-spacing: 1px;
-}
-
-.login-container h2 {
-  font-size: 1.4rem;
-  color: #444;
-  margin-bottom: 30px;
-}
-
-.input-group {
-  margin-bottom: 20px;
-  text-align: left;
-}
-
-.input-group label {
-  display: block;
-  font-weight: 600;
-  margin-bottom: 8px;
-  color: #555;
-}
-
-.input-group input {
-  width: 100%;
-  padding: 12px 15px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  font-size: 1rem;
-  transition: 0.3s ease;
-}
-
-.input-group input:focus {
-  border-color: #2b5876;
-  outline: none;
-  box-shadow: 0 0 6px rgba(43, 88, 118, 0.3);
-}
-
-.login-btn {
-  background: #2b5876;
+.btn-primary {
+  background: #0077ff;
   color: #fff;
-  border: none;
-  border-radius: 8px;
-  width: 100%;
-  padding: 12px 0;
-  font-size: 1.1rem;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.3s ease;
-  text-decoration: none;
+  box-shadow: 0 3px 10px rgba(0, 119, 255, 0.4);
 }
 
-.login-btn:hover {
-  background: #4e4376;
+.btn-primary:hover {
+  background: #005fcc;
+  transform: translateY(-2px);
 }
 
-.footer-text {
-  margin-top: 25px;
-  font-size: 0.9rem;
-  color: #777;
+.btn-outline {
+  border: 2px solid #fff;
+  color: #fff;
+  background: transparent;
 }
 
-.footer-text a {
-  color: #2b5876;
-  text-decoration: none;
-  font-weight: 600;
+.btn-outline:hover {
+  background: #fff;
+  color: #0077ff;
+  transform: translateY(-2px);
 }
 
-.footer-text a:hover {
-  text-decoration: underline;
-}
-
-@media (max-width: 480px) {
-  .login-container {
-    padding: 30px 25px;
+@media (max-width: 768px) {
+  .hero-content h1 {
+    font-size: 26px;
   }
 
-  .logo {
-    font-size: 1.8rem;
+  .hero-content p {
+    font-size: 14px;
   }
 
-  .login-container h2 {
-    font-size: 1.2rem;
+  .btn {
+    font-size: 14px;
+    padding: 9px 18px;
+  }
+
+  .hero-buttons {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .hero-content .logo {
+    width: 70px;
+    height: 70px;
   }
 }
