@@ -1,13 +1,19 @@
+/* ===== General Reset ===== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+/* ===== Hero Section ===== */
 .hero-section {
+  position: relative;
   height: 100vh;
-  background: url("./assets/no-ragging.png") center center / cover no-repeat;
+  background: url("./assets/bg.png") no-repeat center center/cover;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #fff;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
 }
 
 .overlay {
@@ -16,62 +22,51 @@
   background: rgba(0, 0, 0, 0.55);
 }
 
+/* ===== Hero Content ===== */
 .hero-content {
   position: relative;
-  z-index: 1;
-  padding: 20px;
-  max-width: 600px;
-  animation: fadeIn 1.5s ease;
+  z-index: 2;
+  text-align: center;
+  color: #fff;
 }
 
-.hero-content .logo {
-  width: 350px;
-  height: 350px;
-  margin-bottom: 15px;
-  border-radius: 50%;
-  box-shadow: 0 0 20px rgba(255, 255, 255, 0.3);
+/* ===== Logo ===== */
+.logo {
+  width: 300px;
+  height: auto;
+  margin-bottom: 2rem;
+  transition: transform 0.3s ease;
 }
 
-.hero-content h1 {
-  font-size: 36px;
-  margin-bottom: 10px;
-  letter-spacing: 1px;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+.logo:hover {
+  transform: scale(1.05);
 }
 
-.hero-content p {
-  font-size: 16px;
-  margin-bottom: 30px;
-  color: #f0f0f0;
-  line-height: 1.5;
-}
-
+/* ===== Buttons ===== */
 .hero-buttons {
   display: flex;
+  gap: 20px;
   justify-content: center;
-  gap: 14px;
 }
 
 .btn {
   text-decoration: none;
-  padding: 10px 22px;
-  border-radius: 6px;
-  font-size: 15px;
+  padding: 10px 28px;
+  border-radius: 8px;
   font-weight: 500;
-  letter-spacing: 0.5px;
   transition: all 0.3s ease;
-  display: inline-block;
+  font-size: 1rem;
 }
 
 .btn-primary {
-  background: #0077ff;
+  background-color: #007bff;
   color: #fff;
-  box-shadow: 0 3px 10px rgba(0, 119, 255, 0.4);
+  box-shadow: 0 4px 12px rgba(0, 123, 255, 0.4);
 }
 
 .btn-primary:hover {
-  background: #005fcc;
-  transform: translateY(-2px);
+  background-color: #0062d1;
+  box-shadow: 0 6px 16px rgba(0, 123, 255, 0.5);
 }
 
 .btn-outline {
@@ -82,31 +77,5 @@
 
 .btn-outline:hover {
   background: #fff;
-  color: #0077ff;
-  transform: translateY(-2px);
-}
-
-@media (max-width: 768px) {
-  .hero-content h1 {
-    font-size: 26px;
-  }
-
-  .hero-content p {
-    font-size: 14px;
-  }
-
-  .btn {
-    font-size: 14px;
-    padding: 9px 18px;
-  }
-
-  .hero-buttons {
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .hero-content .logo {
-    width: 70px;
-    height: 70px;
-  }
+  color: #0d1117;
 }
