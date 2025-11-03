@@ -3,14 +3,17 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Report-page</title>
-    <link rel="icon" href="./assets/icon.png" />
+    <title>Report Page - ARTC</title>
+    <link rel="icon" href="../assets/icon.png" />
+    <link rel="stylesheet" href="../css/report.css" />
     <link rel="stylesheet" href="../css/nav-bar.css" />
   </head>
+
   <body>
     <header>
       <div class="header-left">
         <img src="../assets/icon.png" alt="ARTC Logo" class="logo" />
+        <h1>Anti-Ragging Committee</h1>
       </div>
     </header>
 
@@ -23,18 +26,70 @@
         <li><a href="./analysis.html">Analysis</a></li>
         <li><a href="./schedule.html">Schedule</a></li>
         <li><a href="./article.html">Article</a></li>
-        <li><a href="./report.html">Report</a></li>
+        <li><a href="./report.html" class="active">Report</a></li>
         <li><a href="./contact.html">Contact</a></li>
         <li><a href="../index.html">Logout</a></li>
       </ul>
     </nav>
 
-      <h2>Welcome to ARTC</h2>
-        <p>
-          Your safety and comfort are our priority. Report any ragging or
-          teasing incidents confidentially.
-        </p>
-        
+    <main>
+      <h2 class="page-title">Complaint Form</h2>
+      <p class="intro">
+        Please fill out the form below to report any ragging or harassment
+        incident. Your privacy and safety are our top priority.
+      </p>
+
+      <form class="complaint-form">
+        <fieldset>
+          <legend>Personal Information</legend>
+          <label for="name">Name:</label>
+          <input type="text" id="name" placeholder="Your name" />
+
+          <label for="class">Class & Section:</label>
+          <input type="text" id="class" placeholder="E.g., B.Tech - CSE A" />
+        </fieldset>
+
+        <fieldset>
+          <legend>Issue Details</legend>
+          <label for="type">Type of Problem:</label>
+          <input type="text" id="type" placeholder="E.g., Verbal harassment" />
+
+          <label for="location">Location of Incident:</label>
+          <input type="text" id="location" placeholder="Where it happened" />
+
+          <label for="date">Date of Incident:</label>
+          <input type="date" id="date" />
+
+          <label for="description">Describe what happened:</label>
+          <textarea
+            id="description"
+            rows="4"
+            placeholder="Write the full description here..."
+          ></textarea>
+
+          <label for="people">People Involved (optional):</label>
+          <input type="text" id="people" placeholder="Names (if known)" />
+
+          <label for="evidence">Upload Evidence (optional):</label>
+          <input type="file" id="evidence" />
+        </fieldset>
+
+        <fieldset>
+          <legend>Privacy</legend>
+          <label><input type="radio" name="privacy" /> Keep my name confidential</label>
+          <label><input type="radio" name="privacy" /> Allow ARTC to contact me</label>
+        </fieldset>
+
+        <label class="checkbox">
+          <input type="checkbox" /> I confirm that I am submitting this complaint honestly and truthfully.
+        </label>
+
+        <button type="submit" class="btn-submit">Submit</button>
+      </form>
+    </main>
+
+    <footer>
+      &copy; 2025 Anti-Ragging Committee. All Rights Reserved.
+    </footer>
   </body>
-  <footer>&copy; 2025 Anti-Ragging Committee. All Rights Reserved.</footer>
 </html>
