@@ -14,52 +14,53 @@ main {
 h2 {
   color: #005fcc;
   margin-bottom: 10px;
+  font-size: 26px;
+  font-weight: 600;
 }
 
 .intro {
   color: #444;
-  max-width: 700px;
+  max-width: 750px;
   margin: 0 auto 40px;
   font-size: 15px;
   line-height: 1.6;
 }
 
-/* === Card Grid === */
 .card-container {
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 25px;
-  max-width: 1000px;
+  max-width: 1100px;
   margin: 0 auto;
 }
 
-/* === Individual Card === */
 .card {
   background: #fff;
-  border-radius: 10px;
-  padding: 20px;
+  border-radius: 12px;
+  padding: 25px 20px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .card:hover {
-  transform: translateY(-5px);
+  transform: translateY(-6px);
   box-shadow: 0 6px 18px rgba(0, 95, 204, 0.3);
 }
 
-/* === Image === */
 .card img {
   width: 100px;
   height: 100px;
   border-radius: 50%;
   object-fit: cover;
   margin-bottom: 15px;
+  border: 3px solid #005fcc;
 }
 
-/* === Text === */
 .card h3 {
   color: #005fcc;
   margin-bottom: 5px;
+  font-size: 18px;
+  font-weight: 600;
 }
 
 .card .role {
@@ -74,12 +75,14 @@ h2 {
   line-height: 1.5;
 }
 
-/* === Responsive === */
 @media (max-width: 600px) {
   main {
     padding: 20px 10px;
   }
   .card {
     padding: 15px;
+  }
+  h2 {
+    font-size: 22px;
   }
 }
