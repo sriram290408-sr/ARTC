@@ -65,7 +65,6 @@ p {
   color: #0056cc;
 }
 
-/* Active Nav Highlight (if not in nav-bar.css) */
 nav ul li a.active {
   background-color: #0077ff;
   color: #fff !important;
