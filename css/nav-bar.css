@@ -14,15 +14,15 @@ body {
 }
 
 header {
-  display: flex;
-  align-items: center;
-  background: linear-gradient(90deg, #765efdac, #352eff91);
-  padding: 10px 40px;
+  background: url(../assets/bg.png);
 }
 
 .logo {
-  width: 270px;        
+  width: 300px;        
   height: auto;
+  padding-bottom: 20px;
+  display: flex;
+  justify-content: center;
 }
 
 nav {

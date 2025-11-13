@@ -21,24 +21,20 @@ p {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 25px;
+  gap: 20px;
   padding: 20px;
+  max-width: 1100px;
+  margin: 0 auto;
 }
 
 .article-card {
   background: #fff;
   border-radius: 10px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  border: 1px solid #ddd;
   width: 320px;
   padding: 25px;
   text-align: left;
-  transition: all 0.3s ease;
   border-top: 5px solid #0077ff;
-}
-
-.article-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 8px 18px rgba(0, 119, 255, 0.25);
 }
 
 .article-card h3 {
@@ -58,10 +54,20 @@ p {
   color: #0077ff;
   font-weight: 600;
   font-size: 14px;
-  transition: color 0.3s ease;
 }
 
 .article-card a:hover {
-  color: #0056cc;
+  text-decoration: underline;
 }
 
+@media (max-width: 1000px) {
+  .article-card {
+    width: 45%;
+  }
+}
+
+@media (max-width: 600px) {
+  .article-card {
+    width: 100%;
+  }
+}
