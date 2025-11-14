@@ -39,6 +39,22 @@ main.analysis-container {
   line-height: 1.6;
 }
 
+.analysis-section {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  margin: 40px 0;
+}
+
+.analysis-section img {
+  width: 80%;
+  max-width: 700px;
+  border-radius: 12px;
+  box-shadow: 0 4px 20px;
+  transition: transform 0.3s ease-in-out;
+}
+
+
 .download-section {
   background: #fff;
   border-radius: 16px;

@@ -110,4 +110,11 @@
       <p>&copy; 2025 Anti-Ragging Committee. All Rights Reserved.</p>
     </div>
   </footer>
+  <script>
+    document.querySelector(".contact-form").onsubmit = function (event) {
+      event.preventDefault();
+      alert("Your message is sent");
+      this.reset();
+    };
+  </script>
 </html>
