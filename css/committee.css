@@ -75,6 +75,24 @@ h2 {
   line-height: 1.5;
 }
 
+
+.linkedin {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 50px;
+  margin-right: 40px;
+  text-decoration: none;
+  color: #ff7a00;
+  font-weight: 400;
+  gap: 5px;
+}
+
+.linkedin img{
+  width: 30px;
+  height:30px;
+}
+
 @media (max-width: 600px) {
   main {
     padding: 20px 10px;
