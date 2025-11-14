@@ -79,7 +79,7 @@ textarea {
   background: #005fcc;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 480px) {
   .complaint-form {
     width: 90%;
   }

@@ -60,14 +60,29 @@ p {
   text-decoration: underline;
 }
 
-@media (max-width: 1000px) {
-  .article-card {
-    width: 45%;
+@media (max-width: 480px) {
+  .article-container {
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px;
   }
-}
 
-@media (max-width: 600px) {
   .article-card {
     width: 100%;
+    padding: 20px;
+  }
+
+  h2 {
+    font-size: 24px;
+    margin-top: 20px;
+  }
+
+  .article-card h3 {
+    font-size: 18px;
+  }
+
+  .article-card p,
+  .article-card a {
+    font-size: 13px;
   }
 }

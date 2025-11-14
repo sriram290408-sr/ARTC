@@ -89,7 +89,7 @@ h2 {
   text-decoration: underline;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .login-container {
     width: 80%;
     padding: 25px 30px;

@@ -63,7 +63,7 @@ main {
   background-color: #e67e22;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   .small-video {
     width: 90%;
   }

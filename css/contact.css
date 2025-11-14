@@ -107,3 +107,51 @@ textarea:focus {
   color: #666;
   font-style: italic;
 }
+
+@media(max-width: 480px) {
+  .hero {
+    padding: 30px 10px;
+  }
+
+  .hero .card {
+    width: 100%;
+    padding: 20px;
+  }
+
+  .hero .title {
+    font-size: 22px;
+  }
+
+  .hero .subtitle {
+    font-size: 13px;
+  }
+
+  .container {
+    padding: 15px;
+  }
+
+  .card {
+    padding: 20px;
+  }
+
+  .form-row {
+    flex-direction: column;
+    margin-bottom: 15px;
+  }
+
+  input,
+  textarea {
+    font-size: 13px;
+    padding: 8px 10px;
+  }
+
+  .btn {
+    width: 100%;
+    padding: 10px;
+    font-size: 14px;
+  }
+
+  .form-note {
+    font-size: 12px;
+  }
+}

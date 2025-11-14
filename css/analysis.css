@@ -107,7 +107,7 @@ main.analysis-container {
   color: #0077ff;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 480px) {
   main.analysis-container {
     padding: 25px 15px;
     gap: 25px;

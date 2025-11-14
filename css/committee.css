@@ -93,7 +93,7 @@ h2 {
   height: 30px;
 }
 
-@media (max-width: 600px) {
+@media (max-width: 480px) {
   main {
     padding: 20px 10px;
   }
