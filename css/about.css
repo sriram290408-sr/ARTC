@@ -40,11 +40,6 @@
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.feature-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
-}
-
 .feature-card h3 {
   color: #004aad;
   margin-bottom: 12px;

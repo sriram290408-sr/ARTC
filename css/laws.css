@@ -85,7 +85,6 @@ p {
 .download-btn:hover {
   background: #ff9900;
   color: #000;
-  transform: translateY(-2px);
   box-shadow: 0 6px 12px rgba(0, 0, 0, 0.25);
 }
 

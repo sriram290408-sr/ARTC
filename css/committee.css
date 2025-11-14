@@ -42,11 +42,6 @@ h2 {
   transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
-.card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 6px 18px rgba(0, 95, 204, 0.3);
-}
-
 .card img {
   width: 100px;
   height: 100px;
