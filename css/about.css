@@ -61,7 +61,7 @@
   margin-bottom: 10px;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 767px) {
   .info-section {
     padding: 30px 15px;
     margin: 20px 10px;

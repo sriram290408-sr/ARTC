@@ -62,7 +62,7 @@ h2 {
   color: #000;
 }
 
-@media (max-width: 480px) {
+@media (max-width: 767px) {
   .schedule-container {
     flex-direction: column;
     align-items: center;
