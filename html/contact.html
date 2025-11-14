@@ -111,7 +111,7 @@
     </div>
   </footer>
   <script>
-    document.querySelector(".contact-form").onsubmit = function (event) {
+    document.querySelector("form[role='form']").onsubmit = function (event) {
       event.preventDefault();
       alert("Your message is sent");
       this.reset();
