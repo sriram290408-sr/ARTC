@@ -1,3 +1,25 @@
+.history-btn {
+    position: absolute;
+    right: 30px;
+    width: 150px;
+    height: auto;
+    background: #4A90E2;
+    color: white;
+    padding: 10px 22px;
+    text-decoration: none;
+    font-size: 15px;
+    font-weight: 600;
+    box-shadow: 0 3px 8px rgba(0,0,0,0.20);
+    border-radius: 100px;
+    margin-top: 450px;
+}
+
+.history-btn:hover {
+    background: #3b78c8;
+    transform: scale(1.05);
+}
+
+
 .page-title {
   text-align: center;
   margin-top: 25px;

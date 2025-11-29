@@ -1,0 +1,112 @@
+.history-container {
+    max-width: 92%;
+    margin: 20px auto;
+    font-family: "Poppins", sans-serif;
+}
+
+.back-btn {
+    position: absolute;   
+    left: 15px;       
+    background: #ccccccf1;
+    padding: 7px 18px;
+    border-radius: 25px;
+    font-weight: 600;
+    text-decoration: none;
+    color: #000;  
+    margin-top: 250px; 
+}
+.back-btn:hover {
+    background: #ddd;
+}
+
+.top-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 15px 0 25px 0;
+}
+
+.sort-select {
+    padding: 8px 14px;
+    border-radius: 8px;
+    border: 1px solid #bbb;
+    font-size: 14px;
+}
+
+.row-card {
+    background: #fff;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 20px;
+    margin-bottom: 15px;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+}
+
+.top-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 14px;
+}
+
+.report-name {
+    flex: 1;
+    font-size: 18px;
+    color: #1877F2;
+    font-weight: 600;
+}
+
+.type {
+    font-size: 14px;
+    color: #555;
+    white-space: nowrap;
+}
+
+.date {
+    color: #d20000;
+    font-size: 14px;
+    white-space: nowrap;
+}
+
+.desc {
+    margin-top: 10px;
+    color: #333;
+    font-size: 15px;
+}
+
+.assignee-badge {
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: white;
+    font-weight: 600;
+    font-size: 15px;
+}
+
+.assignee-blue {
+    background: #1877F2;
+}
+
+.assignee-green {
+    background: #00b894;
+}
+
+.assignee-red {
+    background: #d63031;
+}
+
+@media(max-width: 768px) {
+    .top-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .top-header {
+        flex-direction: column;
+        gap: 10px;
+        align-items: flex-start;
+    }
+}
