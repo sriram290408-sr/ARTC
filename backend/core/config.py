@@ -1,0 +1,1 @@
+DB_URL = "postgresql+psycopg2://postgres:AcademyRootPassword@localhost:5432/Artc"
