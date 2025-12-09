@@ -8,5 +8,5 @@ SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 
 Base = declarative_base()
 
-# IMPORTANT: create tables
+
 Base.metadata.create_all(bind=engine)
