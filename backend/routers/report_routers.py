@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from database import SessionLocal
-from model.report import Report
-from schemas.report import ReportCreate, ReportUpdate
+from backend.model.report_models import Report
+from backend.schemas.report_ import ReportCreate, ReportUpdate
 
 router = APIRouter()
 

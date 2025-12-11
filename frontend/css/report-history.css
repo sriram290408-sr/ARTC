@@ -1,20 +1,15 @@
-.history-container {
-    max-width: 92%;
-    margin: 20px auto;
-    font-family: "Poppins", sans-serif;
-}
-
 .back-btn {
-    position: absolute;   
-    left: 15px;       
+    position: absolute;
+    left: 15px;
     background: #ccccccf1;
     padding: 7px 18px;
     border-radius: 25px;
     font-weight: 600;
     text-decoration: none;
-    color: #000;  
-    margin-top: 250px; 
+    color: #000;
+    margin-top: 250px;
 }
+
 .back-btn:hover {
     background: #ddd;
 }
@@ -23,90 +18,95 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin: 15px 0 25px 0;
+    margin-left: 650px;  
 }
 
 .sort-select {
-    padding: 8px 14px;
+    padding: 10px;
     border-radius: 8px;
     border: 1px solid #bbb;
     font-size: 14px;
+    margin-top: 20px;
+    margin-right: 10px;
 }
 
-.row-card {
-    background: #fff;
-    border: 1px solid #ddd;
+.report-card {
+    width: 100%;
+    padding: 10px 12px;
     border-radius: 12px;
-    padding: 20px;
     margin-bottom: 15px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-}
-
-.top-row {
+    margin-top: 40px;
     display: flex;
-    align-items: center;
     justify-content: space-between;
-    gap: 14px;
+    gap: 15px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.07);
+    border-left: 6px solid #ccc;
+    min-height: 75px;
 }
 
-.report-name {
-    flex: 1;
-    font-size: 18px;
-    color: #1877F2;
-    font-weight: 600;
+.report-left {
+    width: 75%;
 }
 
-.type {
+.report-title {
+    font-size: 17px;
+    font-weight: 700;
+    margin-bottom: 3px;
+}
+
+.report-desc {
+    font-size: 13px;
+    line-height: 1.3;
+    margin-top: 2px;
+}
+
+.report-right {
+    width: 25%;
+    text-align: right;
+}
+
+.report-type {
     font-size: 14px;
-    color: #555;
-    white-space: nowrap;
+    margin-bottom: 2px;
 }
 
-.date {
-    color: #d20000;
-    font-size: 14px;
-    white-space: nowrap;
+.report-date {
+    font-size: 13px;
+    margin-top: 4px;
 }
 
-.desc {
-    margin-top: 10px;
-    color: #333;
-    font-size: 15px;
-}
-
-.assignee-badge {
-    width: 38px;
-    height: 38px;
-    border-radius: 50%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: white;
+.status-label {
+    padding: 4px 10px;
+    border-radius: 18px;
+    font-size: 12.5px;
     font-weight: 600;
-    font-size: 15px;
+    margin-top: 8px;
 }
 
-.assignee-blue {
-    background: #1877F2;
+.status-pending {
+    background: #ffffff;
+    border-left-color: #f4c542;
 }
 
-.assignee-green {
-    background: #00b894;
+.status-fake {
+    background: #ffffff;
+    border-left-color: #d9534f;
 }
 
-.assignee-red {
-    background: #d63031;
+.status-completed {
+    background: #ffffff;
+    border-left-color: #4caf50;
 }
 
 @media(max-width: 768px) {
-    .top-row {
+    .report-card {
         flex-direction: column;
-        align-items: flex-start;
+        min-height: auto;
     }
 
-    .top-header {
-        flex-direction: column;
-        gap: 10px;
-        align-items: flex-start;
+    .report-right {
+        width: 100%;
+        text-align: left;
+        margin-top: 5px;
     }
 }
