@@ -107,5 +107,36 @@
         <p>&copy; 2025 Anti-Ragging Committee. All Rights Reserved.</p>
       </div>
     </footer>
+    <script>
+      async function loadReports() {
+        const container = document.querySelector(".history-container");
+
+        const res = await fetch("http://127.0.0.1:8000/reports");
+        const data = await res.json();
+
+        data.reverse(); // newest first
+
+        data.forEach((r) => {
+          const card = document.createElement("div");
+          card.className = "report-card";
+
+          card.innerHTML = `
+        <div class="report-left">
+          <div class="report-title">${r.problem_type}</div>
+          <div class="report-desc">${r.description}</div>
+        </div>
+        <div class="report-right">
+          <div class="report-type">${r.problem_type}</div>
+          <div class="report-date">${r.date_of_incident}</div>
+          <div class="status-label pending">Pending</div>
+        </div>
+      `;
+
+          container.appendChild(card);
+        });
+      }
+
+      loadReports();
+    </script>
   </body>
 </html>
