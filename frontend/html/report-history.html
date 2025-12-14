@@ -1,142 +1,68 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Report History - ARTC</title>
-    <link rel="stylesheet" href="../css/nav-bar.css" />
-    <link rel="stylesheet" href="../css/report-history.css" />
-  </head>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Report History - ARTC</title>
+  <link rel="stylesheet" href="../css/nav-bar.css" />
+  <link rel="stylesheet" href="../css/report-history.css" />
+</head>
 
-  <body>
-    <header>
-      <div class="header-left">
-        <img src="../assets/icon.png" alt="logo" class="logo" />
-      </div>
-    </header>
-    <nav></nav>
+<body>
+  <header>
+    <div class="header-left">
+      <img src="../assets/icon.png" alt="logo" class="logo" />
+    </div>
+  </header>
 
-    <a href="./report.html" class="back-btn">← Back</a>
+  <nav></nav>
 
-    <div class="history-container">
-      <div class="top-header">
-        <h2>Your Report History</h2>
+  <a href="./report.html" class="back-btn">← Back</a>
 
-        <select class="sort-select">
-          <option>Sort by Latest</option>
-          <option>Sort by Oldest</option>
-          <option>Sort by Type</option>
-          <option>Sort by Status</option>
-        </select>
-      </div>
+  <div class="history-container" id="historyContainer">
+    <div class="top-header">
+      <h2>Your Report History</h2>
+      <select class="sort-select" id="sortSelect">
+        <option value="latest">Sort by Latest</option>
+        <option value="oldest">Sort by Oldest</option>
+      </select>
+    </div>
+  </div>
 
-      <div class="report-card status-pending">
-        <div class="report-left">
-          <div class="report-title">Harassment in Hostel</div>
-          <div class="report-desc">
-            A first-year student reported harassment in the boys hostel west
-            wing.
-          </div>
-        </div>
-        <div class="report-right">
-          <div class="report-type">Bullying</div>
-          <div class="report-date">12 Feb 2025</div>
-          <div class="status-label pending">Pending</div>
-        </div>
+  <footer>
+    <div class="footer-container">
+      <div class="footer-about">
+        <h3>About ARTC</h3>
+        <p>
+          The Anti-Ragging Task Committee (ARTC) works to ensure a safe and
+          respectful environment for students.
+        </p>
       </div>
 
-      <div class="report-card status-fake">
-        <div class="report-left">
-          <div class="report-title">Fake Complaint</div>
-          <div class="report-desc">
-            Submitted with inaccurate details and unverifiable information.
-          </div>
-        </div>
-        <div class="report-right">
-          <div class="report-type">General</div>
-          <div class="report-date">05 Feb 2025</div>
-          <div class="status-label fake">Fake</div>
-        </div>
+      <div class="footer-links">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="./about.html">About</a></li>
+          <li><a href="./laws.html">Laws</a></li>
+          <li><a href="./committee.html">Committee</a></li>
+          <li><a href="./report.html">Report</a></li>
+          <li><a href="./contact.html">Contact</a></li>
+        </ul>
       </div>
 
-      <div class="report-card status-completed">
-        <div class="report-left">
-          <div class="report-title">Classroom Ragging</div>
-          <div class="report-desc">
-            Complaints regarding seniors forcing juniors to perform tasks.
-          </div>
-        </div>
-        <div class="report-right">
-          <div class="report-type">Ragging</div>
-          <div class="report-date">30 Jan 2025</div>
-          <div class="status-label completed">Completed</div>
-        </div>
+      <div class="footer-contact">
+        <h3>Contact</h3>
+        <p>Email: support@artc.org.in</p>
+        <p>Phone: +91 98765 43210</p>
+        <p>Chennai, India</p>
       </div>
     </div>
 
-    <footer>
-      <div class="footer-container">
-        <div class="footer-about">
-          <h3>About ARTC</h3>
-          <p>
-            The Anti-Ragging Task Committee (ARTC) works to ensure a safe and
-            respectful environment for students.
-          </p>
-        </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Anti-Ragging Committee. All Rights Reserved.</p>
+    </div>
+  </footer>
 
-        <div class="footer-links">
-          <h3>Quick Links</h3>
-          <ul>
-            <li><a href="./about.html">About</a></li>
-            <li><a href="./laws.html">Laws</a></li>
-            <li><a href="./committee.html">Committee</a></li>
-            <li><a href="./report.html">Report</a></li>
-            <li><a href="./contact.html">Contact</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-contact">
-          <h3>Contact</h3>
-          <p>Email: support@artc.org.in</p>
-          <p>Phone: +91 98765 43210</p>
-          <p>Chennai, India</p>
-        </div>
-      </div>
-
-      <div class="footer-bottom">
-        <p>&copy; 2025 Anti-Ragging Committee. All Rights Reserved.</p>
-      </div>
-    </footer>
-    <script>
-      async function loadReports() {
-        const container = document.querySelector(".history-container");
-
-        const res = await fetch("http://127.0.0.1:8000/reports");
-        const data = await res.json();
-
-        data.reverse(); // newest first
-
-        data.forEach((r) => {
-          const card = document.createElement("div");
-          card.className = "report-card";
-
-          card.innerHTML = `
-        <div class="report-left">
-          <div class="report-title">${r.problem_type}</div>
-          <div class="report-desc">${r.description}</div>
-        </div>
-        <div class="report-right">
-          <div class="report-type">${r.problem_type}</div>
-          <div class="report-date">${r.date_of_incident}</div>
-          <div class="status-label pending">Pending</div>
-        </div>
-      `;
-
-          container.appendChild(card);
-        });
-      }
-
-      loadReports();
-    </script>
-  </body>
+  <script src="../js/report-history.js"></script>
+</body>
 </html>

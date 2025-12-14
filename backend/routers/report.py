@@ -1,4 +1,3 @@
-
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from database import SessionLocal
@@ -16,17 +15,22 @@ def get_db():
 
 @router.post("/create")
 def create_report(report: ReportCreate, db: Session = Depends(get_db)):
-    db.add(Report(**report.dict()))
+    new_report = Report(**report.dict())
+    db.add(new_report)
     db.commit()
-    return {"message": "Report submitted"}
+    db.refresh(new_report)
+    return {"message": "Report submitted successfully"}
 
 @router.get("/history")
-def history(db: Session = Depends(get_db)):
+def get_report_history(db: Session = Depends(get_db)):
     return db.query(Report).order_by(Report.created_at.desc()).all()
 
 @router.put("/status/{id}")
 def update_status(id: int, status: str, db: Session = Depends(get_db)):
     report = db.query(Report).filter(Report.id == id).first()
+    if not report:
+        return {"error": "Report not found"}
+
     report.status = status
     db.commit()
     return {"message": "Status updated"}

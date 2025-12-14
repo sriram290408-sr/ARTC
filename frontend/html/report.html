@@ -160,40 +160,5 @@
       </div>
     </footer>
   </body>
-  <script>
-    document.querySelector(".complaint-form").onsubmit = async function (
-      event
-    ) {
-      event.preventDefault();
-
-      const data = {
-        name: document.getElementById("name").value,
-        class_section: document.getElementById("class").value,
-        problem_type: document.getElementById("type").value,
-        location: document.getElementById("location").value,
-        date_of_incident: document.getElementById("date").value,
-        description: document.getElementById("description").value,
-        people_involved: document.getElementById("people").value || null,
-        privacy_option:
-          document.querySelector("input[name='privacy']:checked").value ===
-          "allow",
-      };
-
-      try {
-        const res = await fetch("http://127.0.0.1:8000/reports", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(data),
-        });
-
-        if (!res.ok) throw new Error("Error submitting report");
-
-        alert("Report submitted successfully!");
-        event.target.reset();
-      } catch (err) {
-        alert("Failed to submit report.");
-        console.log(err);
-      }
-    };
-  </script>
+  <script src="../js/report.js"></script>
 </html>
