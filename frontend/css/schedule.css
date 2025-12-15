@@ -23,39 +23,38 @@ h2 {
 }
 
 .schedule-container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 25px;
-  max-width: 1100px;
-  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 30px;
+  max-width: 1400px;
+  padding: 40px 20px;
+  width: 100%;
 }
 
 .schedule-card {
-  background: white;
-  border: 1px solid #e0e0e0;
+  background: #fff;
   border-left: 6px solid #004aad;
   border-radius: 12px;
-  padding: 20px;
-  width: 280px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  transition: 0.3s ease;
+  padding: 25px 20px;
+  box-shadow: 0 6px 20px rgba(0,0,0,0.08);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 
 .schedule-card:hover {
-  box-shadow: 0 6px 15px rgba(0, 0, 0, 0.15);
+  transform: translateY(-5px);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.15);
 }
 
 .schedule-card h3 {
   color: #004aad;
   font-size: 18px;
-  margin-bottom: 10px;
+  margin-bottom: 15px;
 }
 
 .schedule-card p {
-  color: #333;
   font-size: 14px;
-  margin: 5px 0;
+  margin: 6px 0;
+  color: #333;
 }
 
 .schedule-card strong {

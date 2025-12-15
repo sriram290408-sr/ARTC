@@ -7,6 +7,7 @@
     <link rel="icon" href="../assets/icon.png" />
     <link rel="stylesheet" href="../css/nav-bar.css" />
     <link rel="stylesheet" href="../css/analysis.css" />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
   </head>
 
   <body>
@@ -16,18 +17,19 @@
       </div>
 
       <div class="user-menu">
-    <div class="user-icon"> <img src="../assets/profile.png" width="100px" height="100px"> </div>
+        <div class="user-icon">
+          <img src="../assets/profile.png" width="100px" height="100px" />
+        </div>
 
-    <input type="checkbox" id="toggle-menu">
-    <label for="toggle-menu" class="arrow">&#9662;</label>
+        <input type="checkbox" id="toggle-menu">
+        <label for="toggle-menu" class="arrow">&#9662;</label>
 
-    <div class="dropdown">
-        <a href="./home.html">Home</a>
-        <a href="./profile.html">Profile</a>
-        <a href="../index.html">Logout</a>
-    </div>
-</div>
-
+        <div class="dropdown">
+          <a href="./home.html">Home</a>
+          <a href="./profile.html">Profile</a>
+          <a href="../index.html">Logout</a>
+        </div>
+      </div>
     </header>
 
     <nav>
@@ -48,16 +50,13 @@
       <section class="intro-card">
         <h2>Complaint Analysis Dashboard</h2>
         <p>
-          Here you can view the anti-ragging reports, visualize complaint
-          statistics, and download analysis data for reference.
+          Visualize the status of complaints received by the Anti-Ragging Committee (ARTC). 
+          The chart shows the proportion of complaints that are solved, pending, or found fake.
         </p>
       </section>
 
       <div class="analysis-section">
-        <img
-          src="../assets/anti-ragging-analysis.png"
-          alt="Anti Ragging Analysis Chart"
-        />
+        <canvas id="complaintChart"></canvas>
       </div>
 
       <section class="download-section">
@@ -102,5 +101,7 @@
         <p>&copy; 2025 Anti-Ragging Committee. All Rights Reserved.</p>
       </div>
     </footer>
+
+    <script src="../js/analysis.js"></script>
   </body>
 </html>
