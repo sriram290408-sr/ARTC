@@ -1,37 +1,56 @@
-const API_BASE_URL = "http://127.0.0.1:8000";
+document.addEventListener("DOMContentLoaded", () => {
+  const reportForm = document.getElementById("reportForm");
 
-document
-  .querySelector(".complaint-form")
-  .addEventListener("submit", submitReport);
+  if (!reportForm) {
+    console.error("Report form not found");
+    return;
+  }
 
-async function submitReport(event) {
-  event.preventDefault();
+  reportForm.addEventListener("submit", submitReport);
+});
+
+async function submitReport(e) {
+  e.preventDefault();
+
+  const form = e.target;
 
   const payload = {
-    title: document.getElementById("type").value,
-    description: document.getElementById("description").value,
-    problem_type: document.getElementById("type").value,
-    incident_location: document.getElementById("location").value,
-    incident_date: document.getElementById("date").value,
-    name: document.getElementById("name").value,
-    class_section: document.getElementById("class").value,
-    people_involved: document.getElementById("people").value || null
+    title: form.querySelector("#title")?.value.trim(),
+    description: form.querySelector("#description")?.value.trim(),
+    category: form.querySelector("#category")?.value || "General"
   };
 
+  if (!payload.title || !payload.description) {
+    alert("Please fill all required fields");
+    return;
+  }
+
   try {
-    const response = await fetch(`${API_BASE_URL}/reports/create`, {
+    const submitBtn = form.querySelector("button[type='submit']");
+    submitBtn.disabled = true;
+    submitBtn.textContent = "Submitting...";
+
+    const response = await fetch("http://127.0.0.1:8000/reports", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
+      headers: {
+        "Content-Type": "application/json"
+      },
+      credentials: "include", 
       body: JSON.stringify(payload)
     });
 
-    if (!response.ok) throw new Error("Submission failed");
+    if (!response.ok) {
+      throw new Error("Failed to submit complaint");
+    }
 
     alert("Complaint submitted successfully");
-    event.target.reset();
+
+    form.reset();
+
+    window.location.href = "./profile.html";
 
   } catch (error) {
     console.error(error);
-    alert("Failed to submit complaint");
+    alert("Something went wrong. Please try again.");
   }
 }

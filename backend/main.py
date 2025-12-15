@@ -1,7 +1,7 @@
 
 from fastapi import FastAPI
 from database import engine, Base
-from routers import user, report, committee, action_taken, login
+from routers import user, report, committee, action_taken, login, profile
 
 app = FastAPI(title="ARTC Backend - Final")
 
@@ -12,3 +12,4 @@ app.include_router(report.router)
 app.include_router(committee.router)
 app.include_router(action_taken.router)
 app.include_router(login.router)
+app.include_router(profile.router) 

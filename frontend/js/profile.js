@@ -1,83 +1,107 @@
-const API = "http://127.0.0.1:8000";
+const profileName = document.getElementById("profileName");
+const profileInitials = document.getElementById("profileInitials");
 
 const nameInput = document.getElementById("name");
-const classInput = document.getElementById("class_section");
-const rollInput = document.getElementById("roll_no");
+const classSectionInput = document.getElementById("class_section");
+const rollNoInput = document.getElementById("roll_no");
 const schoolInput = document.getElementById("school");
 
 const saveBtn = document.getElementById("saveProfile");
 
-const profileName = document.getElementById("profileName");
-const profileInitials = document.getElementById("profileInitials");
+function getInitials(name) {
+  if (!name) return "NA";
+
+  return name
+    .trim()
+    .split(" ")
+    .map(word => word.charAt(0))
+    .join("")
+    .substring(0, 2)
+    .toUpperCase();
+}
+
+function updateProfileUI() {
+  const name = nameInput.value.trim();
+  const classSection = classSectionInput.value.trim();
+  const school = schoolInput.value.trim();
+
+  if (!name || !classSection || !school) {
+    alert("Please complete all required fields");
+    return;
+  }
+
+  profileName.textContent = name;
+  profileInitials.textContent = getInitials(name);
+
+  saveBtn.textContent = "Saved ✔";
+  saveBtn.disabled = true;
+
+  setTimeout(() => {
+    saveBtn.textContent = "Save Profile";
+    saveBtn.disabled = false;
+  }, 1500);
+
+  localStorage.setItem(
+    "artc_profile_ui",
+    JSON.stringify({
+      name,
+      class_section: classSection,
+      roll_no: rollNoInput.value,
+      school
+    })
+  );
+}
+
+function loadProfileUI() {
+  const saved = localStorage.getItem("artc_profile_ui");
+  if (!saved) return;
+
+  const data = JSON.parse(saved);
+
+  nameInput.value = data.name;
+  classSectionInput.value = data.class_section;
+  rollNoInput.value = data.roll_no;
+  schoolInput.value = data.school;
+
+  profileName.textContent = data.name;
+  profileInitials.textContent = getInitials(data.name);
+}
+
+saveBtn.addEventListener("click", updateProfileUI);
+
+document.addEventListener("DOMContentLoaded", loadProfileUI);
 
 document.addEventListener("DOMContentLoaded", () => {
-  loadProfile();
-  loadReportStats();
+  loadReportCounts();
 });
 
-saveBtn.addEventListener("click", saveProfile);
-
-// LOAD PROFILE
-async function loadProfile() {
+async function loadReportCounts() {
   try {
-    const res = await fetch(`${API}/user/profile`);
-    if (!res.ok) return;
+    const response = await fetch(
+      "http://127.0.0.1:8000/reports/count",
+      { credentials: "include" }
+    );
 
-    const data = await res.json();
+    if (!response.ok) {
+      throw new Error("Failed to fetch report counts");
+    }
 
-    nameInput.value = data.name;
-    classInput.value = data.class_section;
-    rollInput.value = data.roll_no;
-    schoolInput.value = data.school;
+    const data = await response.json();
 
-    profileName.textContent = data.name;
-    profileInitials.textContent = getInitials(data.name);
-  } catch (err) {
-    console.error("Profile load failed", err);
-  }
-}
+    document.getElementById("totalReports").textContent =
+      data.total ?? 0;
 
-// SAVE PROFILE
-async function saveProfile() {
-  const payload = {
-    name: nameInput.value.trim(),
-    class_section: classInput.value.trim(),
-    roll_no: rollInput.value,
-    school: schoolInput.value.trim()
-  };
-
-  try {
-    const res = await fetch(`${API}/user/profile`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(payload)
-    });
-
-    if (!res.ok) throw new Error();
-
-    alert("Profile updated successfully");
-    loadProfile();
-  } catch {
-    alert("Failed to update profile");
-  }
-}
-
-// REPORT STATS
-async function loadReportStats() {
-  try {
-    const res = await fetch(`${API}/reports/history`);
-    const reports = await res.json();
-
-    document.getElementById("totalReports").textContent = reports.length;
     document.getElementById("pendingReports").textContent =
-      reports.filter(r => r.status === "Pending").length;
-    document.getElementById("resolvedReports").textContent =
-      reports.filter(r => r.status === "Completed").length;
-  } catch (err) {
-    console.error("Report stats error", err);
-  }
-}
+      data.pending ?? 0;
 
-function getInitials(name) {
-  return name.split(" ").map(w => w[0]).join("").toUpperCase();
+    document.getElementById("resolvedReports").textContent =
+      data.resolved ?? 0;
+
+  } catch (error) {
+    console.error(error);
+
+    document.getElementById("totalReports").textContent = 0;
+    document.getElementById("pendingReports").textContent = 0;
+    document.getElementById("resolvedReports").textContent = 0;
+  }
 }

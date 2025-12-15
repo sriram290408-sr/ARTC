@@ -11,7 +11,6 @@
 
 <body>
 
-<!-- USER MENU -->
 <div class="user-menu">
   <div class="user-icon">
     <img id="profileImage" src="../assets/profile.png" alt="User" />
@@ -49,55 +48,87 @@
 
 <main class="profile-layout">
 
-  <!-- PROFILE HEADER -->
-  <div class="profile-header-box">
+  <section class="profile-header-box">
     <div class="profile-circle" id="profileInitials">SE</div>
     <h2 id="profileName">Student Name</h2>
-    <p class="profile-sub">Student • ARTC Support Portal</p>
-  </div>
+    <p class="profile-sub">Student Profile • ARTC Portal</p>
+  </section>
 
-  <!-- PROFILE GRID -->
-  <div class="profile-grid">
+  <section class="profile-grid">
 
-    <!-- EDITABLE DETAILS -->
     <div class="card">
       <h3>Student Details</h3>
 
-      <label>Name</label>
-      <input type="text" id="name">
+      <div class="form-row">
+        <label for="name">Full Name</label>
+        <input type="text" id="name">
+      </div>
 
-      <label>Class & Section</label>
-      <input type="text" id="class_section">
+      <div class="form-row">
+        <label for="class_section">Class & Section</label>
+        <input type="text" id="class_section">
+      </div>
 
-      <label>Roll No</label>
-      <input type="text" id="roll_no" disabled>
+      <div class="form-row">
+        <label for="roll_no">Roll Number</label>
+        <input type="text" id="roll_no" disabled>
+      </div>
 
-      <label>School</label>
-      <input type="text" id="school">
+      <div class="form-row">
+        <label for="school">School</label>
+        <input type="text" id="school">
+      </div>
 
-      <button id="saveProfile" class="save-btn">Save Profile</button>
+      <button id="saveProfile" class="save-btn">
+        Save Profile
+      </button>
     </div>
 
-    <!-- REPORT SUMMARY -->
     <div class="card">
-      <h3>Your Reports</h3>
-      <p><strong>Total Complaints:</strong> <span id="totalReports">0</span></p>
-      <p><strong>Under Review:</strong> <span id="pendingReports">0</span></p>
-      <p><strong>Resolved:</strong> <span id="resolvedReports">0</span></p>
+      <h3>Complaint Status</h3>
+
+      <div class="status-list">
+        <div class="status-item">
+          <span>Total Complaints</span>
+          <strong id="totalReports">0</strong>
+        </div>
+
+        <div class="status-item">
+          <span>Under Review</span>
+          <strong id="pendingReports">0</strong>
+        </div>
+
+        <div class="status-item">
+          <span>Resolved</span>
+          <strong id="resolvedReports">0</strong>
+        </div>
+      </div>
+
       <hr>
-      <p><a href="./report-history.html">View All Complaints →</a></p>
+
+      <a href="./report-history.html" class="text-link">
+        View Full Complaint History
+      </a>
     </div>
 
-    <!-- SUPPORT -->
-    <div class="card">
-      <h3>Safety & Support</h3>
-      <p>Your identity will remain confidential.</p>
-      <p>You can report teasing, bullying, or ragging safely.</p>
+    <div class="card full-width">
+      <h3>Privacy & Safety Notice</h3>
+      <p>
+        The Anti-Ragging Committee ensures that all student complaints
+        are handled with complete confidentiality and fairness.
+      </p>
+
+      <ul class="info-list">
+        <li>Identity protection for every complaint</li>
+        <li>Official committee investigation</li>
+        <li>No retaliation policy</li>
+      </ul>
     </div>
 
-  </div>
+  </section>
 
 </main>
+
 
 <footer>
   <div class="footer-bottom">

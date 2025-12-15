@@ -53,77 +53,48 @@
         Please fill out the form below to report any ragging or harassment
         incident. Your privacy and safety are our top priority.
       </p>
+<main class="profile-layout"> 
 
-      <form class="complaint-form">
-        <fieldset>
-          <legend>Personal Information</legend>
-          <label for="name">Name:</label>
-          <input type="text" id="name" placeholder="Your name" required />
+  <div class="card"> 
+    <h3>Submit Complaint</h3> 
 
-          <label for="class">Class & Section:</label>
-          <input
-            type="text"
-            id="class"
-            placeholder="E.g., B.Tech - CSE A"
-            required
-          />
-        </fieldset>
+    <form id="reportForm">
+      <label>Title</label>
+      <input type="text" name="title" placeholder="Title" required />
 
-        <fieldset>
-          <legend>Issue Details</legend>
-          <label for="type">Type of Problem:</label>
-          <input
-            type="text"
-            id="type"
-            placeholder="E.g., Verbal harassment"
-            required
-          />
+      <label>Description</label>
+      <textarea name="description" placeholder="Description" required></textarea>
 
-          <label for="location">Location of Incident:</label>
-          <input
-            type="text"
-            id="location"
-            placeholder="Where it happened"
-            required
-          />
+      <label>Problem Type</label>
+      <select name="problem_type" required>
+        <option value="">Select Problem Type</option>
+        <option value="Ragging">Ragging</option>
+        <option value="Bullying">Bullying</option>
+        <option value="Harassment">Harassment</option>
+      </select>
 
-          <label for="date">Date of Incident:</label>
-          <input type="date" id="date" required />
+      <label>Location</label>
+      <input type="text" name="incident_location" placeholder="Location" required />
 
-          <label for="description">Describe what happened:</label>
-          <textarea
-            id="description"
-            rows="4"
-            placeholder="Write the full description here..."
-            required
-          ></textarea>
+      <label>Incident Date</label>
+      <input type="date" name="incident_date" required />
 
-          <label for="people">People Involved (optional):</label>
-          <input type="text" id="people" placeholder="Names (if known)" />
+      <label>Your Name</label>
+      <input type="text" name="name" placeholder="Your Name" required />
 
-          <label for="evidence">Upload Evidence (optional):</label>
-          <input type="file" id="evidence" />
-        </fieldset>
+      <label>Class & Section</label>
+      <input type="text" name="class_section" placeholder="Class & Section" required />
 
-        <fieldset>
-          <legend>Privacy</legend>
-          <label
-            ><input type="radio" name="privacy" required /> Keep my name
-            confidential</label
-          >
-          <label
-            ><input type="radio" name="privacy" required /> Allow ARTC to
-            contact me</label
-          >
-        </fieldset>
+      <label>People Involved (optional)</label>
+      <input type="text" name="people_involved" placeholder="People Involved (optional)" />
 
-        <label class="checkbox">
-          <input type="checkbox" required /> I confirm that I am submitting this
-          complaint honestly and truthfully.
-        </label>
+      <button type="submit" class="save-btn">Submit Complaint</button>
+    </form>
 
-        <button type="submit" class="btn-submit">Submit</button>
-      </form>
+  </div>
+
+</main>
+
     </main>
 
     <footer>

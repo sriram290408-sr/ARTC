@@ -1,108 +1,159 @@
-.history-btn {
-    position: absolute;
-    right: 30px;
-    width: 150px;
-    height: auto;
-    background: #4A90E2;
-    color: white;
-    padding: 10px 22px;
-    text-decoration: none;
-    font-size: 15px;
-    font-weight: 600;
-    box-shadow: 0 3px 8px rgba(0,0,0,0.20);
-    border-radius: 100px;
-    margin-top: 450px;
+.profile-layout {
+    max-width: 900px;
+    margin: 50px auto;
+    padding: 0 20px 50px 20px;
+    font-family: "Poppins", Arial, sans-serif;
+    color: #333;
 }
 
-.history-btn:hover {
-    background: #3b78c8;
-    transform: scale(1.05);
+.card {
+    background: #ffffff;
+    padding: 35px 30px;
+    border-radius: 16px;
+    box-shadow:
+        0 8px 20px rgba(0,0,0,0.08),
+        0 12px 25px rgba(0,0,0,0.05);
+    transition: all 0.3s ease;
+    position: relative;
 }
 
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow:
+        0 12px 28px rgba(0,0,0,0.12),
+        0 16px 35px rgba(0,0,0,0.08);
+}
+
+.card h3 {
+    color: #0a74da;
+    font-size: 22px;
+    margin-bottom: 25px;
+    text-align: center;
+}
 
 .page-title {
-  text-align: center;
-  margin-top: 25px;
-  font-size: 26px;
-  font-weight: bold;
-  color: #222;
+    text-align: center;
+    font-size: 28px;
+    font-weight: 700;
+    color: #222;
+    margin-top: 30px;
 }
 
 .intro {
-  text-align: center;
-  margin: 10px auto 30px;
-  font-size: 15px;
-  color: #444;
-  max-width: 700px;
+    text-align: center;
+    margin: 10px auto 40px;
+    font-size: 16px;
+    color: #555;
+    max-width: 700px;
+    line-height: 1.6;
 }
 
-.complaint-form {
-  max-width: 600px;
-  background: #f2f2f2;
-  padding: 25px;
-  margin: 0 auto 40px;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+#reportForm {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 22px 25px;
 }
 
-fieldset {
-  border: none;
-  margin-bottom: 20px;
+#reportForm textarea,
+#reportForm button {
+    grid-column: span 2;
 }
 
-legend {
-  font-weight: bold;
-  margin-bottom: 10px;
-  color: #333;
+#reportForm label {
+    display: block;
+    margin: 12px 0 6px;
+    font-weight: 600;
+    color: #333;
+    font-size: 14.5px;
 }
 
-label {
-  display: block;
-  margin: 10px 0 5px;
-  color: #222;
+#reportForm input,
+#reportForm select,
+#reportForm textarea {
+    width: 100%;
+    padding: 12px 15px;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    font-size: 14.5px;
+    outline: none;
+    font-family: inherit;
+    transition: all 0.25s ease;
 }
 
-input[type="text"],
-input[type="date"],
-input[type="file"],
-textarea {
-  width: 100%;
-  padding: 8px;
-  border: 1px solid #ccc;
-  border-radius: 4px;
+#reportForm input:focus,
+#reportForm select:focus,
+#reportForm textarea:focus {
+    border-color: #0a74da;
+    box-shadow: 0 0 0 3px rgba(10,116,218,0.12);
 }
 
-textarea {
-  resize: vertical;
+.save-btn {
+    padding: 12px 25px;
+    background: #0a74da;
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    font-size: 15px;
+    font-weight: 600;
+    cursor: pointer;
+    display: block;
+    margin: 25px auto 0;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    transition: all 0.25s ease;
 }
 
-.checkbox {
-  display: flex;
-  align-items: center;
-  margin: 15px 0;
-  font-size: 14px;
-  color: #333;
+.save-btn:hover {
+    background: #065bb5;
+    transform: translateY(-2px) scale(1.02);
+    box-shadow: 0 6px 16px rgba(0,0,0,0.15);
 }
 
-.btn-submit {
-  background: #0077ff;
-  color: #fff;
-  border: none;
-  padding: 10px 20px;
-  border-radius: 5px;
-  font-size: 15px;
-  cursor: pointer;
-  display: block;
-  margin: 0 auto;
-  transition: background 0.3s;
+.save-btn:disabled {
+    background: #a0c3f2;
+    cursor: not-allowed;
 }
 
-.btn-submit:hover {
-  background: #005fcc;
+.history-btn {
+    position: absolute;
+    top: 20px;
+    right: 30px;
+    width: 160px;
+    padding: 10px 25px;
+    text-align: center;
+    background: #0a74da;
+    color: #fff;
+    font-weight: 600;
+    font-size: 15px;
+    border-radius: 50px;
+    text-decoration: none;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+    transition: all 0.25s ease;
 }
 
-@media (max-width: 767px) {
-  .complaint-form {
-    width: 90%;
-  }
+.history-btn:hover {
+    background: #065bb5;
+    transform: scale(1.05) translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    #reportForm {
+        grid-template-columns: 1fr;
+    }
+
+    #reportForm textarea,
+    #reportForm button {
+        grid-column: span 1;
+    }
+
+    .history-btn {
+        width: 140px;
+        top: 15px;
+        right: 15px;
+        font-size: 14px;
+    }
+
+    .intro {
+        width: 90%;
+        font-size: 15px;
+    }
 }
