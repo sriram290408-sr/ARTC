@@ -1,56 +1,36 @@
-document.addEventListener("DOMContentLoaded", () => {
-  const reportForm = document.getElementById("reportForm");
+document.getElementById("reportForm").addEventListener("submit", async function (e) {
+  e.preventDefault(); 
 
-  if (!reportForm) {
-    console.error("Report form not found");
-    return;
-  }
-
-  reportForm.addEventListener("submit", submitReport);
-});
-
-async function submitReport(e) {
-  e.preventDefault();
-
-  const form = e.target;
-
-  const payload = {
-    title: form.querySelector("#title")?.value.trim(),
-    description: form.querySelector("#description")?.value.trim(),
-    category: form.querySelector("#category")?.value || "General"
+  const formData = {
+    title: this.title.value,
+    description: this.description.value,
+    problem_type: this.problem_type.value,
+    incident_location: this.incident_location.value,
+    incident_date: this.incident_date.value,
+    name: this.name.value,
+    class_section: this.class_section.value,
+    people_involved: this.people_involved.value || null,
   };
 
-  if (!payload.title || !payload.description) {
-    alert("Please fill all required fields");
-    return;
-  }
-
   try {
-    const submitBtn = form.querySelector("button[type='submit']");
-    submitBtn.disabled = true;
-    submitBtn.textContent = "Submitting...";
-
-    const response = await fetch("http://127.0.0.1:8000/reports", {
+    const response = await fetch("http://127.0.0.1:8000/reports/create", {
       method: "POST",
       headers: {
-        "Content-Type": "application/json"
+        "Content-Type": "application/json",
       },
-      credentials: "include", 
-      body: JSON.stringify(payload)
+      body: JSON.stringify(formData),
     });
 
-    if (!response.ok) {
-      throw new Error("Failed to submit complaint");
+    const result = await response.json();
+
+    if (response.ok) {
+      alert(result.message);
+      this.reset();
+    } else {
+      alert("Failed to submit report: " + (result.detail || "Unknown error"));
     }
-
-    alert("Complaint submitted successfully");
-
-    form.reset();
-
-    window.location.href = "./profile.html";
-
   } catch (error) {
-    console.error(error);
-    alert("Something went wrong. Please try again.");
+    console.error("Error:", error);
+    alert("An error occurred while submitting the report.");
   }
-}
+});

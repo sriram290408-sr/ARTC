@@ -11,10 +11,8 @@ async function loadHistory() {
   try {
     const res = await fetch(`${API_BASE_URL}/reports/history`);
     if (!res.ok) throw new Error("Failed to fetch reports");
-
     reports = await res.json();
     renderReports();
-
   } catch (err) {
     console.error(err);
     container.innerHTML += "<p>Failed to load reports</p>";
@@ -23,18 +21,20 @@ async function loadHistory() {
 
 function renderReports() {
   document.querySelectorAll(".report-card").forEach(e => e.remove());
-
   let sorted = [...reports];
   if (sortSelect.value === "oldest") sorted.reverse();
-
   sorted.forEach(r => {
     const card = document.createElement("div");
     card.className = `report-card status-${r.status.toLowerCase()}`;
-
     card.innerHTML = `
       <div class="report-left">
         <div class="report-title">${r.title}</div>
         <div class="report-desc">${r.description}</div>
+        <div class="report-extra">
+          <strong>Location:</strong> ${r.incident_location}<br>
+          <strong>Reported by:</strong> ${r.name} (${r.class_section})<br>
+          ${r.people_involved ? `<strong>People involved:</strong> ${r.people_involved}<br>` : ""}
+        </div>
       </div>
       <div class="report-right">
         <div class="report-type">${r.problem_type}</div>
@@ -42,7 +42,6 @@ function renderReports() {
         <div class="status-label ${r.status.toLowerCase()}">${r.status}</div>
       </div>
     `;
-
     container.appendChild(card);
   });
 }

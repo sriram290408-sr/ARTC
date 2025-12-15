@@ -6,8 +6,8 @@
   <title>Report History - ARTC</title>
   <link rel="stylesheet" href="../css/nav-bar.css" />
   <link rel="stylesheet" href="../css/report-history.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
-
 <body>
   <header>
     <div class="header-left">
@@ -17,28 +17,26 @@
 
   <nav></nav>
 
-  <a href="./report.html" class="back-btn">← Back</a>
+  <main class="container">
+    <a href="./report.html" class="back-btn">← Back</a>
 
-  <div class="history-container" id="historyContainer">
-    <div class="top-header">
-      <h2>Your Report History</h2>
-      <select class="sort-select" id="sortSelect">
+    <div class="history-header">
+      <h2>Report History</h2>
+      <select id="sortSelect" class="sort-select">
         <option value="latest">Sort by Latest</option>
         <option value="oldest">Sort by Oldest</option>
       </select>
     </div>
-  </div>
+
+    <div id="historyContainer" class="history-container"></div>
+  </main>
 
   <footer>
     <div class="footer-container">
       <div class="footer-about">
         <h3>About ARTC</h3>
-        <p>
-          The Anti-Ragging Task Committee (ARTC) works to ensure a safe and
-          respectful environment for students.
-        </p>
+        <p>The Anti-Ragging Task Committee (ARTC) ensures a safe and respectful environment for students.</p>
       </div>
-
       <div class="footer-links">
         <h3>Quick Links</h3>
         <ul>
@@ -49,7 +47,6 @@
           <li><a href="./contact.html">Contact</a></li>
         </ul>
       </div>
-
       <div class="footer-contact">
         <h3>Contact</h3>
         <p>Email: support@artc.org.in</p>
@@ -57,7 +54,6 @@
         <p>Chennai, India</p>
       </div>
     </div>
-
     <div class="footer-bottom">
       <p>&copy; 2025 Anti-Ragging Committee. All Rights Reserved.</p>
     </div>
