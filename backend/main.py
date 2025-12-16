@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from database import engine, Base
-from routers import user, report, committee, action_taken, login, profile
+from backend.database import engine, Base
+from backend.routers import user, report, committee, action_taken, login, profile
 
 app = FastAPI(title="ARTC Backend - Final")
 
