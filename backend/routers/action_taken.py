@@ -1,9 +1,9 @@
 
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from database import SessionLocal
-from models.action_taken import ActionTaken
-from schemas.action_taken import ActionCreate
+from backend.database import SessionLocal
+from backend.models.action_taken import ActionTaken
+from backend.schemas.action_taken import ActionCreate
 
 router = APIRouter(prefix="/actions", tags=["Action Taken"])
 

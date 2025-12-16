@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from database import SessionLocal
-from models.profile import Profile
-from schemas.profile import ProfileUpdate
+from backend.database import SessionLocal
+from backend.models.profile import Profile
+from backend.schemas.profile import ProfileUpdate
 
 router = APIRouter(prefix="/profile", tags=["Profile"])
 

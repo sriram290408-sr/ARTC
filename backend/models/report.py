@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, String, Text, Date, DateTime
 from datetime import datetime
-from database import Base
+from backend.database import Base
 
 class Report(Base):
     __tablename__ = "reports"

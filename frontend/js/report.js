@@ -1,36 +1,36 @@
-document.getElementById("reportForm").addEventListener("submit", async function (e) {
-  e.preventDefault(); 
+const form = document.getElementById("reportForm");
 
-  const formData = {
-    title: this.title.value,
-    description: this.description.value,
-    problem_type: this.problem_type.value,
-    incident_location: this.incident_location.value,
-    incident_date: this.incident_date.value,
-    name: this.name.value,
-    class_section: this.class_section.value,
-    people_involved: this.people_involved.value || null,
+form.addEventListener("submit", async (e) => {
+  e.preventDefault(); 
+  
+  const data = {
+    title: form.title.value,
+    description: form.description.value,
+    problem_type: form.problem_type.value,
+    incident_location: form.incident_location.value,
+    incident_date: form.incident_date.value,
+    name: form.name.value,
+    class_section: form.class_section.value,
+    people_involved: form.people_involved.value || null,
   };
 
   try {
-    const response = await fetch("http://127.0.0.1:8000/reports/create", {
+    const res = await fetch("http://127.0.0.1:8000/reports/create", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify(formData),
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
     });
 
-    const result = await response.json();
+    const result = await res.json();
 
-    if (response.ok) {
+    if (res.ok) {
       alert(result.message);
-      this.reset();
+      form.reset();
     } else {
-      alert("Failed to submit report: " + (result.detail || "Unknown error"));
+      alert("Failed: " + (result.detail || "Something went wrong"));
     }
-  } catch (error) {
-    console.error("Error:", error);
-    alert("An error occurred while submitting the report.");
+  } catch (err) {
+    alert("Server error. Try again later.");
+    console.error(err);
   }
 });
