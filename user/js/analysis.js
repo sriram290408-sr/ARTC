@@ -1,15 +1,12 @@
-// Get canvas
 const canvas = document.getElementById("complaintChart");
 const ctx = canvas.getContext("2d");
 
-// Data
 const data = {
   solved: 45,
   pending: 30,
   fake: 25
 };
 
-// Create chart
 new Chart(ctx, {
   type: "pie",
   data: {
@@ -21,7 +18,7 @@ new Chart(ctx, {
     }]
   },
   options: {
-    responsive: false,        // IMPORTANT
-    maintainAspectRatio: true // PERFECT CIRCLE
+    responsive: false,       
+    maintainAspectRatio: true 
   }
 });
