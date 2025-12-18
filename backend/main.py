@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from backend.database import engine, Base
-from backend.routers import user, report, committee, action_taken, login, profile
+from backend.routers import user, report, committee, action_taken, login
 
 app = FastAPI(title="ARTC Backend - Final")
 
@@ -22,7 +22,6 @@ app.include_router(report.router)
 app.include_router(committee.router)
 app.include_router(action_taken.router)
 app.include_router(login.router)
-app.include_router(profile.router)
 
 # Root endpoint
 @app.get("/")
