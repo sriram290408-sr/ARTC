@@ -159,6 +159,8 @@ footer {
   text-align: center;
   padding: 25px 10px;
   font-size: 14px;
+  color: #fff;
+  margin-top: auto;
 }
 
 .footer-container {
@@ -208,6 +210,12 @@ footer {
 .footer-bottom span {
   color: white;
 }
+
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
 
 
 @media (max-width: 767px) {
