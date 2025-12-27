@@ -1,9 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from backend.database import SessionLocal
+from backend.models.user import User
 from backend.models.login_log import LoginLog
 from backend.schemas.auth import LoginSchema
-from backend.models.user import  User
+from backend.core.hash import verify_password
+from backend.core.security import create_access_token
 
 router = APIRouter(prefix="/users", tags=["Users"])
 
@@ -15,23 +17,24 @@ def get_db():
         db.close()
 
 @router.post("/login")
-def login_user(data: LoginSchema, db: Session = Depends(get_db)):
-    user = (
-        db.query(User)
-        .filter(User.email == data.email, User.password == data.password)
-        .first()
-    )
+def login(data: LoginSchema, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.email == data.email).first()
 
-    if not user:
-        raise HTTPException(status_code=401, detail="Invalid email or password")
+    if not user or not verify_password(data.password, user.password):
+        raise HTTPException(401, "Invalid credentials")
 
-    log = LoginLog(user_id=user.id)
-    db.add(log)
+    token = create_access_token({
+        "user_id": user.id,
+        "role": user.role
+    })
+
+    db.add(LoginLog(user_id=user.id))
     db.commit()
 
     return {
-        "message": "Login successful",
-        "user_id": user.id,
-        "name": user.full_name,
-        "role": user.role,
+        "access_token": token,
+        "user": {
+            "name": user.full_name,
+            "role": user.role
+        }
     }

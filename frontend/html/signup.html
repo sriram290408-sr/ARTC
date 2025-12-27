@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ARTC - Sign Up</title>
+  <link rel="icon" href="../assets/icon.png" />
+  <link rel="stylesheet" href="../css/signup.css" />
+</head>
+
+<body>
+<section class="signup-section">
+  <div class="form-container">
+    <img src="../assets/icon.png" alt="ARTC Logo" class="logo" />
+    <h2>Create Your Account</h2>
+
+    <form id="signupForm" class="signup-form">
+
+      <label>Full Name</label>
+      <input type="text" id="fullname" required />
+
+      <label>Email</label>
+      <input type="email" id="email" required />
+
+      <label>Role</label>
+      <select id="role" required>
+        <option value="">Select role</option>
+        <option value="student">Student</option>
+        <option value="faculty">Faculty</option>
+      </select>
+
+      <label>Password</label>
+      <input type="password" id="password" required />
+
+      <label>Confirm Password</label>
+      <input type="password" id="confirm" required />
+
+      <div class="checkbox">
+        <input type="checkbox" id="agree" required />
+        <label for="agree">I agree to terms</label>
+      </div>
+
+      <button type="submit" class="btn-submit">Sign Up</button>
+
+      <p class="login-link">
+        Already have an account? <a href="./login.html">Login here</a>
+      </p>
+
+    </form>
+  </div>
+</section>
+
+<script src="../js/signup.js"></script>
+</body>
+</html>

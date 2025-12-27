@@ -1,9 +1,9 @@
-
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from backend.database import SessionLocal
-from backend.models import user as User
+from backend.models.user import User
 from backend.schemas.user import UserCreate
+from backend.core.hash import hash_password
 
 router = APIRouter(prefix="/users", tags=["Users"])
 
@@ -16,21 +16,21 @@ def get_db():
 
 @router.post("/create")
 def create_user(user: UserCreate, db: Session = Depends(get_db)):
-    db.add(User(**user.dict()))
-    db.commit()
-    return {"message": "User created"}
+    if db.query(User).filter(User.email == user.email).first():
+        raise HTTPException(400, "Email already exists")
 
-def get_user(user_id: int, db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.id == user_id).first()
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
-    return user
+    new_user = User(
+        full_name=user.full_name,
+        email=user.email,
+        role=user.role,
+        password=hash_password(user.password)
+    )
 
-@router.delete("/user/{user_id}")
-def delete_user(user_id: int, db: Session = Depends(get_db)):
-    user = db.query(User).filter(User.id == user_id).first()
-    if not user:
-        raise HTTPException(status_code=404, detail="User not found")
-    db.delete(user)
+    db.add(new_user)
     db.commit()
-    return {"message": f"User with id {user_id} deleted successfully"}
+    db.refresh(new_user)
+
+    return {
+        "message": "User created",
+        "role": new_user.role
+    }
