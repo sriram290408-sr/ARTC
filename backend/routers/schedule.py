@@ -3,6 +3,7 @@ from sqlalchemy.orm import Session
 from backend.database import SessionLocal
 from backend.models.schedule import Schedule
 from backend.schemas.schedule import ScheduleCreate
+from backend.core.dependency import admin_only
 
 router = APIRouter(prefix="/schedule", tags=["Schedule"])
 
@@ -13,25 +14,27 @@ def get_db():
     finally:
         db.close()
 
-
-@router.post("/add")
-def add_schedule(data: ScheduleCreate, db: Session = Depends(get_db)):
+@router.post("/", dependencies=[Depends(admin_only)])
+def create_schedule(
+    data: ScheduleCreate,
+    db: Session = Depends(get_db)
+):
     schedule = Schedule(**data.dict())
     db.add(schedule)
     db.commit()
-    db.refresh(schedule)
-    return schedule
+    return {"message": "Schedule added"}
 
+@router.get("/")
+def get_schedule(db: Session = Depends(get_db)):
+    return db.query(Schedule).all()
 
-@router.get("/all")
-def get_schedules(db: Session = Depends(get_db)):
-    return db.query(Schedule).order_by(Schedule.date).all()
-
-
-@router.delete("/delete/{schedule_id}")
-def delete_schedule(schedule_id: int, db: Session = Depends(get_db)):
+@router.delete("/{schedule_id}", dependencies=[Depends(admin_only)])
+def delete_schedule(
+    schedule_id: int,
+    db: Session = Depends(get_db)
+):
     schedule = db.query(Schedule).filter(Schedule.id == schedule_id).first()
     if schedule:
         db.delete(schedule)
         db.commit()
-    return {"message": "Deleted"}
+    return {"message": "Schedule removed"}

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Report Page - ARTC</title>
+    <link rel="icon" href="../assets/icon.png" />
+    <link rel="stylesheet" href="../css/nav-bar.css" />
+    <link rel="stylesheet" href="../css/admin_report.css" />
+  </head>
+
+  <body>
+    <header>
+      <div class="header-left">
+        <img src="../assets/icon.png" alt="ARTC Logo" class="logo" />
+      </div>
+
+      <div class="user-menu">
+        <div class="user-icon">
+          <img src="../assets/profile.png" width="100px" height="100px" />
+        </div>
+
+        <input type="checkbox" id="toggle-menu" />
+        <label for="toggle-menu" class="arrow">&#9662;</label>
+
+        <div class="dropdown">
+          <a href="./home.html">Home</a>
+          <a href="./admin_profile.html">Profile</a>
+          <a href="../index.html">Logout</a>
+        </div>
+
+        <a href="./admin_report-history.html" class="history-btn">Report History</a>
+      </div>
+    </header>
+
+    <nav>
+      <ul>
+        <li><a href="./home.html">Home</a></li>
+        <li><a href="./about.html">About</a></li>
+        <li><a href="./laws.html">Laws</a></li>
+        <li><a href="./admin_committee.html">Committee</a></li>
+        <li><a href="./admin_analysis.html" class="active">Analysis</a></li>
+        <li><a href="./admin_schedule.html">Schedule</a></li>
+        <li><a href="./article.html">Article</a></li>
+        <li><a href="./admin_report.html">Report</a></li>
+        <li><a href="./contact.html">Contact</a></li>
+      </ul>
+    </nav>
+
+    <main>
+      <h2 class="page-title">Complaint Form</h2>
+      <p class="intro">
+        Please fill out the form below to report any ragging or harassment
+        incident. Your privacy and safety are our top priority.
+      </p>
+<main class="profile-layout"> 
+
+  <div class="card"> 
+    <h3>Submit Complaint</h3> 
+
+    <form id="reportForm">
+      <label>Title</label>
+      <input type="text" name="title" placeholder="Title" required />
+
+      <label>Description</label>
+      <textarea name="description" placeholder="Description" required></textarea>
+
+      <label>Problem Type</label>
+      <select name="problem_type" required>
+        <option value="">Select Problem Type</option>
+        <option value="Ragging">Ragging</option>
+        <option value="Bullying">Bullying</option>
+        <option value="Harassment">Harassment</option>
+      </select>
+
+      <label>Location</label>
+      <input type="text" name="incident_location" placeholder="Location" required />
+
+      <label>Incident Date</label>
+      <input type="date" name="incident_date" required />
+
+      <label>Your Name</label>
+      <input type="text" name="name" placeholder="Your Name" required />
+
+      <label>Class & Section</label>
+      <input type="text" name="class_section" placeholder="Class & Section" required />
+
+      <label>People Involved (optional)</label>
+      <input type="text" name="people_involved" placeholder="People Involved (optional)" />
+
+      <button type="submit" class="save-btn">Submit Complaint</button>
+    </form>
+
+  </div>
+
+</main>
+
+    </main>
+
+    <footer>
+      <div class="footer-container">
+        <div class="footer-about">
+          <h3>About ARTC</h3>
+          <p>
+            The Anti-Ragging Task Committee (ARTC) works to ensure a safe and
+            respectful environment for students by preventing ragging through
+            awareness and action.
+          </p>
+        </div>
+
+        <div class="footer-links">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="./about.html">About</a></li>
+            <li><a href="./laws.html">Laws</a></li>
+            <li><a href="./admin_committee.html">Committee</a></li>
+            <li><a href="./admin_report.html">Report</a></li>
+            <li><a href="./contact.html">Contact</a></li>
+          </ul>
+        </div>
+
+        <div class="footer-contact">
+          <h3>Contact</h3>
+          <p>Email: support@artc.org.in</p>
+          <p>Phone: +91 98765 43210</p>
+          <p>Chennai, India</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 Anti-Ragging Committee. All Rights Reserved.</p>
+      </div>
+    </footer>
+  </body>
+  <script src="../js/admin_report.js"></script>
+</html>
