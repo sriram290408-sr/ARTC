@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Schedule - ARTC</title>
+  <link rel="icon" href="../assets/icon.png" />
+  <link rel="stylesheet" href="../css/nav-bar.css" />
+  <link rel="stylesheet" href="../css/admin_schedule.css" />
+</head>
+
+<body>
+
+<header>
+  <div class="header-left">
+    <img src="../assets/icon.png" alt="ARTC Logo" class="logo" />
+  </div>
+
+  <div class="header-left">
+        <img src="../assets/icon.png" alt="ARTC Logo" class="logo" />
+      </div>
+
+      <div class="user-icon">
+        <img src="../assets/profile.png" width="100px" height="100px" />
+      </div>
+      <div class="user-menu">
+        <div class="dropdown">
+          <a href="./admin.html">Home</a>
+          <a href="./admin_profile.html">Profile</a>
+          <a href="./login.html">Logout</a>
+        </div>
+      </div>
+      </div>
+</header>
+
+<nav class="navbar">
+    <input type="checkbox" id="menu-toggle">
+
+  <label for="menu-toggle" class="hamburger">
+    <span></span>
+    <span></span>
+    <span></span>
+  </label>
+  <ul class="nav-links">
+      <ul>
+        <li><a href="./admin.html" class="active">Home</a></li>
+        <li><a href="./about.html">About</a></li>
+        <li><a href="./laws.html">Laws</a></li>
+        <li><a href="./admin_committee.html">Committee</a></li>
+        <li><a href="./admin_analysis.html">Analysis</a></li>
+        <li><a href="./admin_schedule.html" class="active">Schedule</a></li>
+        <li><a href="./article.html">Article</a></li>
+        <li><a href="./admin_report.html">Report</a></li>
+        <li><a href="./contact.html">Contact</a></li>
+      </ul>
+</nav>
+
+<main>
+  <h2>ARTC Programme Schedule</h2>
+  <p class="intro">
+    Manage all upcoming <strong>ARTC</strong> programs here.
+  </p>
+
+  <button id="deleteSelectedBtn" class="delete-selected-btn">
+    Delete Selected Schedules
+  </button>
+
+  <section class="schedule-container" id="scheduleContainer"></section>
+</main>
+
+<footer>
+  <div class="footer-bottom">
+    <p>&copy; 2025 Anti-Ragging Committee. All Rights Reserved.</p>
+  </div>
+</footer>
+
+<script src="../js/admin_schedule.js"></script>
+
+</body>
+</html>
