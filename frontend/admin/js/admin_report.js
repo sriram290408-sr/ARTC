@@ -1,57 +1,55 @@
-const API = "https://YOUR_RENDER_URL";
+const API = "http://127.0.0.1:8000";
 
-async function loadReports() {
-  const res = await fetch(`${API}/reports`, {
+const params = new URLSearchParams(window.location.search);
+const reportId = params.get("id");
+
+if (!reportId) {
+  alert("No report selected");
+  location.href = "admin_report-history.html";
+}
+
+async function loadReport() {
+  const res = await fetch(`${API}/reports/${reportId}`, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("token")}`
     }
   });
 
-  const reports = await res.json();
-  const table = document.getElementById("reportTable");
-  table.innerHTML = "";
+  const r = await res.json();
 
-  reports.forEach(r => {
-    table.innerHTML += `
-      <tr>
-        <td>${r.title}</td>
-        <td>${r.problem_type}</td>
-        <td>
-          <select onchange="updateStatus(${r.id}, this.value)">
-            <option ${r.status==="pending"?"selected":""}>pending</option>
-            <option ${r.status==="fake"?"selected":""}>fake</option>
-            <option ${r.status==="completed"?"selected":""}>completed</option>
-          </select>
-        </td>
-        <td>
-          <button onclick="deleteReport(${r.id})">Delete</button>
-        </td>
-      </tr>`;
-  });
+  document.getElementById("caseMeta").innerText =
+    `Report ID: #${r.id} | Submitted: ${formatDate(r.created_at)}`;
+
+  title.value = r.title;
+  description.value = r.description;
+  problem_type.value = r.problem_type;
+  incident_location.value = r.incident_location;
+  incident_date.value = r.incident_date;
+  name.value = r.name;
+  class_section.value = r.class_section;
+  people_involved.value = r.people_involved || "-";
+  status.value = r.status;
 }
 
-async function updateStatus(id, status) {
-  await fetch(`${API}/reports/${id}`, {
+async function updateReport() {
+  await fetch(`${API}/reports/${reportId}`, {
     method: "PUT",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${localStorage.getItem("token")}`
     },
-    body: JSON.stringify({ status })
-  });
-}
-
-async function deleteReport(id) {
-  if (!confirm("Delete this report?")) return;
-
-  await fetch(`${API}/reports/${id}`, {
-    method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")}`
-    }
+    body: JSON.stringify({
+      status: status.value,
+      remarks: remarks.value
+    })
   });
 
-  loadReports();
+  alert("Report updated successfully");
+  location.href = "admin_report-history.html";
 }
 
-loadReports();
+function formatDate(d) {
+  return new Date(d).toLocaleDateString("en-IN");
+}
+
+loadReport();

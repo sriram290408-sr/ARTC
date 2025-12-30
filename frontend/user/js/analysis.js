@@ -1,24 +1,44 @@
+const API = "http://127.0.0.1:8000";
+
 const canvas = document.getElementById("complaintChart");
 const ctx = canvas.getContext("2d");
 
-const data = {
-  solved: 45,
-  pending: 30,
-  fake: 25
-};
+async function loadUserAnalysis() {
+  try {
+    const res = await fetch(`${API}/reports/analytics/public`);
+    const data = await res.json();
 
-new Chart(ctx, {
-  type: "pie",
-  data: {
-    labels: ["Solved", "Pending", "Fake"],
-    datasets: [{
-      data: [data.solved, data.pending, data.fake],
-      backgroundColor: ["#28a745", "#ffc107", "#dc3545"],
-      borderWidth: 0
-    }]
-  },
-  options: {
-    responsive: false,       
-    maintainAspectRatio: true 
+    new Chart(ctx, {
+      type: "pie",
+      data: {
+        labels: ["Solved", "Pending", "Fake"],
+        datasets: [
+          {
+            data: [
+              data.completed,
+              data.pending,
+              data.fake
+            ],
+            backgroundColor: ["#28a745", "#ffc107", "#dc3545"],
+            borderWidth: 0
+          }
+        ]
+      },
+      options: {
+        responsive: false,
+        maintainAspectRatio: true,
+        plugins: {
+          legend: {
+            position: "bottom"
+          }
+        }
+      }
+    });
+
+  } catch {
+    canvas.outerHTML =
+      "<p style='color:red;text-align:center'>Unable to load analysis</p>";
   }
-});
+}
+
+document.addEventListener("DOMContentLoaded", loadUserAnalysis);

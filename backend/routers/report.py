@@ -1,8 +1,10 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+from sqlalchemy import func
 from backend.database import SessionLocal
 from backend.models.report import Report
 from backend.schemas.report import ReportCreate
+from backend.core.dependency import admin_only
 
 router = APIRouter(prefix="/reports", tags=["Reports"])
 
@@ -26,11 +28,56 @@ def get_report_history(db: Session = Depends(get_db)):
     return db.query(Report).order_by(Report.created_at.desc()).all()
 
 @router.put("/status/{id}")
-def update_status(id: int, status: str, db: Session = Depends(get_db)):
+def update_status(
+    id: int,
+    status: str,
+    db: Session = Depends(get_db),
+    user=Depends(admin_only)
+):
     report = db.query(Report).filter(Report.id == id).first()
     if not report:
-        return {"error": "Report not found"}
-
+        raise HTTPException(status_code=404, detail="Report not found")
     report.status = status
     db.commit()
     return {"message": "Status updated"}
+
+@router.get("/analytics")
+def report_analytics(
+    db: Session = Depends(get_db),
+    user=Depends(admin_only)
+):
+    results = (
+        db.query(Report.status, func.count(Report.id))
+        .group_by(Report.status)
+        .all()
+    )
+
+    data = {
+        "pending": 0,
+        "completed": 0,
+        "fake": 0
+    }
+
+    for status, count in results:
+        data[status] = count
+
+    return data
+
+@router.get("/analytics/public")
+def public_analytics(db: Session = Depends(get_db)):
+    results = (
+        db.query(Report.status, func.count(Report.id))
+        .group_by(Report.status)
+        .all()
+    )
+
+    data = {
+        "pending": 0,
+        "completed": 0,
+        "fake": 0
+    }
+
+    for status, count in results:
+        data[status] = count
+
+    return data

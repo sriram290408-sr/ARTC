@@ -1,22 +1,3 @@
-const API = "http://127.0.0.1:8000";
-const container = document.getElementById("historyContainer");
-const sortSelect = document.getElementById("sortSelect");
-
-let reports = [];
-
-document.addEventListener("DOMContentLoaded", fetchReports);
-sortSelect.addEventListener("change", showReports);
-
-async function fetchReports() {
-  try {
-    const res = await fetch(API + "/reports/history");
-    reports = await res.json();
-    showReports();
-  } catch {
-    container.innerHTML = "<p>Unable to load reports</p>";
-  }
-}
-
 function showReports() {
   container.innerHTML = "";
 
@@ -25,14 +6,15 @@ function showReports() {
 
   list.forEach(r => {
     container.innerHTML += `
-      <div class="report-card status-${r.status.toLowerCase()}">
+      <div class="report-card status-${r.status.toLowerCase()}"
+           onclick="openReport(${r.id})">
+
         <div>
           <h3>${r.title}</h3>
           <p>${r.description}</p>
           <small>
-            Location: ${r.incident_location}<br>
-            By: ${r.name} (${r.class_section})<br>
-            ${r.people_involved ? `People: ${r.people_involved}` : ""}
+            <b>Location:</b> ${r.incident_location}<br>
+            <b>Reported By:</b> ${r.name} (${r.class_section})
           </small>
         </div>
 
@@ -46,6 +28,6 @@ function showReports() {
   });
 }
 
-function formatDate(date) {
-  return new Date(date).toLocaleDateString("en-IN");
+function openReport(id) {
+  window.location.href = `admin_report.html?id=${id}`;
 }

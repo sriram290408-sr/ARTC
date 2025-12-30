@@ -15,12 +15,10 @@ function closeForm() {
   modal.style.display = "none";
 }
 
-// Close modal when clicking outside
 window.onclick = function(e) {
   if (e.target === modal) closeForm();
 }
 
-// Handle form submission
 form.addEventListener("submit", (e) => {
   e.preventDefault();
 
@@ -28,10 +26,9 @@ form.addEventListener("submit", (e) => {
     name: nameInput.value.trim(),
     role: roleInput.value.trim(),
     desc: descInput.value.trim(),
-    img: "../assets/profile.png" // default image
+    img: "../assets/profile.png" 
   };
 
-  // Save to localStorage
   const members = JSON.parse(localStorage.getItem("committeeMembers")) || [];
   members.push(member);
   localStorage.setItem("committeeMembers", JSON.stringify(members));
@@ -41,13 +38,11 @@ form.addEventListener("submit", (e) => {
   closeForm();
 });
 
-// Load members from localStorage
 function loadMembers() {
   const members = JSON.parse(localStorage.getItem("committeeMembers")) || [];
   members.forEach(addCard);
 }
 
-// Create a card
 function addCard(member) {
   const card = document.createElement("div");
   card.className = "card";
