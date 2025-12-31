@@ -1,6 +1,6 @@
 from sqlalchemy import Column, Integer, DateTime, ForeignKey
 from datetime import datetime
-from backend.database import Base
+from database import Base
 
 class LoginLog(Base):
     __tablename__ = "login_logs"

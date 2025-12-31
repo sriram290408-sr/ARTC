@@ -1,10 +1,10 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from sqlalchemy import func
-from backend.database import SessionLocal
-from backend.models.report import Report
-from backend.schemas.report import ReportCreate
-from backend.core.dependency import admin_only
+from database import SessionLocal
+from models.report import Report
+from schemas.report import ReportCreate
+from core.dependency import admin_only
 
 router = APIRouter(prefix="/reports", tags=["Reports"])
 

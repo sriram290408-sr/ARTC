@@ -1,6 +1,6 @@
 
 from sqlalchemy import Column, Integer, String
-from backend.database import Base
+from database import Base
 
 class CommitteeMember(Base):
     __tablename__ = "committee_members"

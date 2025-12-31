@@ -1,9 +1,9 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from backend.database import SessionLocal
-from backend.models.schedule import Schedule
-from backend.schemas.schedule import ScheduleCreate
-from backend.core.dependency import admin_only
+from database import SessionLocal
+from models.schedule import Schedule
+from schemas.schedule import ScheduleCreate
+from core.dependency import admin_only
 
 router = APIRouter(prefix="/schedule", tags=["Schedule"])
 

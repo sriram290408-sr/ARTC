@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from backend.database import SessionLocal
-from backend.models.user import User
-from backend.schemas.user import UserCreate
+from database import SessionLocal
+from models.user import User
+from schemas.user import UserCreate
 
 router = APIRouter(prefix="/users", tags=["Users"])
 

@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from backend.database import SessionLocal
-from backend.models.committee import CommitteeMember
-from backend.schemas.committee import CommitteeCreate
+from database import SessionLocal
+from models.committee import CommitteeMember
+from schemas.committee import CommitteeCreate
 
 router = APIRouter(prefix="/committee", tags=["Committee"])
 
