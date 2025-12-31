@@ -8,7 +8,7 @@
 .hero-section {
   position: relative;
   height: 100vh;
-  background: url("./assets/bg.png") no-repeat center center/cover;
+  background: url("./frontend/assets/bg.png") no-repeat center center/cover;
   display: flex;
   align-items: center;
   justify-content: center;
