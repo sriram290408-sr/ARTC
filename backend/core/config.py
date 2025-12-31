@@ -1,1 +1,6 @@
-DB_URL = "postgresql+psycopg2://postgres:AcademyRootPassword@db.cuxqcptncwihjowuvmge.supabase.co:5432/postgres"
+import os
+
+DATABASE_URL = os.getenv("DATABASE_URL")
+
+if not DATABASE_URL:
+    raise ValueError("DATABASE_URL environment variable is not set")
