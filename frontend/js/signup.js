@@ -4,21 +4,20 @@ document.querySelector(".signup-form").addEventListener("submit", async (e) => {
   const fullname = document.getElementById("fullname").value;
   const email = document.getElementById("email").value;
   const password = document.getElementById("password").value;
+  const confirm = document.getElementById("confirm").value;
   const role = document.getElementById("role").value;
 
-  const user = {
-    full_name: fullname,
-    email: email,
-    password: password,
-    role: role
-  };
+  if (password !== confirm) {
+    alert("Passwords do not match");
+    return;
+  }
+
+  const user = { full_name: fullname, email, password, role };
 
   try {
-    const res = await fetch("https://YOUR_RENDER_URL/users/signup", {
+    const res = await fetch("https://artc-backend.onrender.com/users/signup", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify(user)
     });
 
@@ -29,19 +28,17 @@ document.querySelector(".signup-form").addEventListener("submit", async (e) => {
       return;
     }
 
-    // Save login info
     localStorage.setItem("user_id", data.id);
     localStorage.setItem("role", data.role);
 
-    // Redirect based on role
     if (data.role === "student") {
-      window.location.href = "/frontend/user/html/home.html";
+      window.location.href = "/user/html/home.html";
     } else {
-      window.location.href = "/frontend/admin/html/admin.html";
+      window.location.href = "/admin/html/admin.html";
     }
 
   } catch (error) {
-    alert("Server error. Try again later.");
+    alert("Server error");
     console.error(error);
   }
 });
