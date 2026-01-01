@@ -5,7 +5,6 @@ from models.user import User
 from schemas.auth import LoginSchema
 from core.security import create_access_token
 from core.hash import verify_password
-from models.login_log import LoginLog
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
@@ -27,9 +26,6 @@ def login(data: LoginSchema, db: Session = Depends(get_db)):
         "user_id": user.id,
         "role": user.role
     })
-
-    db.add(LoginLog(user_id=user.id))
-    db.commit()
 
     return {
         "access_token": token,
