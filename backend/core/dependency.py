@@ -1,11 +1,14 @@
 from fastapi import Depends, HTTPException
-from fastapi.security import OAuth2PasswordBearer
+from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
 from core.security import verify_token
 
-oauth2 = OAuth2PasswordBearer(tokenUrl="auth/login")
+security = HTTPBearer()
 
-def admin_only(token: str = Depends(oauth2)):
+def admin_only(credentials: HTTPAuthorizationCredentials = Depends(security)):
+    token = credentials.credentials
     payload = verify_token(token)
+
     if not payload or payload.get("role") not in ["admin", "faculty"]:
-        raise HTTPException(status_code=403, detail="Admin access only")
+        raise HTTPException(status_code=403, detail="Admin access required")
+
     return payload

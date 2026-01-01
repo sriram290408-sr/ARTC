@@ -1,18 +1,24 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from database import Base
+from database import Base, engine
 from routers import user, report, committee, login
 
-app = FastAPI(title="ARTC Backend - Final")
+app = FastAPI(title="ARTC Backend")
 
+# CORS (Frontend → Backend)
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=["https://your-frontend.netlify.app"],   # change to frontend domain in production
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Create DB tables on startup
+@app.on_event("startup")
+def startup():
+    Base.metadata.create_all(bind=engine)
 
 # Routers
 app.include_router(user.router)
@@ -20,6 +26,7 @@ app.include_router(report.router)
 app.include_router(committee.router)
 app.include_router(login.router)
 
+# Health check
 @app.get("/")
 def root():
-    return {"message": "ARTC Backend is running!"}
+    return {"message": "ARTC Backend is running"}
