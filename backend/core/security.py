@@ -1,9 +1,8 @@
 from datetime import datetime, timedelta
 from jose import jwt, JWTError
+from core.config import SECRET_KEY, ACCESS_TOKEN_EXPIRE_MINUTES
 
-SECRET_KEY = "ARTC_SECRET_KEY"  # later move to ENV
 ALGORITHM = "HS256"
-ACCESS_TOKEN_EXPIRE_MINUTES = 60
 
 def create_access_token(data: dict):
     to_encode = data.copy()
