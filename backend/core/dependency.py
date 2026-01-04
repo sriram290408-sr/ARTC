@@ -1,14 +1,44 @@
-from fastapi import Depends, HTTPException
+from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
+
+from database import SessionLocal
 from core.security import verify_token
 
-security = HTTPBearer()
+security = HTTPBearer(auto_error=False)
 
-def admin_only(credentials: HTTPAuthorizationCredentials = Depends(security)):
+def admin_only(
+    credentials: HTTPAuthorizationCredentials = Depends(security)
+):
+    if credentials is None:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Authorization token missing"
+        )
+
     token = credentials.credentials
     payload = verify_token(token)
 
-    if not payload or payload.get("role") not in ["admin", "faculty"]:
-        raise HTTPException(status_code=403, detail="Admin access required")
+    if not payload:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid or expired token"
+        )
+
+    if payload.get("role") not in ["admin", "faculty"]:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Admin or faculty access required"
+        )
 
     return payload
+
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    except Exception as e:
+        print("DB ERROR:", e)
+        raise
+    finally:
+        db.close()
