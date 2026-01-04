@@ -22,9 +22,9 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
     localStorage.setItem("role", data.role);
 
     if (data.role === "admin" || data.role === "faculty") {
-      window.location.href = "/admin/html/admin.html";
+      window.location.href = "/frontend/html/admin.html";
     } else {
-      window.location.href = "/user/html/home.html";
+      window.location.href = "/frontend/html/home.html";
     }
 
   } catch (err) {
