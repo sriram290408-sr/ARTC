@@ -21,7 +21,6 @@ app.add_middleware(
 def root():
     return {"message": "Backend is running successfully"}
 
-# ✅ Register all routers
 app.include_router(user_router)
 app.include_router(schedule_router)
 app.include_router(committee_router)
