@@ -18,7 +18,7 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
       return;
     }
 
-    localStorage.setItem("token", data.access_token);
+    localStorage.setItem("access_token", data.access_token);
     localStorage.setItem("role", data.role);
 
     if (data.role === "admin" || data.role === "faculty") {
