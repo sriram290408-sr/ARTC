@@ -1,6 +1,6 @@
+const token = localStorage.getItem("access_token");
 const role = localStorage.getItem("role");
-const token = localStorage.getItem("token");
 
-if (!token || role !== "admin") {
-  window.location.href = "/admin.html";
+if (!token || (role !== "admin" && role !== "faculty")) {
+  window.location.href = "/index.html";
 }
