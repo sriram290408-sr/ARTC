@@ -1,4 +1,4 @@
-const API = "http://127.0.0.1:8000";
+const API = "https://artc-backend.onrender.com";
 
 const canvas = document.getElementById("complaintChart");
 const ctx = canvas.getContext("2d");

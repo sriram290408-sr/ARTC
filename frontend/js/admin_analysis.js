@@ -1,4 +1,4 @@
-const API = "http://127.0.0.1:8000";
+const API = "https://artc-backend.onrender.com";
 const token = localStorage.getItem("token");
 
 async function loadAnalytics() {

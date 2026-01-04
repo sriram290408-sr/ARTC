@@ -1,4 +1,4 @@
-const API = "https://YOUR_RENDER_URL";
+const API = "https://artc-backend.onrender.com";
 
 function openPopup() {
   document.querySelector(".popup").style.display = "block";

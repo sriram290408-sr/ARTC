@@ -78,7 +78,7 @@ document.addEventListener("DOMContentLoaded", () => {
 async function loadReportCounts() {
   try {
     const response = await fetch(
-      "http://127.0.0.1:8000/reports/count",
+      "https://artc-backend.onrender.com/reports/count",
       { credentials: "include" }
     );
 
