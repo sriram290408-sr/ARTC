@@ -1,6 +1,5 @@
 from fastapi import Depends, HTTPException, status
 from fastapi.security import HTTPBearer, HTTPAuthorizationCredentials
-
 from database import SessionLocal
 from core.security import verify_token
 
@@ -15,8 +14,7 @@ def admin_only(
             detail="Authorization token missing"
         )
 
-    token = credentials.credentials
-    payload = verify_token(token)
+    payload = verify_token(credentials.credentials)
 
     if not payload:
         raise HTTPException(
@@ -37,8 +35,5 @@ def get_db():
     db = SessionLocal()
     try:
         yield db
-    except Exception as e:
-        print("DB ERROR:", e)
-        raise
     finally:
         db.close()

@@ -3,7 +3,8 @@ from sqlalchemy.orm import Session
 from database import SessionLocal
 from models.user import User
 from schemas.auth import LoginSchema
-from core.security import verify_password, create_access_token
+from core.hash import verify_password
+from core.security import create_access_token
 
 router = APIRouter(prefix="/auth", tags=["Auth"])
 
@@ -31,5 +32,7 @@ def login(data: LoginSchema, db: Session = Depends(get_db)):
 
     return {
         "access_token": token,
-        "role": user.role
+        "token_type": "bearer",
+        "role": user.role,
+        "name": user.full_name
     }
