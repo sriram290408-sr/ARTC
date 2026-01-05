@@ -1,132 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Report Page - ARTC</title>
-    <link rel="icon" href="../assets/icon.png" />
-    <link rel="stylesheet" href="../css/nav-bar.css" />
-    <link rel="stylesheet" href="../css/report.css" />
-  </head>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Report Page - ARTC</title>
 
-  <body>
-    <header>
-      <div class="header-left">
-        <img src="../assets/icon.png" alt="ARTC Logo" class="logo" />
+  <link rel="icon" href="../assets/icon.png" />
+  <link rel="stylesheet" href="../css/nav-bar.css" />
+  <link rel="stylesheet" href="../css/report.css" />
+</head>
+
+<body>
+  <header>
+    <div class="header-left">
+      <img src="../assets/icon.png" alt="ARTC Logo" class="logo" />
+    </div>
+
+    <div class="user-icon">
+      <img src="../assets/profile.png" alt="Profile" />
+      <span class="dropdown-arrow">▼</span>
+      <div class="user-menu">
+        <a href="./home.html">Home</a>
+        <a href="./profile.html">Profile</a>
+        <a href="./login.html">Logout</a>
       </div>
+    </div>
 
-      <div class="user-icon">
-        <img src="../assets/profile.png" alt="Profile" />
-        <span class="dropdown-arrow">▼</span>
+    <a href="./report-history.html" class="history-btn">Report History</a>
+  </header>
 
-        <div class="user-menu">
-          <a href="./home.html">Home</a>
-          <a href="./profile.html">Profile</a>
-          <a href="./login.html">Logout</a>
-        </div>
-      </div>
+  <nav>
+    <ul>
+      <li><a href="./home.html">Home</a></li>
+      <li><a href="./about.html">About</a></li>
+      <li><a href="./laws.html">Laws</a></li>
+      <li><a href="./committee.html">Committee</a></li>
+      <li><a href="./analysis.html">Analysis</a></li>
+      <li><a href="./schedule.html">Schedule</a></li>
+      <li><a href="./article.html">Article</a></li>
+      <li><a href="./report.html" class="active">Report</a></li>
+      <li><a href="./contact.html">Contact</a></li>
+    </ul>
+  </nav>
 
-        <a href="./report-history.html" class="history-btn">Report History</a>
-      </div>
-    </header>
-
-    <nav>
-      <ul>
-        <li><a href="./home.html">Home</a></li>
-        <li><a href="./about.html">About</a></li>
-        <li><a href="./laws.html">Laws</a></li>
-        <li><a href="./committee.html">Committee</a></li>
-        <li><a href="./analysis.html">Analysis</a></li>
-        <li><a href="./schedule.html">Schedule</a></li>
-        <li><a href="./article.html">Article</a></li>
-        <li><a href="./report.html" class="active">Report</a></li>
-        <li><a href="./contact.html">Contact</a></li>
-      </ul>
-    </nav>
-
-    <main>
-      <h2 class="page-title">Complaint Form</h2>
+  <main class="profile-layout">
+    <div class="card">
+      <h2>Submit Complaint</h2>
       <p class="intro">
-        Please fill out the form below to report any ragging or harassment
-        incident. Your privacy and safety are our top priority.
+        Please fill out the form below to report any ragging or harassment incident. Your privacy and safety are our top priority.
       </p>
-<main class="profile-layout"> 
 
-  <div class="card"> 
-    <h3>Submit Complaint</h3> 
+      <form id="reportForm">
+        <label>Title</label>
+        <input type="text" name="title" placeholder="Title" required />
 
-    <form id="reportForm">
-      <label>Title</label>
-      <input type="text" name="title" placeholder="Title" required />
+        <label>Description</label>
+        <textarea name="description" placeholder="Description" required></textarea>
 
-      <label>Description</label>
-      <textarea name="description" placeholder="Description" required></textarea>
+        <label>Problem Type</label>
+        <select name="problem_type" required>
+          <option value="">Select Problem Type</option>
+          <option value="Ragging">Ragging</option>
+          <option value="Bullying">Bullying</option>
+          <option value="Harassment">Harassment</option>
+        </select>
 
-      <label>Problem Type</label>
-      <select name="problem_type" required>
-        <option value="">Select Problem Type</option>
-        <option value="Ragging">Ragging</option>
-        <option value="Bullying">Bullying</option>
-        <option value="Harassment">Harassment</option>
-      </select>
+        <label>Location</label>
+        <input type="text" name="incident_location" placeholder="Location" required />
 
-      <label>Location</label>
-      <input type="text" name="incident_location" placeholder="Location" required />
+        <label>Incident Date</label>
+        <input type="date" name="incident_date" required />
 
-      <label>Incident Date</label>
-      <input type="date" name="incident_date" required />
+        <label>Your Name</label>
+        <input type="text" name="name" placeholder="Your Name" required />
 
-      <label>Your Name</label>
-      <input type="text" name="name" placeholder="Your Name" required />
+        <label>Class & Section</label>
+        <input type="text" name="class_section" placeholder="Class & Section" required />
 
-      <label>Class & Section</label>
-      <input type="text" name="class_section" placeholder="Class & Section" required />
+        <label>People Involved (optional)</label>
+        <input type="text" name="people_involved" placeholder="People Involved (optional)" />
 
-      <label>People Involved (optional)</label>
-      <input type="text" name="people_involved" placeholder="People Involved (optional)" />
+        <button type="submit" class="save-btn">Submit Complaint</button>
+        <p id="formMessage" style="text-align:center; margin-top:10px; color:green;"></p>
+      </form>
+    </div>
+  </main>
 
-      <button type="submit" class="save-btn">Submit Complaint</button>
-    </form>
-
-  </div>
-
-</main>
-
-    </main>
-
-    <footer>
-      <div class="footer-container">
-        <div class="footer-about">
-          <h3>About ARTC</h3>
-          <p>
-            The Anti-Ragging Task Committee (ARTC) works to ensure a safe and
-            respectful environment for students by preventing ragging through
-            awareness and action.
-          </p>
-        </div>
-
-        <div class="footer-links">
-          <h3>Quick Links</h3>
-          <ul>
-            <li><a href="./about.html">About</a></li>
-            <li><a href="./laws.html">Laws</a></li>
-            <li><a href="./committee.html">Committee</a></li>
-            <li><a href="./report.html">Report</a></li>
-            <li><a href="./contact.html">Contact</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-contact">
-          <h3>Contact</h3>
-          <p>Email: support@artc.org.in</p>
-          <p>Phone: +91 98765 43210</p>
-          <p>Chennai, India</p>
-        </div>
+  <footer>
+    <div class="footer-container">
+      <div class="footer-about">
+        <h3>About ARTC</h3>
+        <p>
+          The Anti-Ragging Task Committee (ARTC) works to ensure a safe and
+          respectful environment for students by preventing ragging through
+          awareness and action.
+        </p>
       </div>
-      <div class="footer-bottom">
-        <p>&copy; 2025 Anti-Ragging Committee. All Rights Reserved.</p>
+
+      <div class="footer-links">
+        <h3>Quick Links</h3>
+        <ul>
+          <li><a href="./about.html">About</a></li>
+          <li><a href="./laws.html">Laws</a></li>
+          <li><a href="./committee.html">Committee</a></li>
+          <li><a href="./report.html">Report</a></li>
+          <li><a href="./contact.html">Contact</a></li>
+        </ul>
       </div>
-    </footer>
-  </body>
+
+      <div class="footer-contact">
+        <h3>Contact</h3>
+        <p>Email: support@artc.org.in</p>
+        <p>Phone: +91 98765 43210</p>
+        <p>Chennai, India</p>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p>&copy; 2025 Anti-Ragging Committee. All Rights Reserved.</p>
+    </div>
+  </footer>
+
   <script src="../js/report.js"></script>
+</body>
 </html>

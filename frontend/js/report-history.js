@@ -19,7 +19,6 @@ async function fetchReports() {
 
 function showReports() {
   container.innerHTML = "";
-
   let list = [...reports];
   if (sortSelect.value === "oldest") list.reverse();
 
@@ -35,11 +34,10 @@ function showReports() {
             ${r.people_involved ? `People: ${r.people_involved}` : ""}
           </small>
         </div>
-
         <div>
           <b>${r.problem_type}</b><br>
           ${formatDate(r.incident_date)}<br>
-          <span class="${r.status.toLowerCase()}">${r.status}</span>
+          <span class="status status-${r.status.toLowerCase()}">${r.status}</span>
         </div>
       </div>
     `;

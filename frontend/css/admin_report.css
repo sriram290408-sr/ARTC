@@ -6,30 +6,12 @@
   color: #333;
 }
 
-.page-title {
-  text-align: center;
-  font-size: 28px;
-  font-weight: 700;
-  color: #222;
-  margin-top: 30px;
-}
-
-.intro {
-  text-align: center;
-  margin: 10px auto 40px;
-  font-size: 16px;
-  color: #555;
-  max-width: 750px;
-  line-height: 1.6;
-}
-
 .card {
   background: #fff;
   padding: 35px 30px;
   border-radius: 16px;
   box-shadow: 0 8px 20px rgba(0,0,0,.08);
-  transition: .3s;
-  position: relative;
+  transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .card:hover {
@@ -37,64 +19,61 @@
   box-shadow: 0 12px 28px rgba(0,0,0,.12);
 }
 
+.card h2 {
+  color: #005fcc;
+  font-size: 26px;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
 .card h3 {
   color: #005fcc;
-  font-size: 22px;
-  text-align: center;
-  margin-bottom: 25px;
+  font-size: 20px;
+  margin-bottom: 20px;
+  border-bottom: 1px solid #e0e0e0;
+  padding-bottom: 5px;
 }
 
-#reportForm {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 22px 25px;
-}
-
-#reportForm textarea,
-#reportForm button {
-  grid-column: span 2;
-}
-
-#reportForm label {
-  font-weight: 600;
-  font-size: 14px;
-  color: #333;
-}
-
-#reportForm input,
-#reportForm select,
-#reportForm textarea {
+input, textarea, select {
   width: 100%;
   padding: 12px 15px;
   border-radius: 10px;
   border: 1px solid #ccc;
   font-size: 14px;
-  transition: .25s;
+  transition: border-color 0.25s, box-shadow 0.25s;
 }
 
-#reportForm input:focus,
-#reportForm select:focus,
-#reportForm textarea:focus {
+input[readonly], textarea[readonly] {
+  background-color: #f9fafb;
+  color: #6b7280;
+  cursor: not-allowed;
+}
+
+input:focus, textarea:focus, select:focus {
   border-color: #005fcc;
-  box-shadow: 0 0 0 3px rgba(0,95,204,.15);
+  box-shadow: 0 0 0 3px rgba(0,95,204,0.15);
   outline: none;
 }
 
+textarea {
+  min-height: 80px;
+  resize: vertical;
+}
+
 .save-btn {
-  padding: 12px 28px;
-  background: #005fcc;
+  width: 200px;
+  margin: 15px auto 0;
+  background-color: #005fcc;
   color: #fff;
-  border: none;
   border-radius: 50px;
+  padding: 12px 0;
   font-weight: 600;
   cursor: pointer;
-  display: block;
-  margin: 25px auto 0;
-  transition: .25s;
+  transition: background 0.25s, transform 0.2s;
 }
 
 .save-btn:hover {
-  background: #003f8a;
+  background-color: #003f8a;
   transform: translateY(-2px);
 }
 
@@ -108,16 +87,58 @@
   border-radius: 10px;
   font-weight: 600;
   text-decoration: none;
-  transition: .25s;
+  transition: background 0.25s;
 }
 
 .history-btn:hover {
   background: #003f8a;
 }
 
+.admin-action {
+  background-color: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 12px;
+  padding: 20px;
+  margin-top: 20px;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 15px;
+}
+
+.admin-action label {
+  font-weight: 600;
+  color: #374151;
+}
+
+.admin-action select {
+  padding: 12px 15px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+  background-color: #fff;
+  appearance: none;
+  cursor: pointer;
+  transition: border-color 0.25s, box-shadow 0.25s;
+}
+
+.admin-action textarea {
+  min-height: 100px;
+  resize: vertical;
+  padding: 12px 15px;
+  border-radius: 10px;
+  border: 1px solid #d1d5db;
+  font-size: 14px;
+  transition: border-color 0.25s, box-shadow 0.25s;
+}
+
+.status-pending { color: orange; }
+.status-under_review { color: #3b82f6; }
+.status-completed { color: green; }
+.status-fake { color: red; }
+
 @media (max-width:768px) {
-  #reportForm {
-    grid-template-columns: 1fr;
+  .profile-layout {
+    padding: 20px;
   }
 
   .history-btn {

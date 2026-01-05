@@ -1,4 +1,5 @@
 const form = document.getElementById("reportForm");
+const formMessage = document.getElementById("formMessage");
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault(); 
@@ -24,13 +25,16 @@ form.addEventListener("submit", async (e) => {
     const result = await res.json();
 
     if (res.ok) {
-      alert(result.message);
+      formMessage.style.color = "green";
+      formMessage.innerText = "Complaint submitted successfully!";
       form.reset();
     } else {
-      alert("Failed: " + (result.detail || "Something went wrong"));
+      formMessage.style.color = "red";
+      formMessage.innerText = "Failed: " + (result.detail || "Something went wrong");
     }
   } catch (err) {
-    alert("Server error. Try again later.");
+    formMessage.style.color = "red";
+    formMessage.innerText = "Server error. Try again later.";
     console.error(err);
   }
 });

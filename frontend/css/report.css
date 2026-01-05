@@ -16,7 +16,7 @@
 
 .intro {
   text-align: center;
-  margin: 10px auto 40px;
+  margin: 10px auto 30px;
   font-size: 16px;
   color: #555;
   max-width: 700px;
@@ -28,8 +28,7 @@
   padding: 35px 30px;
   border-radius: 16px;
   box-shadow: 0 8px 20px rgba(0,0,0,.08);
-  transition: .3s;
-  position: relative;
+  transition: transform 0.3s, box-shadow 0.3s;
 }
 
 .card:hover {
@@ -61,20 +60,20 @@
   border-radius: 10px;
   border: 1px solid #ccc;
   font-size: 14px;
-  transition: .25s;
+  transition: border-color 0.25s, box-shadow 0.25s;
 }
 
 #reportForm input:focus,
 #reportForm select:focus,
 #reportForm textarea:focus {
-  border-color: #0a74da;
-  box-shadow: 0 0 0 3px rgba(10,116,218,.15);
+  border-color: #005fcc;
+  box-shadow: 0 0 0 3px rgba(0,95,204,.15);
   outline: none;
 }
 
 .save-btn {
   padding: 12px 28px;
-  background: #0a74da;
+  background: #005fcc;
   color: #fff;
   border: none;
   border-radius: 50px;
@@ -82,38 +81,39 @@
   cursor: pointer;
   margin: 25px auto 0;
   display: block;
-  transition: .25s;
+  transition: background 0.25s, transform 0.2s;
 }
 
 .save-btn:hover {
-  background: #065bb5;
+  background: #003f8a;
   transform: translateY(-2px);
 }
 
 .history-btn {
   position: absolute;
-  top: 320px;
+  top: 30px;
   right: 30px;
-  background: #0a74da;
+  background: #005fcc;
   color: #fff;
   padding: 10px 22px;
   border-radius: 10px;
   font-weight: 600;
   text-decoration: none;
-  transition: .25s;
+  transition: background 0.25s;
 }
 
 .history-btn:hover {
-  background: #065bb5;
+  background: #003f8a;
 }
 
 @media (max-width:768px) {
   #reportForm {
     grid-template-columns: 1fr;
   }
+
   .history-btn {
     position: static;
-    margin: 20px auto 0;
+    margin: 20px auto;
     display: block;
     text-align: center;
   }
