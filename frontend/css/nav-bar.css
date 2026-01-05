@@ -83,11 +83,6 @@ header {
   display: block;
 }
 
-.user-icon:hover .dropdown-arrow {
-  transform: rotate(180deg);
-}
-
-
 nav {
   background: #0a74da;
   text-align: center;
