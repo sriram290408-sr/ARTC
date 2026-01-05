@@ -29,6 +29,7 @@ async function loadReport() {
   class_section.value = r.class_section;
   people_involved.value = r.people_involved || "-";
   status.value = r.status;
+  remarks.value = r.remarks || "";
 }
 
 async function updateReport() {

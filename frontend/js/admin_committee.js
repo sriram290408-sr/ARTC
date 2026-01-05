@@ -1,9 +1,6 @@
-const container = document.querySelector(".card-container");
+const container = document.getElementById("cardContainer");
 const modal = document.getElementById("memberModal");
 const form = document.getElementById("memberForm");
-const nameInput = document.getElementById("name");
-const roleInput = document.getElementById("role");
-const descInput = document.getElementById("desc");
 
 document.addEventListener("DOMContentLoaded", loadMembers);
 
@@ -15,42 +12,58 @@ function closeForm() {
   modal.style.display = "none";
 }
 
-window.onclick = function(e) {
-  if (e.target === modal) closeForm();
-}
-
-form.addEventListener("submit", (e) => {
+form.addEventListener("submit", e => {
   e.preventDefault();
 
+  const members = JSON.parse(localStorage.getItem("committeeMembers")) || [];
+
   const member = {
-    name: nameInput.value.trim(),
-    role: roleInput.value.trim(),
-    desc: descInput.value.trim(),
-    img: "../assets/profile.png" 
+    id: Date.now(),
+    name: document.getElementById("name").value,
+    role: document.getElementById("role").value,
+    desc: document.getElementById("desc").value,
+    linkedin: document.getElementById("linkedin").value,
+    img: "../assets/profile.png"
   };
 
-  const members = JSON.parse(localStorage.getItem("committeeMembers")) || [];
   members.push(member);
   localStorage.setItem("committeeMembers", JSON.stringify(members));
 
-  addCard(member);
+  loadMembers();
   form.reset();
   closeForm();
 });
 
 function loadMembers() {
   const members = JSON.parse(localStorage.getItem("committeeMembers")) || [];
-  members.forEach(addCard);
+  container.innerHTML = "";
+
+  members.forEach(member => {
+    const card = document.createElement("div");
+    card.className = "card";
+
+    card.innerHTML = `
+      <img src="${member.img}">
+      <h3>${member.name}</h3>
+      <p class="role">${member.role}</p>
+      <p>${member.desc}</p>
+
+      <a href="${member.linkedin}" target="_blank" class="linkedin">
+        LinkedIn
+      </a>
+
+      <button class="delete-btn" onclick="deleteMember(${member.id})">
+        Delete
+      </button>
+    `;
+
+    container.appendChild(card);
+  });
 }
 
-function addCard(member) {
-  const card = document.createElement("div");
-  card.className = "card";
-  card.innerHTML = `
-    <img src="${member.img}" alt="Profile">
-    <h3>${member.name}</h3>
-    <p class="role">${member.role}</p>
-    <p>${member.desc}</p>
-  `;
-  container.appendChild(card);
+function deleteMember(id) {
+  let members = JSON.parse(localStorage.getItem("committeeMembers")) || [];
+  members = members.filter(m => m.id !== id);
+  localStorage.setItem("committeeMembers", JSON.stringify(members));
+  loadMembers();
 }

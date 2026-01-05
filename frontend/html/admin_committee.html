@@ -1,103 +1,108 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <title>Admin Committee</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="icon" href="../assets/icon.png" />
-    <link rel="stylesheet" href="../css/nav-bar.css" />
-    <link rel="stylesheet" href="../css/admin_committee.css" />
-  </head>
-  <body>
-    <header>
-      <div class="header-left">
-        <img src="../assets/icon.png" alt="ARTC Logo" class="logo" />
-      </div>
+<head>
+  <meta charset="UTF-8" />
+  <title>Admin Committee</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="icon" href="../assets/icon.png" />
+  <link rel="stylesheet" href="../css/nav-bar.css" />
+  <link rel="stylesheet" href="../css/admin_committee.css" />
+</head>
 
-      <div class="user-icon">
-        <img src="../assets/profile.png" width="100px" height="100px" />
-      </div>
-      <div class="dropdown">
-          <a href="./admin.html">Home</a>
-          <a href="./admin_profile.html">Profile</a>
-          <a href="./login.html">Logout</a>
-        </div>
-      </div>
-    </header>
+<body>
+<header>
+  <div class="header-left">
+    <img src="../assets/icon.png" alt="ARTC Logo" class="logo" />
+  </div>
 
-    <nav>
+  <div class="user-icon">
+    <img src="../assets/profile.png" />
+  </div>
+  <div class="dropdown">
+    <a href="./admin.html">Home</a>
+    <a href="./admin_profile.html">Profile</a>
+    <a href="./login.html">Logout</a>
+  </div>
+</header>
+
+<nav>
+  <ul>
+    <li><a href="./admin.html">Home</a></li>
+    <li><a href="./admin_about.html">About</a></li>
+    <li><a href="./admin_laws.html">Laws</a></li>
+    <li><a href="./admin_committee.html" class="active">Committee</a></li>
+    <li><a href="./admin_analysis.html">Analysis</a></li>
+    <li><a href="./admin_schedule.html">Schedule</a></li>
+    <li><a href="./admin_article.html">Article</a></li>
+    <li><a href="./admin_report.html">Report</a></li>
+    <li><a href="./admin_contact.html">Contact</a></li>
+  </ul>
+</nav>
+
+<main>
+  <h2>Meet Our Committee Members</h2>
+  <p class="intro">
+    The ARTC Committee consists of dedicated teachers and student
+    representatives who ensure a safe and respectful campus environment.
+  </p>
+
+  <h2 class="admin-title">Admin – Committee Management</h2>
+
+  <button class="floating-add" onclick="openForm()">+</button>
+
+  <div class="card-container" id="cardContainer"></div>
+</main>
+
+<div class="modal" id="memberModal">
+  <div class="modal-content">
+    <span class="close" onclick="closeForm()">×</span>
+    <h3>Add Committee Member</h3>
+
+    <form id="memberForm">
+      <input type="text" id="name" placeholder="Name" required />
+      <input type="text" id="role" placeholder="Role" required />
+      <textarea id="desc" placeholder="Description"></textarea>
+      <input type="url" id="linkedin" placeholder="LinkedIn Profile URL" required />
+      <button type="submit">Add Member</button>
+    </form>
+  </div>
+</div>
+
+<footer>
+  <div class="footer-container">
+    <div class="footer-about">
+      <h3>About ARTC</h3>
+      <p>
+        The Anti-Ragging Task Committee (ARTC) ensures a safe and respectful
+        environment for students by preventing ragging through awareness and
+        action.
+      </p>
+    </div>
+
+    <div class="footer-links">
+      <h3>Quick Links</h3>
       <ul>
-        <li><a href="./admin.html">Home</a></li>
         <li><a href="./admin_about.html">About</a></li>
         <li><a href="./admin_laws.html">Laws</a></li>
-        <li><a href="./admin_committee.html" class="active">Committee</a></li>
-        <li><a href="./admin_analysis.html">Analysis</a></li>
-        <li><a href="./admin_schedule.html">Schedule</a></li>
-        <li><a href="./admin_article.html">Article</a></li>
+        <li><a href="./admin_committee.html">Committee</a></li>
         <li><a href="./admin_report.html">Report</a></li>
         <li><a href="./admin_contact.html">Contact</a></li>
       </ul>
-    </nav>
-
-    <main>
-      <h2>Meet Our Committee Members</h2>
-      <p class="intro">
-        The ARTC Committee consists of dedicated teachers and student
-        representatives who ensure a safe and respectful campus environment.
-      </p>
-
-      <h2 class="admin-title">Admin – Committee Management</h2>
-
-      <button class="floating-add" onclick="openForm()">+</button>
-
-      <div class="card-container" id="cardContainer"></div>
-    </main>
-
-    <div class="modal" id="memberModal">
-      <div class="modal-content">
-        <span class="close" onclick="closeForm()">×</span>
-        <h3>Add Committee Member</h3>
-        <form id="memberForm">
-          <input type="text" id="name" placeholder="Name" required />
-          <input type="text" id="role" placeholder="Role" required />
-          <textarea id="desc" placeholder="Description" rows="3"></textarea>
-          <button type="submit">Add Member</button>
-        </form>
-      </div>
     </div>
 
-    <footer>
-      <div class="footer-container">
-        <div class="footer-about">
-          <h3>About ARTC</h3>
-          <p>
-            The Anti-Ragging Task Committee (ARTC) ensures a safe and respectful
-            environment for students by preventing ragging through awareness and
-            action.
-          </p>
-        </div>
-        <div class="footer-links">
-          <h3>Quick Links</h3>
-          <ul>
-            <li><a href="./about.html">About</a></li>
-            <li><a href="./laws.html">Laws</a></li>
-            <li><a href="./admin_committee.html">Committee</a></li>
-            <li><a href="./admin_report.html">Report</a></li>
-            <li><a href="./contact.html">Contact</a></li>
-          </ul>
-        </div>
-        <div class="footer-contact">
-          <h3>Contact</h3>
-          <p>Email: support@artc.org.in</p>
-          <p>Phone: +91 98765 43210</p>
-          <p>Chennai, India</p>
-        </div>
-      </div>
-      <div class="footer-bottom">
-        <p>&copy; 2025 Anti-Ragging Committee. All Rights Reserved.</p>
-      </div>
-    </footer>
+    <div class="footer-contact">
+      <h3>Contact</h3>
+      <p>Email: support@artc.org.in</p>
+      <p>Phone: +91 98765 43210</p>
+      <p>Chennai, India</p>
+    </div>
+  </div>
 
-    <script src="../js/admin_committee.js"></script>
-  </body>
+  <div class="footer-bottom">
+    <p>&copy; 2025 Anti-Ragging Committee. All Rights Reserved.</p>
+  </div>
+</footer>
+
+<script src="../js/admin_committee.js"></script>
+</body>
 </html>
