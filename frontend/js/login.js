@@ -26,9 +26,7 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
     } else {
       window.location.href = "/frontend/html/home.html";
     }
-
   } catch (err) {
-    alert("Server error. Try again later.");
-    console.error(err);
+    alert("Server error");
   }
 });

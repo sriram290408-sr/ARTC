@@ -1,11 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException, status
 from sqlalchemy.orm import Session
-
 from database import SessionLocal
 from models.user import User
+from schemas.auth import LoginSchema
 from core.security import verify_password, create_access_token
 
-router = APIRouter(prefix="/auth", tags=["Authentication"])
+router = APIRouter(prefix="/auth", tags=["Auth"])
 
 def get_db():
     db = SessionLocal()
@@ -14,38 +14,22 @@ def get_db():
     finally:
         db.close()
 
-
 @router.post("/login")
-def login(data: dict, db: Session = Depends(get_db)):
-    email = data.get("email")
-    password = data.get("password")
+def login(data: LoginSchema, db: Session = Depends(get_db)):
+    user = db.query(User).filter(User.email == data.email).first()
 
-    if not email or not password:
-        raise HTTPException(
-            status_code=status.HTTP_400_BAD_REQUEST,
-            detail="Email and password required"
-        )
-
-    user = db.query(User).filter(User.email == email).first()
-
-    if not user:
+    if not user or not verify_password(data.password, user.password):
         raise HTTPException(
             status_code=status.HTTP_401_UNAUTHORIZED,
             detail="Invalid email or password"
         )
 
-    if not verify_password(password, user.password):
-        raise HTTPException(
-            status_code=status.HTTP_401_UNAUTHORIZED,
-            detail="Invalid email or password"
-        )
-
-    access_token = create_access_token({
+    token = create_access_token({
         "sub": str(user.id),
         "role": user.role
     })
 
     return {
-        "access_token": access_token,
+        "access_token": token,
         "role": user.role
     }
