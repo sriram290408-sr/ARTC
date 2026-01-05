@@ -5,10 +5,9 @@ async function loadSchedule() {
   try {
     const res = await fetch(`${API}/schedule`);
     const data = await res.json();
-
     container.innerHTML = "";
 
-    if (data.length === 0) {
+    if (!data.length) {
       container.innerHTML = "<p>No schedules available</p>";
       return;
     }
@@ -18,13 +17,12 @@ async function loadSchedule() {
         <div class="schedule-card">
           <h3>${item.event_name}</h3>
           <p><strong>Date:</strong> ${new Date(item.datetime).toLocaleDateString()}</p>
-          <p><strong>Time:</strong> ${new Date(item.datetime).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}</p>
+          <p><strong>Time:</strong> ${new Date(item.datetime).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</p>
           <p><strong>Venue:</strong> ${item.venue}</p>
         </div>
       `;
     });
-
-  } catch (err) {
+  } catch {
     container.innerHTML = "<p>Error loading schedule</p>";
   }
 }
