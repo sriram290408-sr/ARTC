@@ -7,23 +7,33 @@ let reports = [];
 
 async function loadReports() {
   try {
-    const res = await fetch(`${API}/reports`, {
+    const res = await fetch(`${API}/reports/history`, {
       headers: {
         Authorization: `Bearer ${localStorage.getItem("token")}`
       }
     });
 
-    if (!res.ok) throw new Error("Failed to fetch reports");
+    if (!res.ok) {
+      throw new Error("Failed to fetch report history");
+    }
 
     reports = await res.json();
     showReports();
   } catch (err) {
-    container.innerHTML = `<p class="error">Error loading reports: ${err.message}</p>`;
+    console.error(err);
+    container.innerHTML = `
+      <p class="error">Error loading reports</p>
+    `;
   }
 }
 
 function showReports() {
   container.innerHTML = "";
+
+  if (reports.length === 0) {
+    container.innerHTML = "<p>No reports found.</p>";
+    return;
+  }
 
   let list = [...reports];
   if (sortSelect.value === "oldest") list.reverse();
@@ -31,18 +41,22 @@ function showReports() {
   list.forEach(r => {
     container.innerHTML += `
       <div class="report-card status-${r.status}" onclick="openReport(${r.id})">
-        <div>
-          <h3>${r.title}</h3>
+        <div class="left">
+          <h3>${r.title || "Report"}</h3>
           <p>${truncate(r.description, 100)}</p>
+
           <small>
             <b>Location:</b> ${r.incident_location}<br>
             <b>Reported By:</b> ${r.name} (${r.class_section})
           </small>
         </div>
-        <div>
+
+        <div class="right">
           <b>${r.problem_type}</b><br>
           ${formatDate(r.incident_date)}<br>
-          <span class="status ${r.status}">${r.status}</span>
+          <span class="status ${r.status}">
+            ${r.status.toUpperCase()}
+          </span>
         </div>
       </div>
     `;
@@ -57,7 +71,7 @@ function formatDate(d) {
   return new Date(d).toLocaleDateString("en-IN");
 }
 
-function truncate(str, max) {
+function truncate(str = "", max) {
   return str.length > max ? str.slice(0, max) + "..." : str;
 }
 

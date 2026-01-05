@@ -1,14 +1,6 @@
 const API = "https://artc-backend.onrender.com";
-
-function openPopup() {
-  document.querySelector(".popup").style.display = "block";
-  document.querySelector(".overlay").style.display = "block";
-}
-
-function closePopup() {
-  document.querySelector(".popup").style.display = "none";
-  document.querySelector(".overlay").style.display = "none";
-}
+const container = document.getElementById("scheduleContainer");
+const deleteBtn = document.getElementById("deleteBtn");
 
 document.getElementById("scheduleForm").addEventListener("submit", async e => {
   e.preventDefault();
@@ -28,7 +20,7 @@ document.getElementById("scheduleForm").addEventListener("submit", async e => {
     body: JSON.stringify(data)
   });
 
-  closePopup();
+  e.target.reset();
   loadSchedule();
 });
 
@@ -36,26 +28,47 @@ async function loadSchedule() {
   const res = await fetch(`${API}/schedule`);
   const data = await res.json();
 
-  const list = document.getElementById("scheduleList");
-  list.innerHTML = "";
+  container.innerHTML = "";
 
-  data.forEach(s => {
-    list.innerHTML += `
-      <li>
-        ${s.event_name} - ${s.venue} - ${s.datetime}
-        <button onclick="deleteSchedule(${s.id})">X</button>
-      </li>`;
+  data.forEach(item => {
+    container.innerHTML += `
+      <div class="schedule-card">
+        <h3>${item.event_name}</h3>
+        <p><strong>Date:</strong> ${new Date(item.datetime).toLocaleDateString()}</p>
+        <p><strong>Time:</strong> ${new Date(item.datetime).toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}</p>
+        <p><strong>Venue:</strong> ${item.venue}</p>
+        <input type="checkbox" class="select" data-id="${item.id}">
+      </div>
+    `;
   });
+
+  toggleDeleteBtn();
 }
 
-async function deleteSchedule(id) {
-  await fetch(`${API}/schedule/${id}`, {
-    method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")}`
-    }
-  });
+function toggleDeleteBtn() {
+  const checkboxes = document.querySelectorAll(".select");
+  checkboxes.forEach(cb => cb.addEventListener("change", () => {
+    deleteBtn.style.display =
+      document.querySelectorAll(".select:checked").length > 0
+        ? "inline-block"
+        : "none";
+  }));
+}
+
+deleteBtn.addEventListener("click", async () => {
+  const selected = document.querySelectorAll(".select:checked");
+
+  for (let cb of selected) {
+    await fetch(`${API}/schedule/${cb.dataset.id}`, {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${localStorage.getItem("token")}`
+      }
+    });
+  }
+
+  deleteBtn.style.display = "none";
   loadSchedule();
-}
+});
 
 loadSchedule();
