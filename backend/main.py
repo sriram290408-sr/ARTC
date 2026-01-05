@@ -14,7 +14,7 @@ from routers.user import router as user_router
 from routers.schedule import router as schedule_router
 from routers.committee import router as committee_router
 from routers.report import router as report_router
-from routers.login import router as login_logs_router
+from routers.auth import router as login_logs_router
 
 app = FastAPI(title="Backend API")
 
