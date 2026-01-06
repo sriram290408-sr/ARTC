@@ -17,6 +17,10 @@ def get_db():
 
 @router.post("/signup")
 def signup(data: UserSignup, db: Session = Depends(get_db)):
+
+    if data.role not in ["student", "faculty"]:
+        raise HTTPException(status_code=400, detail="Invalid role")
+
     if db.query(User).filter(User.email == data.email).first():
         raise HTTPException(status_code=400, detail="Email already registered")
 

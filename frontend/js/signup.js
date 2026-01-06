@@ -1,8 +1,8 @@
 document.querySelector(".signup-form").addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const fullname = document.getElementById("fullname").value;
-  const email = document.getElementById("email").value;
+  const fullname = document.getElementById("fullname").value.trim();
+  const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value;
   const confirm = document.getElementById("confirm").value;
   const role = document.getElementById("role").value;
@@ -17,9 +17,9 @@ document.querySelector(".signup-form").addEventListener("submit", async (e) => {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
       full_name: fullname,
-      email: email,
-      password: password,
-      role: role
+      email,
+      password,
+      role
     })
   });
 
