@@ -6,8 +6,6 @@ class Report(Base):
     __tablename__ = "reports"
 
     id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-
     title = Column(String, nullable=False)
     description = Column(Text, nullable=False)
     problem_type = Column(String, nullable=False)
@@ -19,5 +17,7 @@ class Report(Base):
     name = Column(String, nullable=False)
     class_section = Column(String, nullable=False)
     people_involved = Column(String, nullable=True)
+
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
 
     created_at = Column(DateTime, default=datetime.utcnow)

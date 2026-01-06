@@ -1,23 +1,26 @@
-from sqlalchemy import Column, Integer, String, Text, Date, DateTime, ForeignKey
-from datetime import datetime
-from database import Base
+from pydantic import BaseModel
+from datetime import date, datetime
 
-class Report(Base):
-    __tablename__ = "reports"
+class ReportCreate(BaseModel):
+    title: str
+    description: str
+    problem_type: str
+    incident_location: str
+    incident_date: date
+    name: str
+    class_section: str
+    people_involved: str | None = None
 
-    id = Column(Integer, primary_key=True, index=True)
-    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
 
-    title = Column(String, nullable=False)
-    description = Column(Text, nullable=False)
-    problem_type = Column(String, nullable=False)
-    incident_location = Column(String, nullable=False)
-    incident_date = Column(Date, nullable=False)
+class ReportUpdate(BaseModel):
+    status: str
 
-    status = Column(String, default="pending")
 
-    name = Column(String, nullable=False)
-    class_section = Column(String, nullable=False)
-    people_involved = Column(String, nullable=True)
+class ReportOut(ReportCreate):
+    id: int
+    status: str
+    user_id: int
+    created_at: datetime
 
-    created_at = Column(DateTime, default=datetime.utcnow)
+    class Config:
+        from_attributes = True

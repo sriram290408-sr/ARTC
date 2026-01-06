@@ -1,7 +1,7 @@
 const API = "https://artc-backend.onrender.com";
 const token = localStorage.getItem("token");
 
-let chartInstance = null;
+let chart;
 
 async function loadAnalytics() {
   const canvas = document.getElementById("complaintChart");
@@ -18,31 +18,20 @@ async function loadAnalytics() {
 
     const data = await res.json();
 
-    if (chartInstance) chartInstance.destroy();
+    if (chart) chart.destroy();
 
-    chartInstance = new Chart(canvas, {
+    chart = new Chart(canvas.getContext("2d"), {
       type: "doughnut",
       data: {
         labels: ["Pending", "Completed", "Fake"],
-        datasets: [
-          {
-            data: [
-              data.pending || 0,
-              data.completed || 0,
-              data.fake || 0
-            ],
-            backgroundColor: ["#ffc107", "#28a745", "#dc3545"],
-            borderWidth: 0
-          }
-        ]
-      },
-      options: {
-        responsive: true,
-        plugins: {
-          legend: {
-            position: "bottom"
-          }
-        }
+        datasets: [{
+          data: [
+            data.pending || 0,
+            data.completed || 0,
+            data.fake || 0
+          ],
+          backgroundColor: ["#ffc107", "#28a745", "#dc3545"]
+        }]
       }
     });
 
