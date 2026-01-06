@@ -6,6 +6,11 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value.trim();
 
+  if (!email || !password) {
+    alert("Please fill all fields");
+    return;
+  }
+
   try {
     const res = await fetch(`${BASE_URL}/auth/login`, {
       method: "POST",
@@ -22,14 +27,16 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
 
     localStorage.setItem("access_token", data.access_token);
     localStorage.setItem("role", data.role);
+    localStorage.setItem("name", data.name);
 
-    if (data.role === "admin") {
+    if (data.role === "admin" || data.role === "faculty") {
       window.location.href = "../admin/dashboard.html";
     } else {
       window.location.href = "../user/dashboard.html";
     }
 
-  } catch {
-    alert("Server error");
+  } catch (err) {
+    console.error(err);
+    alert("Server error. Please try again later.");
   }
 });
