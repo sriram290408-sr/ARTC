@@ -1,35 +1,47 @@
-const BASE_URL = "https://artc-backend.onrender.com";
+const API = "https://artc-backend.onrender.com";
+const container = document.getElementById("committeeContainer");
 
-async function addCommitteeMember(name, designation) {
-  const res = await fetch(`${BASE_URL}/committee`, {
+async function loadCommittee() {
+  const res = await fetch(`${API}/committee`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("access_token")}`
+    }
+  });
+
+  const members = await res.json();
+  container.innerHTML = "";
+
+  members.forEach(m => {
+    container.innerHTML += `
+      <div class="committee-card">
+        <h3>${m.name}</h3>
+        <p>${m.designation}</p>
+        <button onclick="deleteMember(${m.id})">Delete</button>
+      </div>
+    `;
+  });
+}
+
+async function addMember(name, designation) {
+  await fetch(`${API}/committee`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${localStorage.getItem("access_token")}`
+      Authorization: `Bearer ${localStorage.getItem("access_token")}`
     },
     body: JSON.stringify({ name, designation })
   });
-
-  return res.json();
+  loadCommittee();
 }
 
-async function viewCommitteeMembers() {
-  const res = await fetch(`${BASE_URL}/committee`, {
-    headers: {
-      "Authorization": `Bearer ${localStorage.getItem("access_token")}`
-    }
-  });
-
-  return res.json();
-}
-
-async function deleteCommitteeMember(id) {
-  const res = await fetch(`${BASE_URL}/committee/${id}`, {
+async function deleteMember(id) {
+  await fetch(`${API}/committee/${id}`, {
     method: "DELETE",
     headers: {
-      "Authorization": `Bearer ${localStorage.getItem("access_token")}`
+      Authorization: `Bearer ${localStorage.getItem("access_token")}`
     }
   });
-
-  return res.json();
+  loadCommittee();
 }
+
+loadCommittee();

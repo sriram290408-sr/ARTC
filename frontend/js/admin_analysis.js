@@ -1,12 +1,7 @@
 const API = "https://artc-backend.onrender.com";
 const token = localStorage.getItem("token");
 
-let chart;
-
-async function loadAnalytics() {
-  const canvas = document.getElementById("complaintChart");
-  if (!canvas) return;
-
+async function loadAnalysis() {
   try {
     const res = await fetch(`${API}/reports/analytics`, {
       headers: {
@@ -14,31 +9,48 @@ async function loadAnalytics() {
       }
     });
 
-    if (!res.ok) throw new Error("Unauthorized");
+    if (!res.ok) {
+      throw new Error("Failed to load analytics");
+    }
 
     const data = await res.json();
-
-    if (chart) chart.destroy();
-
-    chart = new Chart(canvas.getContext("2d"), {
-      type: "doughnut",
-      data: {
-        labels: ["Pending", "Completed", "Fake"],
-        datasets: [{
-          data: [
-            data.pending || 0,
-            data.completed || 0,
-            data.fake || 0
-          ],
-          backgroundColor: ["#ffc107", "#28a745", "#dc3545"]
-        }]
-      }
-    });
-
-  } catch {
-    canvas.outerHTML =
-      "<p style='color:red;text-align:center'>Admin access required</p>";
+    renderChart(data);
+  } catch (err) {
+    console.error(err);
+    alert("Unable to load analysis data");
   }
 }
 
-document.addEventListener("DOMContentLoaded", loadAnalytics);
+function renderChart(data) {
+  const canvas = document.getElementById("complaintChart");
+  if (!canvas) {
+    console.error("Canvas not found");
+    return;
+  }
+
+  const ctx = canvas.getContext("2d");
+
+  new Chart(ctx, {
+    type: "pie",
+    data: {
+      labels: ["Pending", "Verified"],
+      datasets: [{
+        data: [
+          data.pending || 0,
+          data.verified || 0
+        ],
+        backgroundColor: ["#e67e22", "#27ae60"]
+      }]
+    },
+    options: {
+      responsive: true,
+      plugins: {
+        legend: {
+          position: "bottom"
+        }
+      }
+    }
+  });
+}
+
+loadAnalysis();

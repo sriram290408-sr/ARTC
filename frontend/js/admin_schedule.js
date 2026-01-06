@@ -1,35 +1,47 @@
-const BASE_URL = "https://artc-backend.onrender.com";
+const API = "https://artc-backend.onrender.com";
+const container = document.getElementById("scheduleContainer");
+
+async function loadSchedules() {
+  const res = await fetch(`${API}/schedules`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("access_token")}`
+    }
+  });
+
+  const schedules = await res.json();
+  container.innerHTML = "";
+
+  schedules.forEach(s => {
+    container.innerHTML += `
+      <div class="schedule-card">
+        <h3>${s.title}</h3>
+        <p>${s.date} - ${s.time}</p>
+        <button onclick="deleteSchedule(${s.id})">Delete</button>
+      </div>
+    `;
+  });
+}
 
 async function createSchedule(title, date, time) {
-  const res = await fetch(`${BASE_URL}/schedules`, {
+  await fetch(`${API}/schedules`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
-      "Authorization": `Bearer ${localStorage.getItem("access_token")}`
+      Authorization: `Bearer ${localStorage.getItem("access_token")}`
     },
     body: JSON.stringify({ title, date, time })
   });
-
-  return res.json();
-}
-
-async function viewSchedules() {
-  const res = await fetch(`${BASE_URL}/schedules`, {
-    headers: {
-      "Authorization": `Bearer ${localStorage.getItem("access_token")}`
-    }
-  });
-
-  return res.json();
+  loadSchedules();
 }
 
 async function deleteSchedule(id) {
-  const res = await fetch(`${BASE_URL}/schedules/${id}`, {
+  await fetch(`${API}/schedules/${id}`, {
     method: "DELETE",
     headers: {
-      "Authorization": `Bearer ${localStorage.getItem("access_token")}`
+      Authorization: `Bearer ${localStorage.getItem("access_token")}`
     }
   });
-
-  return res.json();
+  loadSchedules();
 }
+
+loadSchedules();

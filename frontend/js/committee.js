@@ -1,28 +1,24 @@
+const API = "https://artc-backend.onrender.com";
 const container = document.getElementById("committeeContainer");
 
-document.addEventListener("DOMContentLoaded", () => {
-  const members = JSON.parse(localStorage.getItem("committeeMembers")) || [];
-
-  if (members.length === 0) {
-    container.innerHTML = "<p>No committee members added yet.</p>";
-    return;
-  }
-
-  members.forEach(member => {
-    const card = document.createElement("div");
-    card.className = "card";
-
-    card.innerHTML = `
-      <img src="${member.img}">
-      <h3>${member.name}</h3>
-      <p class="role">${member.role}</p>
-      <p>${member.desc}</p>
-
-      <a href="${member.linkedin}" target="_blank" class="linkedin">
-        LinkedIn
-      </a>
-    `;
-
-    container.appendChild(card);
+async function loadCommittee() {
+  const res = await fetch(`${API}/committee`, {
+    headers: {
+      Authorization: `Bearer ${localStorage.getItem("access_token")}`
+    }
   });
-});
+
+  const members = await res.json();
+  container.innerHTML = "";
+
+  members.forEach(m => {
+    container.innerHTML += `
+      <div class="committee-card">
+        <h3>${m.name}</h3>
+        <p>${m.designation}</p>
+      </div>
+    `;
+  });
+}
+
+loadCommittee();
