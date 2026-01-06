@@ -1,46 +1,35 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from database import get_db
+from database import SessionLocal
 from models.report import Report
-from schemas.report import ReportCreate, ReportUpdate
+from schemas.report import ReportCreate
 from dependencies.auth import get_current_user
 
-router = APIRouter()
+router = APIRouter(prefix="/report", tags=["Report"])
+
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
 @router.post("/")
-def create_report(data: ReportCreate,
-                  db: Session = Depends(get_db),
-                  user=Depends(get_current_user)):
-    if user.role != "student":
-        raise HTTPException(status_code=403)
-
-    report = Report(title=data.title, content=data.content, student_id=user.id)
+def create_report(
+    data: ReportCreate,
+    db: Session = Depends(get_db),
+    user=Depends(get_current_user)
+):
+    report = Report(
+        **data.dict(),
+        student_id=int(user["sub"])
+    )
     db.add(report)
     db.commit()
-    return {"message": "Report created"}
-
-@router.get("/my")
-def my_reports(db: Session = Depends(get_db),
-               user=Depends(get_current_user)):
-    return db.query(Report).filter(Report.student_id == user.id).all()
+    return {"message": "Report submitted successfully"}
 
 @router.get("/")
-def all_reports(db: Session = Depends(get_db),
-                user=Depends(get_current_user)):
-    if user.role != "admin":
-        raise HTTPException(status_code=403)
-    return db.query(Report).all()
-
-@router.put("/{id}")
-def update_report(id: int,
-                  data: ReportUpdate,
-                  db: Session = Depends(get_db),
-                  user=Depends(get_current_user)):
-    if user.role != "admin":
-        raise HTTPException(status_code=403)
-
-    report = db.query(Report).get(id)
-    report.title = data.title
-    report.content = data.content
-    db.commit()
-    return {"message": "Updated"}
+def get_reports(db: Session = Depends(get_db), user=Depends(get_current_user)):
+    if user["role"] == "faculty":
+        return db.query(Report).all()
+    return db.query(Report).filter(Report.student_id == int(user["sub"])).all()
