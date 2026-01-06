@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from database import get_db
+from auth import get_db
 from models.schedule import Schedule
 from schemas.schedule import ScheduleCreate, ScheduleOut
 from core.dependency import get_current_user, admin_only

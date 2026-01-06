@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
 from datetime import datetime
-from database import get_db
+from auth import get_db
 from models.report import Report
 from schemas.report import ReportCreate, ReportOut
 from core.dependency import get_current_user
