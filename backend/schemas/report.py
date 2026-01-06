@@ -13,4 +13,4 @@ class ReportOut(ReportBase):
     created_at: datetime
     created_by: str
     class Config:
-        orm_mode = True
+        from_attributes = True
