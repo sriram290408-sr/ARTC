@@ -1,30 +1,36 @@
-const API = "https://artc-backend.onrender.com";
-const container = document.getElementById("scheduleContainer");
+const API_URL = "https://artc-backend.onrender.com";
 
-async function loadSchedule() {
+document.addEventListener("DOMContentLoaded", fetchSchedules);
+
+async function fetchSchedules() {
+  const container = document.getElementById("scheduleContainer");
+  container.innerHTML = "";
+
   try {
-    const res = await fetch(`${API}/schedule`);
-    const data = await res.json();
-    container.innerHTML = "";
+    const res = await fetch(`${API_URL}/schedule`);
+    const schedules = await res.json();
 
-    if (!data.length) {
+    if (schedules.length === 0) {
       container.innerHTML = "<p>No schedules available</p>";
       return;
     }
 
-    data.forEach(item => {
-      container.innerHTML += `
-        <div class="schedule-card">
-          <h3>${item.event_name}</h3>
-          <p><strong>Date:</strong> ${new Date(item.datetime).toLocaleDateString()}</p>
-          <p><strong>Time:</strong> ${new Date(item.datetime).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })}</p>
-          <p><strong>Venue:</strong> ${item.venue}</p>
-        </div>
+    schedules.forEach(s => {
+      const card = document.createElement("div");
+      card.className = "schedule-card";
+
+      card.innerHTML = `
+        <h3>${s.title}</h3>
+        <p><strong>Date:</strong> ${s.date}</p>
+        <p><strong>Time:</strong> ${s.time}</p>
+        <p><strong>Venue:</strong> ${s.venue}</p>
       `;
+
+      container.appendChild(card);
     });
-  } catch {
-    container.innerHTML = "<p>Error loading schedule</p>";
+
+  } catch (err) {
+    console.error(err);
+    container.innerHTML = "<p>Error loading schedules</p>";
   }
 }
-
-loadSchedule();

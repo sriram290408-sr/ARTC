@@ -1,16 +1,50 @@
-const API = "https://artc-backend.onrender.com";
-const container = document.getElementById("scheduleContainer");
-const deleteBtn = document.getElementById("deleteBtn");
+const API_URL = "https://artc-backend.onrender.com";
 const token = localStorage.getItem("access_token");
 
-document.getElementById("scheduleForm").addEventListener("submit", async e => {
+document.addEventListener("DOMContentLoaded", () => {
+  fetchSchedules();
+  document.getElementById("scheduleForm").addEventListener("submit", addSchedule);
+});
+
+async function fetchSchedules() {
+  const container = document.getElementById("scheduleContainer");
+  container.innerHTML = "";
+
+  const res = await fetch(`${API_URL}/schedule`);
+  const schedules = await res.json();
+
+  schedules.forEach(s => {
+    const card = document.createElement("div");
+    card.className = "schedule-card";
+
+    card.innerHTML = `
+      <input type="checkbox" class="select" data-id="${s.id}">
+      <h3>${s.title}</h3>
+      <p>Date: ${s.date}</p>
+      <p>Time: ${s.time}</p>
+      <p>Venue: ${s.venue}</p>
+    `;
+
+    container.appendChild(card);
+  });
+
+  document.getElementById("deleteBtn").style.display = "block";
+}
+
+async function addSchedule(e) {
   e.preventDefault();
+
+  const datetime = document.getElementById("datetime").value;
+  const [date, time] = datetime.split("T");
+
   const data = {
-    event_name: document.getElementById("event_name").value,
+    title: document.getElementById("event_name").value,
     venue: document.getElementById("venue").value,
-    datetime: document.getElementById("datetime").value
+    date,
+    time
   };
-  await fetch(`${API}/schedule/`, {
+
+  const res = await fetch(`${API_URL}/schedule`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -18,48 +52,27 @@ document.getElementById("scheduleForm").addEventListener("submit", async e => {
     },
     body: JSON.stringify(data)
   });
-  e.target.reset();
-  loadSchedule();
-});
 
-async function loadSchedule() {
-  const res = await fetch(`${API}/schedule/`);
-  const data = await res.json();
-  container.innerHTML = "";
-  deleteBtn.style.display = "none";
-
-  data.forEach(item => {
-    container.innerHTML += `
-      <div class="schedule-card">
-        <div class="schedule-left">
-          <h3>${item.event_name}</h3>
-          <p><strong>Date:</strong> ${new Date(item.datetime).toLocaleDateString()}</p>
-          <p><strong>Time:</strong> ${new Date(item.datetime).toLocaleTimeString([], { hour:'2-digit', minute:'2-digit'})}</p>
-          <p><strong>Venue:</strong> ${item.venue}</p>
-        </div>
-        <div class="schedule-right">
-          <input type="checkbox" class="selectSchedule" data-id="${item.id}">
-        </div>
-      </div>
-    `;
-  });
-
-  document.querySelectorAll(".selectSchedule").forEach(cb => {
-    cb.addEventListener("change", () => {
-      deleteBtn.style.display = document.querySelectorAll(".selectSchedule:checked").length ? "inline-block" : "none";
-    });
-  });
+  if (res.ok) {
+    alert("Schedule added");
+    fetchSchedules();
+    e.target.reset();
+  } else {
+    alert("Failed to add schedule");
+  }
 }
 
-deleteBtn.addEventListener("click", async () => {
-  const selected = document.querySelectorAll(".selectSchedule:checked");
-  for (let cb of selected) {
-    await fetch(`${API}/schedule/${cb.dataset.id}`, {
+document.getElementById("deleteBtn").addEventListener("click", async () => {
+  const selected = document.querySelectorAll(".select:checked");
+
+  for (const checkbox of selected) {
+    await fetch(`${API_URL}/schedule/${checkbox.dataset.id}`, {
       method: "DELETE",
-      headers: { Authorization: `Bearer ${token}` }
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
     });
   }
-  loadSchedule();
-});
 
-loadSchedule();
+  fetchSchedules();
+});

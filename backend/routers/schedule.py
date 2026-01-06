@@ -2,7 +2,7 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from database import SessionLocal
 from models.schedule import Schedule
-from schemas.schedule import ScheduleCreate
+from schemas.schedule import ScheduleCreate, ScheduleOut
 from core.dependency import admin_only
 
 router = APIRouter(prefix="/schedule", tags=["Schedule"])
@@ -22,16 +22,15 @@ def create_schedule(data: ScheduleCreate, db: Session = Depends(get_db)):
     db.refresh(schedule)
     return {"message": "Schedule added successfully"}
 
-@router.get("/")
-def get_schedule(db: Session = Depends(get_db)):
-    return db.query(Schedule).order_by(Schedule.datetime.asc()).all()
+@router.get("/", response_model=list[ScheduleOut])
+def get_schedules(db: Session = Depends(get_db)):
+    return db.query(Schedule).order_by(Schedule.date.asc()).all()
 
 @router.delete("/{schedule_id}", dependencies=[Depends(admin_only)])
 def delete_schedule(schedule_id: int, db: Session = Depends(get_db)):
     schedule = db.query(Schedule).filter(Schedule.id == schedule_id).first()
     if not schedule:
         raise HTTPException(status_code=404, detail="Schedule not found")
-
     db.delete(schedule)
     db.commit()
     return {"message": "Schedule deleted"}
