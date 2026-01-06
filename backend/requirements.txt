@@ -7,3 +7,4 @@ argon2-cffi
 python-jose
 python-multipart
 python-dotenv
+email-validator
