@@ -1,7 +1,8 @@
 const API = "https://artc-backend.onrender.com";
+const token = localStorage.getItem("token");
 
 const form = document.getElementById("reportForm");
-const messageEl = document.getElementById("formMessage");
+const message = document.getElementById("formMessage");
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -14,25 +15,26 @@ form.addEventListener("submit", async (e) => {
     incident_date: form.incident_date.value,
     name: form.name.value,
     class_section: form.class_section.value,
-    people_involved: form.people_involved.value
+    people_involved: form.people_involved.value || null
   };
 
-  const res = await fetch(`${API}/reports`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem("access_token")}`
-    },
-    body: JSON.stringify(payload)
-  });
+  try {
+    const res = await fetch(`${API}/reports`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify(payload)
+    });
 
-  if (!res.ok) {
-    messageEl.style.color = "red";
-    messageEl.textContent = "Failed to submit report";
-    return;
+    if (!res.ok) throw new Error();
+
+    message.innerText = "Report submitted successfully";
+    message.style.color = "green";
+    form.reset();
+  } catch {
+    message.innerText = "Failed to submit report";
+    message.style.color = "red";
   }
-
-  messageEl.style.color = "green";
-  messageEl.textContent = "Report submitted successfully";
-  form.reset();
 });

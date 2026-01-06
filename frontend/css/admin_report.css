@@ -136,6 +136,7 @@ textarea {
 .status-completed { color: green; }
 .status-fake { color: red; }
 
+
 @media (max-width:768px) {
   .profile-layout {
     padding: 20px;

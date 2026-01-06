@@ -1,17 +1,13 @@
 const API = "https://artc-backend.onrender.com";
+const token = localStorage.getItem("token");
 const container = document.getElementById("historyContainer");
 
 async function loadMyReports() {
   const res = await fetch(`${API}/reports/my`, {
     headers: {
-      Authorization: `Bearer ${localStorage.getItem("access_token")}`
+      Authorization: `Bearer ${token}`
     }
   });
-
-  if (!res.ok) {
-    container.innerHTML = "<p>Unable to load reports</p>";
-    return;
-  }
 
   const reports = await res.json();
   container.innerHTML = "";
@@ -21,7 +17,7 @@ async function loadMyReports() {
       <div class="report-card">
         <h3>${r.title}</h3>
         <p>${r.description}</p>
-        <p><strong>Status:</strong> ${r.status}</p>
+        <span>Status: ${r.status}</span>
       </div>
     `;
   });

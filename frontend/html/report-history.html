@@ -1,73 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Report History - ARTC</title>
-  <link rel="icon" href="../assets/icon.png" />
-  <link rel="stylesheet" href="../css/nav-bar.css" />
-  <link rel="stylesheet" href="../css/report-history.css" />
-</head>
-<body>
-  <header>
-    <div class="header-left">
-      <img src="../assets/icon.png" alt="logo" class="logo" />
-    </div>
-    <div class="user-icon">
-      <img src="../assets/profile.png" alt="Profile" />
-      <span class="dropdown-arrow">▼</span>
-      <div class="user-menu">
-        <a href="./home.html">Home</a>
-        <a href="./profile.html">Profile</a>
-        <a href="./login.html">Logout</a>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Report History - ARTC</title>
+    <link rel="icon" href="../assets/icon.png" />
+    <link rel="stylesheet" href="../css/nav-bar.css" />
+    <link rel="stylesheet" href="../css/report-history.css" />
+  </head>
+  <body>
+    <header>
+      <div class="header-left">
+        <img src="../assets/icon.png" alt="logo" class="logo" />
       </div>
-    </div>
-  </header>
-
-  <nav></nav>
-
-  <main class="container">
-    <a href="./report.html" class="back-btn">← Back</a>
-
-    <div class="history-header">
-      <h2>Report History</h2>
-      <select id="sortSelect" class="sort-select">
-        <option value="latest">Sort by Latest</option>
-        <option value="oldest">Sort by Oldest</option>
-      </select>
-    </div>
-
-    <div id="historyContainer" class="history-grid"></div>
-  </main>
-
-  <footer>
-    <div class="footer-container">
-      <div class="footer-about">
-        <h3>About ARTC</h3>
-        <p>Ensuring a safe and respectful environment for students.</p>
+      <div class="user-icon">
+        <img src="../assets/profile.png" alt="Profile" />
+        <span class="dropdown-arrow">▼</span>
+        <div class="user-menu">
+          <a href="./home.html">Home</a>
+          <a href="./profile.html">Profile</a>
+          <a href="./login.html">Logout</a>
+        </div>
       </div>
-      <div class="footer-links">
-        <h3>Quick Links</h3>
-        <ul>
-          <li><a href="./about.html">About</a></li>
-          <li><a href="./laws.html">Laws</a></li>
-          <li><a href="./committee.html">Committee</a></li>
-          <li><a href="./report.html">Report</a></li>
-          <li><a href="./contact.html">Contact</a></li>
-        </ul>
-      </div>
-      <div class="footer-contact">
-        <h3>Contact</h3>
-        <p>Email: support@artc.org.in</p>
-        <p>Phone: +91 98765 43210</p>
-        <p>Chennai, India</p>
-      </div>
-    </div>
-    <div class="footer-bottom">
-      <p>&copy; 2025 Anti-Ragging Committee. All Rights Reserved.</p>
-    </div>
-  </footer>
+    </header>
 
-  <script src="../js/report-history.js"></script>
-</body>
+    <nav>
+      <ul>
+        <li><a href="./home.html">Home</a></li>
+        <li><a href="./about.html">About</a></li>
+        <li><a href="./laws.html">Laws</a></li>
+        <li><a href="./committee.html">Committee</a></li>
+        <li><a href="./analysis.html">Analysis</a></li>
+        <li><a href="./schedule.html">Schedule</a></li>
+        <li><a href="./article.html">Article</a></li>
+        <li><a href="./report.html">Report</a></li>
+        <li><a href="./contact.html">Contact</a></li>
+      </ul>
+    </nav>
+
+    <main class="container">
+      <a href="./report.html" class="back-btn">← Back</a>
+
+      <div class="history-header">
+        <h2>Report History</h2>
+        <select id="sortSelect" class="sort-select">
+          <option value="latest">Sort by Latest</option>
+          <option value="oldest">Sort by Oldest</option>
+        </select>
+      </div>
+
+      <div id="historyContainer" class="history-grid"></div>
+    </main>
+
+    <footer>
+      <div class="footer-container">
+        <div class="footer-about">
+          <h3>About ARTC</h3>
+          <p>Ensuring a safe and respectful environment for students.</p>
+        </div>
+        <div class="footer-links">
+          <h3>Quick Links</h3>
+          <ul>
+            <li><a href="./about.html">About</a></li>
+            <li><a href="./laws.html">Laws</a></li>
+            <li><a href="./committee.html">Committee</a></li>
+            <li><a href="./report.html">Report</a></li>
+            <li><a href="./contact.html">Contact</a></li>
+          </ul>
+        </div>
+        <div class="footer-contact">
+          <h3>Contact</h3>
+          <p>Email: support@artc.org.in</p>
+          <p>Phone: +91 98765 43210</p>
+          <p>Chennai, India</p>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <p>&copy; 2025 Anti-Ragging Committee. All Rights Reserved.</p>
+      </div>
+    </footer>
+
+    <script src="../js/report-history.js"></script>
+  </body>
 </html>

@@ -1,37 +1,29 @@
 const API = "https://artc-backend.onrender.com";
+const token = localStorage.getItem("token");
 const container = document.getElementById("historyContainer");
 
-async function loadAllReports() {
+async function loadReports() {
   const res = await fetch(`${API}/reports`, {
     headers: {
-      Authorization: `Bearer ${localStorage.getItem("access_token")}`
+      Authorization: `Bearer ${token}`
     }
   });
-
-  if (!res.ok) {
-    container.innerHTML = "<p>Failed to load reports</p>";
-    return;
-  }
 
   const reports = await res.json();
   container.innerHTML = "";
 
   reports.forEach(r => {
     container.innerHTML += `
-      <div class="report-card" data-id="${r.id}">
+      <div class="report-card" onclick="openReport(${r.id})">
         <h3>${r.title}</h3>
-        <p><strong>Student:</strong> ${r.name}</p>
-        <p>Status: ${r.status}</p>
+        <span>Status: ${r.status}</span>
       </div>
     `;
   });
-
-  document.querySelectorAll(".report-card").forEach(card => {
-    card.addEventListener("click", () => {
-      const id = card.getAttribute("data-id");
-      window.location.href = `report.html?id=${id}`;
-    });
-  });
 }
 
-loadAllReports();
+function openReport(id) {
+  location.href = `./admin_report.html?id=${id}`;
+}
+
+loadReports();
