@@ -1,23 +1,29 @@
 const API = "https://artc-backend.onrender.com";
 
-const canvas = document.getElementById("complaintChart");
-const ctx = canvas.getContext("2d");
+let chartInstance = null;
 
 async function loadUserAnalysis() {
+  const canvas = document.getElementById("complaintChart");
+  if (!canvas) return;
+
   try {
     const res = await fetch(`${API}/reports/analytics/public`);
+    if (!res.ok) throw new Error();
+
     const data = await res.json();
 
-    new Chart(ctx, {
+    if (chartInstance) chartInstance.destroy();
+
+    chartInstance = new Chart(canvas, {
       type: "pie",
       data: {
-        labels: ["Solved", "Pending", "Fake"],
+        labels: ["Completed", "Pending", "Fake"],
         datasets: [
           {
             data: [
-              data.completed,
-              data.pending,
-              data.fake
+              data.completed || 0,
+              data.pending || 0,
+              data.fake || 0
             ],
             backgroundColor: ["#28a745", "#ffc107", "#dc3545"],
             borderWidth: 0
@@ -25,8 +31,7 @@ async function loadUserAnalysis() {
         ]
       },
       options: {
-        responsive: false,
-        maintainAspectRatio: true,
+        responsive: true,
         plugins: {
           legend: {
             position: "bottom"
