@@ -1,18 +1,25 @@
-# backend/core/dependency.py
 from fastapi import Depends, HTTPException, status
-from models.user import User
-from jose import jwt
-from core.config import SECRET_KEY, ALGORITHM
+from fastapi.security import OAuth2PasswordBearer
+from core.security import decode_token
 
-def get_current_user(token: str = Depends(...)) -> User:
-    # decode token and return User object
-    try:
-        payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        return User(**payload)
-    except:
-        raise HTTPException(status_code=status.HTTP_401_UNAUTHORIZED, detail="Invalid token")
+oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 
-def admin_only(user: User = Depends(get_current_user)):
-    if user.role != "faculty":  # faculty = admin
-        raise HTTPException(status_code=403, detail="Admin access required")
+def get_current_user(token: str = Depends(oauth2_scheme)):
+    payload = decode_token(token)
+    return payload
+
+def faculty_only(user=Depends(get_current_user)):
+    if user.get("role") != "faculty":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Admin (faculty) access required"
+        )
+    return user
+
+def student_only(user=Depends(get_current_user)):
+    if user.get("role") != "student":
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Student access required"
+        )
     return user

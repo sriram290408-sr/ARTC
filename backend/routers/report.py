@@ -1,26 +1,35 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from datetime import datetime
-from auth import get_db
+from database import SessionLocal
 from models.report import Report
-from schemas.report import ReportCreate, ReportOut
-from core.dependency import get_current_user
+from schemas.report import ReportCreate
+from core.dependency import student_only, get_current_user
 
-router = APIRouter()
+router = APIRouter(prefix="/report", tags=["Report"])
 
-@router.get("/reports/history", response_model=list[ReportOut])
-def get_reports(db: Session = Depends(get_db), user = Depends(get_current_user)):
-    return db.query(Report).order_by(Report.created_at.desc()).all()
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
-@router.post("/reports", response_model=ReportOut)
-def create_report(report: ReportCreate, db: Session = Depends(get_db), user = Depends(get_current_user)):
-    new_report = Report(
-        title=report.title,
-        description=report.description,
-        created_at=datetime.utcnow(),
-        created_by=user.role  
+@router.post("/", dependencies=[Depends(student_only)])
+def create_report(
+    data: ReportCreate,
+    db: Session = Depends(get_db),
+    user=Depends(get_current_user)
+):
+    report = Report(
+        **data.dict(),
+        student_id=int(user["sub"])
     )
-    db.add(new_report)
+    db.add(report)
     db.commit()
-    db.refresh(new_report)
-    return new_report
+    return {"message": "Report submitted successfully"}
+
+@router.get("/")
+def get_reports(db: Session = Depends(get_db), user=Depends(get_current_user)):
+    if user["role"] == "faculty":
+        return db.query(Report).all()
+    return db.query(Report).filter(Report.student_id == int(user["sub"])).all()

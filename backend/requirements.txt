@@ -2,8 +2,8 @@ fastapi
 uvicorn
 sqlalchemy
 psycopg2-binary
-passlib[argon2]
-argon2-cffi
+passlib[bycrypt]
+bycrypt
 python-jose
 python-multipart
 python-dotenv

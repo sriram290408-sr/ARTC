@@ -1,29 +1,36 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from auth import get_db
+from database import SessionLocal
 from models.schedule import Schedule
-from schemas.schedule import ScheduleCreate, ScheduleOut
-from core.dependency import get_current_user, admin_only
+from schemas.schedule import ScheduleCreate
+from core.dependency import faculty_only
 
-router = APIRouter()
+router = APIRouter(prefix="/schedule", tags=["Schedule"])
 
-@router.get("/schedule/all", response_model=list[ScheduleOut])
-def get_all_schedules(db: Session = Depends(get_db)):
-    return db.query(Schedule).order_by(Schedule.date.desc()).all()
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
 
-@router.post("/schedule", response_model=ScheduleOut)
-def create_schedule(schedule: ScheduleCreate, db: Session = Depends(get_db), user = Depends(admin_only)):
-    new_schedule = Schedule(**schedule.dict())
-    db.add(new_schedule)
+@router.get("/")
+def get_schedules(db: Session = Depends(get_db)):
+    return db.query(Schedule).order_by(Schedule.date.asc()).all()
+
+@router.post("/", dependencies=[Depends(faculty_only)])
+def create_schedule(data: ScheduleCreate, db: Session = Depends(get_db)):
+    schedule = Schedule(**data.dict())
+    db.add(schedule)
     db.commit()
-    db.refresh(new_schedule)
-    return new_schedule
+    return {"message": "Schedule added successfully"}
 
-@router.delete("/schedule/{schedule_id}")
-def delete_schedule(schedule_id: int, db: Session = Depends(get_db), user = Depends(admin_only)):
-    schedule = db.query(Schedule).get(schedule_id)
+@router.delete("/{schedule_id}", dependencies=[Depends(faculty_only)])
+def delete_schedule(schedule_id: int, db: Session = Depends(get_db)):
+    schedule = db.query(Schedule).filter(Schedule.id == schedule_id).first()
     if not schedule:
-        return {"error": "Schedule not found"}
+        raise HTTPException(status_code=404, detail="Schedule not found")
+
     db.delete(schedule)
     db.commit()
     return {"message": "Schedule deleted"}
