@@ -5,7 +5,7 @@ from models.schedule import Schedule
 from schemas.schedule import ScheduleCreate
 from dependencies.auth import get_current_user
 
-router = APIRouter(prefix="/schedules")
+router = APIRouter()
 
 @router.post("/")
 def create(data: ScheduleCreate,

@@ -5,7 +5,7 @@ from models.committee import Committee
 from schemas.committee import CommitteeCreate
 from dependencies.auth import get_current_user
 
-router = APIRouter(prefix="/committee")
+router = APIRouter()
 
 @router.post("/")
 def add(data: CommitteeCreate,

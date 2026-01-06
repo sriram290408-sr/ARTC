@@ -6,7 +6,7 @@ from models.user import User
 from core.hash import verify_password
 from core.security import create_access_token
 
-router = APIRouter(prefix="/auth", tags=["Auth"])
+router = APIRouter()
 
 @router.post("/login")
 def login(data: LoginSchema, db: Session = Depends(get_db)):

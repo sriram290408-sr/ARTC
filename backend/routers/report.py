@@ -5,7 +5,7 @@ from models.report import Report
 from schemas.report import ReportCreate, ReportUpdate
 from dependencies.auth import get_current_user
 
-router = APIRouter(prefix="/reports")
+router = APIRouter()
 
 @router.post("/")
 def create_report(data: ReportCreate,
