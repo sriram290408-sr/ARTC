@@ -9,7 +9,7 @@ document.getElementById("signupForm").addEventListener("submit", async (e) => {
   const role = document.getElementById("role").value;
 
   try {
-    const res = await fetch(`${BASE_URL}/users/signup`, {
+    const res = await fetch(`${BASE_URL}/signup`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ full_name, email, password, role })
