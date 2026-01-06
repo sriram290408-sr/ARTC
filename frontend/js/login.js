@@ -25,14 +25,16 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
       return;
     }
 
+    // ✅ Store token correctly
     localStorage.setItem("access_token", data.access_token);
     localStorage.setItem("role", data.role);
     localStorage.setItem("name", data.name);
 
+    // ✅ Role-based redirect
     if (data.role === "admin" || data.role === "faculty") {
-      window.location.href = "../admin/dashboard.html";
+      window.location.href = "../html/dashboard.html";
     } else {
-      window.location.href = "../user/dashboard.html";
+      window.location.href = "../html/dashboard.html";
     }
 
   } catch (err) {
