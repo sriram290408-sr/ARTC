@@ -12,7 +12,7 @@ document.querySelector(".signup-form").addEventListener("submit", async (e) => {
     return;
   }
 
-  const res = await fetch("https://artc-backend.onrender.com/users/signup", {
+  const res = await fetch("https://artc-backend.onrender.com/signup", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({
@@ -34,8 +34,8 @@ document.querySelector(".signup-form").addEventListener("submit", async (e) => {
   localStorage.setItem("role", data.role);
 
   if (data.role === "student") {
-    window.location.href = "/frontend/html/home.html";
+    window.location.href = "/html/home.html";
   } else if (data.role === "faculty") {
-    window.location.href = "/frontend/html/admin.html";
+    window.location.href = "/html/admin.html";
   }
 });
