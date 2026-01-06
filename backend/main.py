@@ -7,7 +7,7 @@ from database import engine, Base
 
 from models.user import User
 from models.schedule import Schedule
-from models.committee import CommitteeMember
+from models.committee import Committee
 from models.report import Report
 from models.login_log import LoginLog
 
