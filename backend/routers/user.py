@@ -1,46 +1,24 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from database import SessionLocal
+from database import get_db
+from schemas.user import UserSignupSchema
 from models.user import User
-from schemas.user import UserSignup
 from core.hash import hash_password
-from core.security import create_access_token
 
-router = APIRouter(prefix="/users", tags=["Users"])
-
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+router = APIRouter(prefix="/users")
 
 @router.post("/signup")
-def signup(data: UserSignup, db: Session = Depends(get_db)):
-
-    if data.role not in ["student", "faculty"]:
-        raise HTTPException(status_code=400, detail="Invalid role")
-
+def signup(data: UserSignupSchema, db: Session = Depends(get_db)):
     if db.query(User).filter(User.email == data.email).first():
-        raise HTTPException(status_code=400, detail="Email already registered")
+        raise HTTPException(status_code=400, detail="Email exists")
 
     user = User(
         full_name=data.full_name,
         email=data.email,
         password=hash_password(data.password),
-        role=data.role
+        role=data.role.lower()
     )
 
     db.add(user)
     db.commit()
-    db.refresh(user)
-
-    token = create_access_token({
-        "sub": str(user.id),
-        "role": user.role
-    })
-
-    return {
-        "access_token": token,
-        "role": user.role
-    }
+    return {"message": "User created"}

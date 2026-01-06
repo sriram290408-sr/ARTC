@@ -1,35 +1,46 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from database import SessionLocal
+from database import get_db
 from models.report import Report
-from schemas.report import ReportCreate
-from core.dependency import student_only, get_current_user
+from schemas.report import ReportCreate, ReportUpdate
+from dependencies.auth import get_current_user
 
-router = APIRouter(prefix="/report", tags=["Report"])
+router = APIRouter(prefix="/reports")
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+@router.post("/")
+def create_report(data: ReportCreate,
+                  db: Session = Depends(get_db),
+                  user=Depends(get_current_user)):
+    if user.role != "student":
+        raise HTTPException(status_code=403)
 
-@router.post("/", dependencies=[Depends(student_only)])
-def create_report(
-    data: ReportCreate,
-    db: Session = Depends(get_db),
-    user=Depends(get_current_user)
-):
-    report = Report(
-        **data.dict(),
-        student_id=int(user["sub"])
-    )
+    report = Report(title=data.title, content=data.content, student_id=user.id)
     db.add(report)
     db.commit()
-    return {"message": "Report submitted successfully"}
+    return {"message": "Report created"}
+
+@router.get("/my")
+def my_reports(db: Session = Depends(get_db),
+               user=Depends(get_current_user)):
+    return db.query(Report).filter(Report.student_id == user.id).all()
 
 @router.get("/")
-def get_reports(db: Session = Depends(get_db), user=Depends(get_current_user)):
-    if user["role"] == "faculty":
-        return db.query(Report).all()
-    return db.query(Report).filter(Report.student_id == int(user["sub"])).all()
+def all_reports(db: Session = Depends(get_db),
+                user=Depends(get_current_user)):
+    if user.role != "admin":
+        raise HTTPException(status_code=403)
+    return db.query(Report).all()
+
+@router.put("/{id}")
+def update_report(id: int,
+                  data: ReportUpdate,
+                  db: Session = Depends(get_db),
+                  user=Depends(get_current_user)):
+    if user.role != "admin":
+        raise HTTPException(status_code=403)
+
+    report = db.query(Report).get(id)
+    report.title = data.title
+    report.content = data.content
+    db.commit()
+    return {"message": "Updated"}

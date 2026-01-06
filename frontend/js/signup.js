@@ -1,3 +1,5 @@
+const BASE_URL = "https://artc-backend.onrender.com";
+
 document.getElementById("signupForm").addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -6,23 +8,11 @@ document.getElementById("signupForm").addEventListener("submit", async (e) => {
   const password = document.getElementById("password").value.trim();
   const role = document.getElementById("role").value;
 
-  if (!full_name || !email || !password || !role) {
-    alert("All fields are required");
-    return;
-  }
-
   try {
-    const res = await fetch("https://artc-backend.onrender.com/users/signup", {
+    const res = await fetch(`${BASE_URL}/users/signup`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        full_name,
-        email,
-        password,
-        role
-      })
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ full_name, email, password, role })
     });
 
     const data = await res.json();
@@ -32,11 +22,10 @@ document.getElementById("signupForm").addEventListener("submit", async (e) => {
       return;
     }
 
-    alert("Signup successful. Please login.");
-    window.location.href = "./login.html";
+    alert("Signup successful");
+    window.location.href = "login.html";
 
-  } catch (error) {
-    console.error(error);
-    alert("Server error. Try again later.");
+  } catch {
+    alert("Server error");
   }
 });

@@ -1,30 +1,24 @@
-const API = "https://artc-backend.onrender.com";
-const id = new URLSearchParams(location.search).get("id");
+const BASE_URL = "https://artc-backend.onrender.com";
 
-async function loadReport() {
-  const res = await fetch(`${API}/reports/${id}`, {
+async function viewAllReports() {
+  const res = await fetch(`${BASE_URL}/reports`, {
     headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")}`
+      "Authorization": `Bearer ${localStorage.getItem("access_token")}`
     }
   });
 
-  const r = await res.json();
-  document.getElementById("title").value = r.title;
-  document.getElementById("status").value = r.status;
+  return res.json();
 }
 
-async function updateStatus() {
-  const status = document.getElementById("status").value;
-
-  await fetch(`${API}/reports/${id}?status=${status}`, {
+async function updateReport(id, title, content) {
+  const res = await fetch(`${BASE_URL}/reports/${id}`, {
     method: "PUT",
     headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")}`
-    }
+      "Content-Type": "application/json",
+      "Authorization": `Bearer ${localStorage.getItem("access_token")}`
+    },
+    body: JSON.stringify({ title, content })
   });
 
-  alert("Updated");
-  location.href = "admin_report-history.html";
+  return res.json();
 }
-
-loadReport();

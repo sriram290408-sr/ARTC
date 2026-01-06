@@ -1,36 +1,37 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from database import SessionLocal
+from database import get_db
 from models.schedule import Schedule
 from schemas.schedule import ScheduleCreate
-from core.dependency import faculty_only
+from dependencies.auth import get_current_user
 
-router = APIRouter(prefix="/schedule", tags=["Schedule"])
+router = APIRouter(prefix="/schedules")
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+@router.post("/")
+def create(data: ScheduleCreate,
+           db: Session = Depends(get_db),
+           user=Depends(get_current_user)):
+    if user.role != "admin":
+        raise HTTPException(status_code=403)
+
+    s = Schedule(**data.dict())
+    db.add(s)
+    db.commit()
+    return {"message": "Created"}
 
 @router.get("/")
-def get_schedules(db: Session = Depends(get_db)):
-    return db.query(Schedule).order_by(Schedule.date.asc()).all()
+def view(db: Session = Depends(get_db),
+         user=Depends(get_current_user)):
+    return db.query(Schedule).all()
 
-@router.post("/", dependencies=[Depends(faculty_only)])
-def create_schedule(data: ScheduleCreate, db: Session = Depends(get_db)):
-    schedule = Schedule(**data.dict())
-    db.add(schedule)
+@router.delete("/{id}")
+def delete(id: int,
+           db: Session = Depends(get_db),
+           user=Depends(get_current_user)):
+    if user.role != "admin":
+        raise HTTPException(status_code=403)
+
+    s = db.query(Schedule).get(id)
+    db.delete(s)
     db.commit()
-    return {"message": "Schedule added successfully"}
-
-@router.delete("/{schedule_id}", dependencies=[Depends(faculty_only)])
-def delete_schedule(schedule_id: int, db: Session = Depends(get_db)):
-    schedule = db.query(Schedule).filter(Schedule.id == schedule_id).first()
-    if not schedule:
-        raise HTTPException(status_code=404, detail="Schedule not found")
-
-    db.delete(schedule)
-    db.commit()
-    return {"message": "Schedule deleted"}
+    return {"message": "Deleted"}

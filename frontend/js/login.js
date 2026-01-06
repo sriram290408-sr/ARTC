@@ -1,20 +1,15 @@
+const BASE_URL = "https://artc-backend.onrender.com";
+
 document.getElementById("loginForm").addEventListener("submit", async (e) => {
   e.preventDefault();
 
   const email = document.getElementById("email").value.trim();
   const password = document.getElementById("password").value.trim();
 
-  if (!email || !password) {
-    alert("Please fill all fields");
-    return;
-  }
-
   try {
-    const res = await fetch("https://artc-backend.onrender.com/auth/login", {
+    const res = await fetch(`${BASE_URL}/auth/login`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password })
     });
 
@@ -28,14 +23,13 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
     localStorage.setItem("access_token", data.access_token);
     localStorage.setItem("role", data.role);
 
-    if (data.role === "admin" || data.role === "faculty") {
-      window.location.href = "./admin.html";
+    if (data.role === "admin") {
+      window.location.href = "../admin/dashboard.html";
     } else {
-      window.location.href = "./home.html";
+      window.location.href = "../user/dashboard.html";
     }
 
-  } catch (error) {
-    console.error(error);
-    alert("Server error. Try again later.");
+  } catch {
+    alert("Server error");
   }
 });

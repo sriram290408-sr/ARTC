@@ -1,24 +1,37 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from database import SessionLocal
-from models.committee import CommitteeMember
+from database import get_db
+from models.committee import Committee
 from schemas.committee import CommitteeCreate
+from dependencies.auth import get_current_user
 
-router = APIRouter(prefix="/committee", tags=["Committee"])
+router = APIRouter(prefix="/committee")
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+@router.post("/")
+def add(data: CommitteeCreate,
+        db: Session = Depends(get_db),
+        user=Depends(get_current_user)):
+    if user.role != "admin":
+        raise HTTPException(status_code=403)
 
-@router.post("/create")
-def add_member(member: CommitteeCreate, db: Session = Depends(get_db)):
-    db.add(CommitteeMember(**member.dict()))
+    member = Committee(**data.dict())
+    db.add(member)
     db.commit()
-    return {"message": "Committee member added"}
+    return {"message": "Added"}
 
-@router.get("/all")
-def get_members(db: Session = Depends(get_db)):
-    return db.query(CommitteeMember).all()
+@router.get("/")
+def view(db: Session = Depends(get_db),
+         user=Depends(get_current_user)):
+    return db.query(Committee).all()
+
+@router.delete("/{id}")
+def delete(id: int,
+           db: Session = Depends(get_db),
+           user=Depends(get_current_user)):
+    if user.role != "admin":
+        raise HTTPException(status_code=403)
+
+    m = db.query(Committee).get(id)
+    db.delete(m)
+    db.commit()
+    return {"message": "Deleted"}
