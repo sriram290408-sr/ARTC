@@ -1,5 +1,5 @@
-from sqlalchemy import Column, Integer, String, Text, Date, DateTime, ForeignKey
-from datetime import datetime
+# backend/models/report.py
+from sqlalchemy import Column, Integer, String, DateTime
 from database import Base
 
 class Report(Base):
@@ -7,17 +7,6 @@ class Report(Base):
 
     id = Column(Integer, primary_key=True, index=True)
     title = Column(String, nullable=False)
-    description = Column(Text, nullable=False)
-    problem_type = Column(String, nullable=False)
-    incident_location = Column(String, nullable=False)
-    incident_date = Column(Date, nullable=False)
-
-    status = Column(String, default="pending")
-
-    name = Column(String, nullable=False)
-    class_section = Column(String, nullable=False)
-    people_involved = Column(String, nullable=True)
-
-    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
-
-    created_at = Column(DateTime, default=datetime.utcnow)
+    description = Column(String, nullable=False)
+    created_at = Column(DateTime, nullable=False)
+    created_by = Column(String, nullable=False)  

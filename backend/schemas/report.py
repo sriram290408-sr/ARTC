@@ -1,26 +1,16 @@
 from pydantic import BaseModel
-from datetime import date, datetime
+from datetime import datetime
 
-class ReportCreate(BaseModel):
+class ReportBase(BaseModel):
     title: str
     description: str
-    problem_type: str
-    incident_location: str
-    incident_date: date
-    name: str
-    class_section: str
-    people_involved: str | None = None
 
+class ReportCreate(ReportBase):
+    pass
 
-class ReportUpdate(BaseModel):
-    status: str
-
-
-class ReportOut(ReportCreate):
+class ReportOut(ReportBase):
     id: int
-    status: str
-    user_id: int
     created_at: datetime
-
+    created_by: str
     class Config:
-        from_attributes = True
+        orm_mode = True

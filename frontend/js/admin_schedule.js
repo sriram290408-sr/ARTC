@@ -3,7 +3,7 @@ const token = localStorage.getItem("access_token");
 
 document.addEventListener("DOMContentLoaded", () => {
   fetchSchedules();
-  document.getElementById("scheduleForm")?.addEventListener("submit", addSchedule);
+  document.getElementById("scheduleForm").addEventListener("submit", addSchedule);
 });
 
 async function fetchSchedules() {
@@ -14,13 +14,12 @@ async function fetchSchedules() {
     const res = await fetch(`${API_URL}/schedule/all`, {
       headers: { Authorization: `Bearer ${token}` }
     });
+    const schedules = await res.json();
 
-    if (!res.ok) {
-      container.innerHTML = "<p>Admin access required</p>";
+    if (!schedules.length) {
+      container.innerHTML = "<p>No schedules available</p>";
       return;
     }
-
-    const schedules = await res.json();
 
     schedules.forEach(s => {
       const card = document.createElement("div");
@@ -29,9 +28,9 @@ async function fetchSchedules() {
       card.innerHTML = `
         <input type="checkbox" class="select" data-id="${s.id}">
         <h3>${s.title}</h3>
-        <p>Date: ${new Date(s.date).toLocaleDateString()}</p>
-        <p>Time: ${s.time || "N/A"}</p>
-        <p>Venue: ${s.venue || "N/A"}</p>
+        <p>Date: ${s.date}</p>
+        <p>Time: ${s.time}</p>
+        <p>Venue: ${s.venue}</p>
       `;
 
       container.appendChild(card);
@@ -47,6 +46,7 @@ async function fetchSchedules() {
 
 async function addSchedule(e) {
   e.preventDefault();
+
   const datetime = document.getElementById("datetime").value;
   const [date, time] = datetime.split("T");
 
@@ -58,7 +58,7 @@ async function addSchedule(e) {
   };
 
   try {
-    const res = await fetch(`${API_URL}/schedule/create`, {
+    const res = await fetch(`${API_URL}/schedule`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -67,28 +67,29 @@ async function addSchedule(e) {
       body: JSON.stringify(data)
     });
 
-    const result = await res.json();
-
     if (res.ok) {
-      alert(result.message);
+      alert("Schedule added");
       fetchSchedules();
       e.target.reset();
     } else {
-      alert(result.detail || "Failed to add schedule");
+      const err = await res.json();
+      alert(err.detail || "Failed to add schedule");
     }
   } catch (err) {
     console.error(err);
-    alert("Failed to add schedule");
+    alert("Network error");
   }
 }
 
-document.getElementById("deleteBtn")?.addEventListener("click", async () => {
+document.getElementById("deleteBtn").addEventListener("click", async () => {
   const selected = document.querySelectorAll(".select:checked");
 
   for (const checkbox of selected) {
     await fetch(`${API_URL}/schedule/${checkbox.dataset.id}`, {
       method: "DELETE",
-      headers: { Authorization: `Bearer ${token}` }
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
     });
   }
 

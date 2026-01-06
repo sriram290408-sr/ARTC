@@ -1,74 +1,29 @@
-from fastapi import APIRouter, Depends, HTTPException
+from fastapi import APIRouter, Depends
 from sqlalchemy.orm import Session
-from database import SessionLocal
+from database import get_db
 from models.schedule import Schedule
 from schemas.schedule import ScheduleCreate, ScheduleOut
-from core.dependency import get_current_user, student_only, faculty_only
+from core.dependency import get_current_user, admin_only
 
-router = APIRouter(prefix="/schedule", tags=["Schedule"])
+router = APIRouter()
 
-def get_db():
-    db = SessionLocal()
-    try:
-        yield db
-    finally:
-        db.close()
+@router.get("/schedule/all", response_model=list[ScheduleOut])
+def get_all_schedules(db: Session = Depends(get_db)):
+    return db.query(Schedule).order_by(Schedule.date.desc()).all()
 
-@router.post("/create")
-def create_schedule(
-    schedule: ScheduleCreate,
-    db: Session = Depends(get_db),
-    user=Depends(student_only)
-):
-    new_schedule = Schedule(
-        **schedule.dict(),
-        user_id=user.id
-    )
+@router.post("/schedule", response_model=ScheduleOut)
+def create_schedule(schedule: ScheduleCreate, db: Session = Depends(get_db), user = Depends(admin_only)):
+    new_schedule = Schedule(**schedule.dict())
     db.add(new_schedule)
     db.commit()
     db.refresh(new_schedule)
-    return {"message": "Schedule added successfully"}
+    return new_schedule
 
-@router.get("/my", response_model=list[ScheduleOut])
-def my_schedules(
-    db: Session = Depends(get_db),
-    user=Depends(get_current_user)
-):
-    return db.query(Schedule).filter(Schedule.user_id == user.id).order_by(Schedule.date.desc()).all()
-
-@router.get("/all", response_model=list[ScheduleOut])
-def all_schedules(
-    db: Session = Depends(get_db),
-    user=Depends(faculty_only)
-):
-    return db.query(Schedule).order_by(Schedule.date.desc()).all()
-
-@router.put("/{id}")
-def update_schedule(
-    id: int,
-    schedule: ScheduleCreate,
-    db: Session = Depends(get_db),
-    user=Depends(faculty_only)
-):
-    s = db.query(Schedule).filter(Schedule.id == id).first()
-    if not s:
-        raise HTTPException(status_code=404, detail="Schedule not found")
-
-    s.title = schedule.title
-    s.description = schedule.description
-    s.date = schedule.date
+@router.delete("/schedule/{schedule_id}")
+def delete_schedule(schedule_id: int, db: Session = Depends(get_db), user = Depends(admin_only)):
+    schedule = db.query(Schedule).get(schedule_id)
+    if not schedule:
+        return {"error": "Schedule not found"}
+    db.delete(schedule)
     db.commit()
-    return {"message": "Schedule updated successfully"}
-
-@router.delete("/{id}")
-def delete_schedule(
-    id: int,
-    db: Session = Depends(get_db),
-    user=Depends(faculty_only)
-):
-    s = db.query(Schedule).filter(Schedule.id == id).first()
-    if not s:
-        raise HTTPException(status_code=404, detail="Schedule not found")
-    db.delete(s)
-    db.commit()
-    return {"message": "Schedule deleted successfully"}
+    return {"message": "Schedule deleted"}

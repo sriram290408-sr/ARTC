@@ -1,17 +1,16 @@
 from pydantic import BaseModel
-from datetime import datetime
+from datetime import date, time
 
-class ScheduleCreate(BaseModel):
+class ScheduleBase(BaseModel):
     title: str
-    description: str | None = None
-    date: datetime
+    venue: str
+    date: date
+    time: time
 
-class ScheduleOut(BaseModel):
+class ScheduleCreate(ScheduleBase):
+    pass
+
+class ScheduleOut(ScheduleBase):
     id: int
-    title: str
-    description: str | None
-    date: datetime
-    user_id: int
-
     class Config:
         from_attributes = True
