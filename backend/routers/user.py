@@ -7,7 +7,7 @@ from core.hash import hash_password
 
 router = APIRouter(prefix="/users")
 
-@router.post("/signup")
+@router.post("/users/signup")
 def signup(data: UserSignupSchema, db: Session = Depends(get_db)):
     if db.query(User).filter(User.email == data.email).first():
         raise HTTPException(status_code=400, detail="Email exists")
