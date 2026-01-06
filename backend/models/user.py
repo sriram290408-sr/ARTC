@@ -4,8 +4,8 @@ from database import Base
 class User(Base):
     __tablename__ = "users"
 
-    id = Column(Integer, primary_key=True)
-    full_name = Column(String)
-    email = Column(String, unique=True)
-    role = Column(String)   
-    password = Column(String)
+    id = Column(Integer, primary_key=True, index=True)
+    email = Column(String, unique=True, index=True, nullable=False)
+    password = Column(String, nullable=False)
+
+    role = Column(String, default="student")  # student | faculty

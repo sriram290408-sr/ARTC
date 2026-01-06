@@ -2,9 +2,13 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from sqlalchemy import func
 from database import SessionLocal
-from schemas.report import ReportCreate, ReportOut, ReportUpdate
 from models.report import Report
-from core.dependency import admin_only, get_current_user
+from schemas.report import ReportCreate, ReportOut
+from core.dependency import (
+    get_current_user,
+    student_only,
+    faculty_only
+)
 
 router = APIRouter(prefix="/reports", tags=["Reports"])
 
@@ -15,13 +19,11 @@ def get_db():
     finally:
         db.close()
 
-
-# USER: CREATE REPORT
 @router.post("/create")
 def create_report(
     report: ReportCreate,
     db: Session = Depends(get_db),
-    user=Depends(get_current_user)
+    user=Depends(student_only)
 ):
     new_report = Report(
         **report.dict(),
@@ -33,7 +35,6 @@ def create_report(
     return {"message": "Report submitted successfully"}
 
 
-# USER: VIEW OWN REPORTS
 @router.get("/my", response_model=list[ReportOut])
 def my_reports(
     db: Session = Depends(get_db),
@@ -46,50 +47,32 @@ def my_reports(
         .all()
     )
 
-
-# ADMIN: VIEW ALL REPORTS
-@router.get("/history", response_model=list[ReportOut], dependencies=[Depends(admin_only)])
-def all_reports(db: Session = Depends(get_db)):
+@router.get("/history", response_model=list[ReportOut])
+def all_reports(
+    db: Session = Depends(get_db),
+    user=Depends(faculty_only)
+):
     return db.query(Report).order_by(Report.created_at.desc()).all()
 
-
-# ADMIN: VIEW SINGLE REPORT
-@router.get("/{id}", response_model=ReportOut, dependencies=[Depends(admin_only)])
-def get_report(id: int, db: Session = Depends(get_db)):
-    report = db.query(Report).filter(Report.id == id).first()
-    if not report:
-        raise HTTPException(status_code=404, detail="Report not found")
-    return report
-
-
-# ADMIN: UPDATE STATUS
-@router.put("/{id}", dependencies=[Depends(admin_only)])
+@router.put("/{id}")
 def update_status(
     id: int,
-    data: ReportUpdate,
-    db: Session = Depends(get_db)
+    status: str,
+    db: Session = Depends(get_db),
+    user=Depends(faculty_only)
 ):
     report = db.query(Report).filter(Report.id == id).first()
     if not report:
         raise HTTPException(status_code=404, detail="Report not found")
 
-    report.status = data.status.lower()
+    report.status = status
     db.commit()
     return {"message": "Status updated"}
 
-
-# ADMIN: ANALYTICS
-@router.get("/analytics", dependencies=[Depends(admin_only)])
-def analytics(db: Session = Depends(get_db)):
+@router.get("/analytics")
+def analytics(
+    db: Session = Depends(get_db),
+    user=Depends(faculty_only)
+):
     results = db.query(Report.status, func.count()).group_by(Report.status).all()
-
-    data = {
-        "pending": 0,
-        "completed": 0,
-        "fake": 0
-    }
-
-    for status, count in results:
-        data[status] = count
-
-    return data
+    return {k.lower(): v for k, v in results}
