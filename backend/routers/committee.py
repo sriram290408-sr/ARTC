@@ -2,36 +2,43 @@ from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from database import get_db
 from models.committee import Committee
-from schemas.committee import CommitteeCreate
+from schemas.committee import CommitteeCreate, CommitteeOut
 from dependencies.auth import get_current_user
 
-router = APIRouter()
+router = APIRouter(prefix="/committee", tags=["Committee"])
 
-@router.post("/")
-def add(data: CommitteeCreate,
-        db: Session = Depends(get_db),
-        user=Depends(get_current_user)):
+# Add member
+@router.post("/", response_model=CommitteeOut)
+def add_member(data: CommitteeCreate,
+               db: Session = Depends(get_db),
+               user=Depends(get_current_user)):
     if user.role != "admin":
-        raise HTTPException(status_code=403)
+        raise HTTPException(status_code=403, detail="Admins only")
 
     member = Committee(**data.dict())
     db.add(member)
     db.commit()
-    return {"message": "Added"}
+    db.refresh(member)
+    return member
 
-@router.get("/")
-def view(db: Session = Depends(get_db),
-         user=Depends(get_current_user)):
+# View members
+@router.get("/", response_model=list[CommitteeOut])
+def view_members(db: Session = Depends(get_db),
+                 user=Depends(get_current_user)):
     return db.query(Committee).all()
 
+# Delete member
 @router.delete("/{id}")
-def delete(id: int,
-           db: Session = Depends(get_db),
-           user=Depends(get_current_user)):
+def delete_member(id: int,
+                  db: Session = Depends(get_db),
+                  user=Depends(get_current_user)):
     if user.role != "admin":
-        raise HTTPException(status_code=403)
+        raise HTTPException(status_code=403, detail="Admins only")
 
-    m = db.query(Committee).get(id)
-    db.delete(m)
+    member = db.query(Committee).filter(Committee.id == id).first()
+    if not member:
+        raise HTTPException(status_code=404, detail="Member not found")
+
+    db.delete(member)
     db.commit()
     return {"message": "Deleted"}

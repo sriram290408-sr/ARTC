@@ -5,5 +5,7 @@ class Committee(Base):
     __tablename__ = "committee"
 
     id = Column(Integer, primary_key=True)
-    name = Column(String)
-    designation = Column(String)
+    name = Column(String, nullable=False)
+    designation = Column(String, nullable=True)
+    email = Column(String, nullable=True)
+    phone = Column(String, nullable=True)

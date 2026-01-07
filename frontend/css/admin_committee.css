@@ -51,8 +51,8 @@ h2 {
 
 .card-container {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  gap: 30px;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 20px;
   margin-top: 30px;
   justify-items: center;
 }
@@ -69,16 +69,18 @@ h2 {
   }
 }
 
-
 .card {
   background: #fff;
   border-radius: 16px;
   padding: 24px 20px;
   text-align: center;
-  width: 100%;
-  max-width: 260px;
+  width: 200px;
+  height: 300px;
   box-shadow: 0 8px 22px rgba(0,0,0,0.08);
   transition: 0.3s;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 
 .card:hover {
@@ -87,8 +89,8 @@ h2 {
 }
 
 .card img {
-  width: 100px;
-  height: 100px;
+  width: 120px;
+  height: 120px;
   border-radius: 50%;
   border: 3px solid #005fcc;
   margin-bottom: 14px;
@@ -115,9 +117,10 @@ h2 {
 }
 
 .card-actions {
-  margin-top: 16px;
+  margin-top: auto; 
   display: flex;
   justify-content: center;
+  width: 100%;
 }
 
 .delete-btn {
@@ -206,7 +209,6 @@ h2 {
   outline: none;
 }
 
-/* SUBMIT BUTTON */
 #memberForm button {
   background: #005fcc;
   color: #fff;

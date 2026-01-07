@@ -1,5 +1,5 @@
 const API = "https://artc-backend.onrender.com";
-const container = document.getElementById("committeeContainer");
+const container = document.getElementById("cardContainer"); 
 
 async function loadCommittee() {
   const res = await fetch(`${API}/committee`, {
