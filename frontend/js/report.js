@@ -27,7 +27,8 @@ reportForm.addEventListener("submit", async (e) => {
   };
 
   if (!payload.title || !payload.description) {
-    showError("Title and Description are required");
+    messageBox.textContent = "Title and Description are required";
+    messageBox.style.color = "red";
     resetButton(submitBtn);
     return;
   }
@@ -49,21 +50,15 @@ reportForm.addEventListener("submit", async (e) => {
 
     messageBox.textContent = "Complaint submitted successfully ✅";
     messageBox.style.color = "green";
+    reportForm.reset();
 
-    reportForm.reset(); 
-
-  } catch (error) {
-    console.error("Report submit error:", error);
-    showError("Something went wrong. Please try again.");
+  } catch (err) {
+    messageBox.textContent = err.message || "Submission failed";
+    messageBox.style.color = "red";
   } finally {
     resetButton(submitBtn);
   }
 });
-
-function showError(msg) {
-  messageBox.textContent = msg;
-  messageBox.style.color = "red";
-}
 
 function resetButton(btn) {
   btn.disabled = false;
