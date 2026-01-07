@@ -1,19 +1,25 @@
 const API = "https://artc-backend.onrender.com";
-const token = localStorage.getItem("token");
-const container = document.getElementById("historyContainer");
 
-async function loadReports() {
+const historyContainer = document.getElementById("historyContainer");
+const sortSelect = document.getElementById("sortSelect");
+
+// ---------------- LOAD MY REPORTS ----------------
+async function loadMyReports(sort = "latest") {
   try {
-    const res = await fetch(`${API}/reports/my`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const res = await fetch(`${API}/reports/my`);
 
-    if (!res.ok) throw new Error();
+    if (!res.ok) throw new Error("Failed to fetch");
 
-    const reports = await res.json();
-    container.innerHTML = "";
+    let reports = await res.json();
+
+    // Sort by date
+    reports.sort((a, b) =>
+      sort === "latest"
+        ? new Date(b.created_at) - new Date(a.created_at)
+        : new Date(a.created_at) - new Date(b.created_at)
+    );
+
+    historyContainer.innerHTML = "";
 
     reports.forEach((r) => {
       const card = document.createElement("div");
@@ -27,12 +33,17 @@ async function loadReports() {
         </span>
       `;
 
-      container.appendChild(card);
+      historyContainer.appendChild(card);
     });
-
-  } catch {
-    container.innerHTML = "<p>Failed to load reports</p>";
+  } catch (err) {
+    historyContainer.innerHTML = "<p>Failed to load reports</p>";
   }
 }
 
-loadReports();
+// ---------------- SORT ----------------
+sortSelect.addEventListener("change", (e) => {
+  loadMyReports(e.target.value);
+});
+
+// Initial load
+loadMyReports();

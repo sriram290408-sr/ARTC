@@ -1,28 +1,25 @@
 const API = "https://artc-backend.onrender.com";
-const token = localStorage.getItem("token");
 
-const container = document.getElementById("historyContainer");
+const historyContainer = document.getElementById("historyContainer");
 const sortSelect = document.getElementById("sortSelect");
 
-async function loadReports(sort = "latest") {
+// ---------------- LOAD ALL REPORTS ----------------
+async function loadAdminReports(sort = "latest") {
   try {
-    const res = await fetch(`${API}/reports`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const res = await fetch(`${API}/reports`);
 
-    if (!res.ok) throw new Error();
+    if (!res.ok) throw new Error("Failed to fetch");
 
     let reports = await res.json();
 
+    // Sort by created date
     reports.sort((a, b) =>
       sort === "latest"
         ? new Date(b.created_at) - new Date(a.created_at)
         : new Date(a.created_at) - new Date(b.created_at)
     );
 
-    container.innerHTML = "";
+    historyContainer.innerHTML = "";
 
     reports.forEach((r) => {
       const card = document.createElement("div");
@@ -36,20 +33,22 @@ async function loadReports(sort = "latest") {
         </span>
       `;
 
-      card.onclick = () => {
-        location.href = `./admin_report.html?id=${r.id}`;
-      };
+      // Redirect to admin update page
+      card.addEventListener("click", () => {
+        window.location.href = `./admin_report.html?id=${r.id}`;
+      });
 
-      container.appendChild(card);
+      historyContainer.appendChild(card);
     });
-
   } catch (err) {
-    container.innerHTML = "<p>Failed to load reports</p>";
+    historyContainer.innerHTML = "<p>Failed to load reports</p>";
   }
 }
 
+// ---------------- SORT ----------------
 sortSelect.addEventListener("change", (e) => {
-  loadReports(e.target.value);
+  loadAdminReports(e.target.value);
 });
 
-loadReports();
+// Initial load
+loadAdminReports();

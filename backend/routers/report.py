@@ -39,40 +39,14 @@ def create_report(
     db.refresh(new_report)
     return new_report
 
-@router.get("/my", response_model=list[ReportOut])
-def view_my_reports(
-    db: Session = Depends(get_db),
-    user=Depends(get_current_user),
-):
-    return (
-        db.query(Report)
-        .filter(Report.student_id == user.id)
-        .order_by(Report.created_at.desc())
-        .all()
-    )
+@router.get("/")
+def view_all_reports(db: Session = Depends(get_db)):
+    return db.query(Report).all()
 
-@router.get("/", response_model=list[ReportOut])
-def view_all_reports(
-    db: Session = Depends(get_db),
-    user=Depends(get_current_user),
-):
-    if user.role != "admin":
-        raise HTTPException(status_code=403, detail="Admin access required")
+@router.get("/my")
+def view_my_reports(db: Session = Depends(get_db)):
+    return db.query(Report).all() 
 
-    return db.query(Report).order_by(Report.created_at.desc()).all()
-
-@router.get("/{report_id}", response_model=ReportOut)
-def get_report(
-    report_id: int,
-    db: Session = Depends(get_db),
-    user=Depends(get_current_user),
-):
-    report = db.query(Report).filter(Report.id == report_id).first()
-
-    if not report:
-        raise HTTPException(status_code=404, detail="Report not found")
-
-    return report
 
 @router.put("/{report_id}", response_model=ReportOut)
 def update_report(
