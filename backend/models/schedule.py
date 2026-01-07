@@ -9,3 +9,4 @@ class Schedule(Base):
     venue = Column(String, nullable=False)
     date = Column(String, nullable=False)
     time = Column(String, nullable=False)
+    link = Column(String, nullable=True)  

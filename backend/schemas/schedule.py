@@ -5,6 +5,7 @@ class ScheduleCreate(BaseModel):
     venue: str
     date: str
     time: str
+    link: str | None = None  
 
 class ScheduleOut(ScheduleCreate):
     id: int
