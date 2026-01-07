@@ -9,11 +9,11 @@ const reportId = params.get("id");
 
 if (!reportId) {
   alert("No report selected");
-  location.href = "./admin_report-history.html";
+  location.href = "../html/admin_report-history.html";
 }
 
 async function loadReport() {
-  if (!token) return (window.location.href = "./login.html");
+  if (!token) return (window.location.href = "../html/admin_report.js");
   try {
     const res = await fetch(`${API}/reports/${reportId}`, {
       headers: { Authorization: `Bearer ${token}` },
@@ -63,7 +63,7 @@ statusDropdown.addEventListener("change", () =>
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
-  if (!token) return (window.location.href = "./login.html");
+  if (!token) return (window.location.href = "../html/admin_report-history.html");
 
   const payload = { status: form.status.value, remarks: form.remarks.value };
 

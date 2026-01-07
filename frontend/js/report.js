@@ -7,7 +7,7 @@ async function fetchReports() {
   const container = document.getElementById("reportContainer");
   container.innerHTML = "";
 
-  if (!token) return window.location.href = "./login.html";
+  if (!token) return window.location.href = "../html/report.html";
 
   try {
     const res = await fetch(`${API_URL}/reports/my`, {
@@ -42,7 +42,7 @@ async function fetchReports() {
 // Submit new report
 document.getElementById("reportForm")?.addEventListener("submit", async (e) => {
   e.preventDefault();
-  if (!token) return window.location.href = "./login.html";
+  if (!token) return window.location.href = "../html/report.html";
 
   const data = {
     title: document.getElementById("report_title").value,
