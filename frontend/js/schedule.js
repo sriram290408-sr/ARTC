@@ -1,24 +1,24 @@
 const API = "https://artc-backend.onrender.com";
-const container = document.getElementById("committeeContainer");
+const container = document.getElementById("scheduleContainer");
 
-async function loadCommittee() {
-  const res = await fetch(`${API}/committee`, {
+async function loadSchedules() {
+  const res = await fetch(`${API}/schedules`, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("access_token")}`
     }
   });
 
-  const members = await res.json();
+  const schedules = await res.json();
   container.innerHTML = "";
 
-  members.forEach(m => {
+  schedules.forEach(s => {
     container.innerHTML += `
-      <div class="committee-card">
-        <h3>${m.name}</h3>
-        <p>${m.designation}</p>
+      <div class="schedule-card">
+        <h3>${s.title}</h3>
+        <p>${s.date} | ${s.time}</p>
       </div>
     `;
   });
 }
 
-loadCommittee();
+loadSchedules();

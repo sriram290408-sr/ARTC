@@ -13,18 +13,12 @@ h2 {
   color: #004aad;
 }
 
-.intro {
-  margin-bottom: 20px;
-}
-
 .schedule-container {
   display: grid;
   grid-template-columns: 1fr;
   gap: 15px;
-  margin-top: 20px;
   max-width: 900px;
-  margin-left: auto;
-  margin-right: auto;
+  margin: 20px auto;
 }
 
 .schedule-card {
@@ -35,61 +29,101 @@ h2 {
   border-radius: 10px;
   padding: 20px;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-  transition: transform 0.3s, box-shadow 0.3s;
-}
-
-.schedule-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
 }
 
 .schedule-left h3 {
   color: #005fcc;
-  font-size: 18px;
-  margin-bottom: 6px;
+  margin-bottom: 5px;
 }
 
 .schedule-left p {
-  font-size: 14px;
   margin: 2px 0;
+  font-size: 14px;
 }
 
-.delete-btn {
+.schedule-card button {
   background: #ff4c4c;
   color: white;
-  padding: 8px 14px;
   border: none;
+  padding: 8px 12px;
   border-radius: 6px;
   cursor: pointer;
-  margin: 10px 0;
-  transition: 0.3s;
 }
 
-.delete-btn:hover {
+.schedule-card button:hover {
   background: #cc0000;
 }
 
-.schedule-form input,
-.schedule-form button {
+.add-btn {
+  position: fixed;
+  bottom: 90px;
+  right: 30px;
+  width: 55px;
+  height: 55px;
+  border-radius: 50%;
+  font-size: 28px;
+  border: none;
+  background: #005fcc;
+  color: white;
+  cursor: pointer;
+  z-index: 1000;
+}
+
+.popup {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+}
+
+.popup-content {
+  background: white;
+  padding: 25px;
+  border-radius: 10px;
+  width: 300px;
+  text-align: center;
+}
+
+.popup-content input {
+  width: 100%;
   padding: 10px;
-  margin: 5px 5px 5px 0;
+  margin: 6px 0;
   border-radius: 6px;
   border: 1px solid #ccc;
 }
 
-.schedule-form button {
-  background: #005fcc;
-  color: white;
+.popup-actions {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+.popup-actions button {
+  padding: 8px 14px;
   border: none;
+  border-radius: 6px;
   cursor: pointer;
 }
 
-.schedule-form button:hover {
-  background: #003f8a;
+.popup-actions button:first-child {
+  background: #005fcc;
+  color: white;
+}
+
+.cancel-btn {
+  background: #999;
+  color: white;
+}
+
+.hidden {
+  display: none;
 }
 
 @media (max-width: 768px) {
   .schedule-container {
-    grid-template-columns: 1fr;
+    padding: 0 10px;
   }
 }

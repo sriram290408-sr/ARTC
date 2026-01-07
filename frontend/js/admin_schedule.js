@@ -1,5 +1,13 @@
 const API = "https://artc-backend.onrender.com";
 const container = document.getElementById("scheduleContainer");
+const popup = document.getElementById("popup");
+const addBtn = document.getElementById("addBtn");
+
+addBtn.onclick = () => popup.classList.remove("hidden");
+
+function closePopup() {
+  popup.classList.add("hidden");
+}
 
 async function loadSchedules() {
   const res = await fetch(`${API}/schedules`, {
@@ -15,15 +23,24 @@ async function loadSchedules() {
     container.innerHTML += `
       <div class="schedule-card">
         <h3>${s.title}</h3>
-        <p>${s.date} - ${s.time}</p>
+        <p>${s.date} | ${s.time}</p>
         <button onclick="deleteSchedule(${s.id})">Delete</button>
       </div>
     `;
   });
 }
 
-async function createSchedule(title, date, time) {
-  await fetch(`${API}/schedules`, {
+async function submitSchedule() {
+  const title = document.getElementById("title").value;
+  const date = document.getElementById("date").value;
+  const time = document.getElementById("time").value;
+
+  if (!title || !date || !time) {
+    alert("Fill all fields");
+    return;
+  }
+
+  const res = await fetch(`${API}/schedules`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -31,6 +48,13 @@ async function createSchedule(title, date, time) {
     },
     body: JSON.stringify({ title, date, time })
   });
+
+  if (!res.ok) {
+    alert("Only admin can add");
+    return;
+  }
+
+  closePopup();
   loadSchedules();
 }
 
@@ -41,6 +65,7 @@ async function deleteSchedule(id) {
       Authorization: `Bearer ${localStorage.getItem("access_token")}`
     }
   });
+
   loadSchedules();
 }
 
