@@ -1,13 +1,13 @@
-from pydantic import BaseModel, EmailStr
-from typing import Optional
+from sqlalchemy import Column, Integer, String
+from database import Base
 
-class CommitteeCreate(BaseModel):
-    name: str
-    designation: Optional[str] = None
-    email: Optional[EmailStr] = None
-    phone: Optional[str] = None
+class Committee(Base):
+    __tablename__ = "committee"
 
-class CommitteeOut(CommitteeCreate):
-    id: int
-    class Config:
-        from_attributes = True
+    id = Column(Integer, primary_key=True)
+    name = Column(String, nullable=False)
+    designation = Column(String, nullable=True)
+    email = Column(String, nullable=True)
+    phone = Column(String, nullable=True)
+    linkedin = Column(String, nullable=True)
+    description = Column(String, nullable=True)
