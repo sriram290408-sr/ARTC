@@ -52,7 +52,7 @@ reportForm.addEventListener("submit", async (e) => {
     reportForm.reset();
 
     setTimeout(() => {
-      window.location.href = "./report-history.html";
+      window.location.href = "../html/report-history.html";
     }, 1200);
 
   } catch (error) {
