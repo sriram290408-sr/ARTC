@@ -1,66 +1,66 @@
 .profile-layout {
-  max-width: 1200px;           
-  margin: 70px auto;
-  padding: 0 24px;
-  font-family: "Poppins", sans-serif;
-  color: #374151;
+  max-width: 1320px;
+  margin: 80px auto;
+  padding: 0 32px;
+  font-family: "Poppins", system-ui, sans-serif;
+  color: #1f2937;
 }
 
 .card {
   background: #ffffff;
-  padding: 42px 48px;          
-  border-radius: 18px;
-  box-shadow: 
-    0 12px 30px rgba(0, 0, 0, 0.08),
-    0 4px 12px rgba(0, 0, 0, 0.04);
+  padding: 50px 56px;
+  border-radius: 20px;
+  box-shadow:
+    0 22px 48px rgba(0, 0, 0, 0.08),
+    0 8px 20px rgba(0, 0, 0, 0.05);
 }
 
 .card h2 {
   text-align: center;
-  font-size: 26px;
-  color: #005fcc;
-  margin-bottom: 10px;
+  font-size: 30px;
+  font-weight: 600;
+  color: #003f8a;
+  margin-bottom: 6px;
 }
 
 #caseMeta {
   text-align: center;
-  font-size: 14px;
+  font-size: 15px;
   color: #6b7280;
-  margin-bottom: 25px;
+  margin-bottom: 32px;
 }
 
 .card h3 {
-  font-size: 20px;
-  color: #005fcc;
-  margin: 25px 0 15px;
+  font-size: 21px;
+  font-weight: 600;
+  color: #004aad;
+  margin: 36px 0 18px;
+  padding-bottom: 6px;
   border-bottom: 1px solid #e5e7eb;
-  padding-bottom: 5px;
 }
 
 label {
   display: block;
-  margin-bottom: 6px;
+  margin-bottom: 8px;
+  font-size: 14.5px;
   font-weight: 600;
-  font-size: 14px;
+  color: #374151;
+  letter-spacing: 0.3px;
 }
 
 input,
 textarea,
 select {
   width: 100%;
-  padding: 12px 14px;
-  margin-bottom: 15px;
-  border-radius: 10px;
+  padding: 14px 16px;
+  margin-bottom: 20px;
+  border-radius: 12px;
   border: 1px solid #d1d5db;
-  font-size: 14px;
-  transition: border-color 0.25s, box-shadow 0.25s;
-}
-
-input[readonly],
-textarea[readonly] {
-  background-color: #f9fafb;
-  color: #6b7280;
-  cursor: not-allowed;
+  font-size: 15px;
+  font-family: inherit;
+  color: #111827;
+  background-color: #ffffff;
+  transition: all 0.25s ease;
 }
 
 input:focus,
@@ -68,71 +68,78 @@ textarea:focus,
 select:focus {
   outline: none;
   border-color: #005fcc;
-  box-shadow: 0 0 0 3px rgba(0, 95, 204, 0.15);
+  box-shadow: 0 0 0 4px rgba(0, 95, 204, 0.18);
+}
+
+input[readonly],
+textarea[readonly] {
+  background-color: #f3f4f6;
+  color: #4b5563;
+  border-color: #e5e7eb;
+  cursor: not-allowed;
 }
 
 textarea {
   resize: vertical;
-  min-height: 90px;
+  min-height: 110px;
+  line-height: 1.65;
 }
 
 hr {
   border: none;
   height: 1px;
   background-color: #e5e7eb;
-  margin: 25px 0;
+  margin: 30px 0;
 }
 
 .admin-action {
   background-color: #f9fafb;
   border: 1px solid #e5e7eb;
-  border-radius: 14px;
-  padding: 22px;
-  margin-top: 20px;
-}
-
-.admin-action select {
-  background-color: #ffffff;
-  cursor: pointer;
+  border-radius: 16px;
+  padding: 28px 30px;
+  margin-top: 32px;
 }
 
 .save-btn {
   display: block;
-  width: 220px;
-  margin: 20px auto 0;
-  padding: 12px 0;
+  width: 260px;
+  margin: 30px auto 0;
+  padding: 14px 0;
   border: none;
   border-radius: 50px;
-  background-color: #005fcc;
+  background: linear-gradient(135deg, #005fcc, #003f8a);
   color: #ffffff;
-  font-size: 15px;
+  font-size: 15.5px;
   font-weight: 600;
+  letter-spacing: 0.4px;
   cursor: pointer;
-  transition: background 0.25s, transform 0.2s;
+  transition: all 0.25s ease;
 }
 
 .save-btn:hover {
-  background-color: #003f8a;
   transform: translateY(-2px);
+  box-shadow: 0 10px 25px rgba(0, 95, 204, 0.3);
 }
 
 #formMessage {
-  margin-top: 12px;
+  margin-top: 14px;
   text-align: center;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 500;
 }
 
-@media (max-width: 768px) {
-  .profile-layout {
-    margin: 30px auto;
-  }
-
+@media (min-width: 1024px) {
   .card {
-    padding: 25px 20px;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 48px;
   }
 
-  .save-btn {
-    width: 100%;
+  .card h2,
+  .card #caseMeta,
+  .card h3,
+  .card hr,
+  .admin-action {
+    grid-column: 1 / -1;
   }
 }
