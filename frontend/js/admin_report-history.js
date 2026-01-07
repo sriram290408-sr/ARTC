@@ -1,49 +1,54 @@
 const API = "https://artc-backend.onrender.com";
+const token = localStorage.getItem("access_token");
+
 const container = document.getElementById("historyContainer");
+const sortSelect = document.getElementById("sortSelect");
 
-document.addEventListener("DOMContentLoaded", loadReports);
+let reports = [];
 
-async function loadReports() {
-  container.innerHTML = "<p>Loading reports...</p>";
-
+async function loadAllReports() {
   try {
-    const res = await fetch(`${API}/reports`);
-
-    if (!res.ok) throw new Error("Failed to fetch reports");
-
-    const reports = await res.json();
-    container.innerHTML = "";
-
-    if (reports.length === 0) {
-      container.innerHTML = "<p>No reports found.</p>";
-      return;
-    }
-
-    reports.forEach(report => {
-      const card = document.createElement("div");
-      card.className = "report-card";
-
-      card.innerHTML = `
-        <h3>${report.title}</h3>
-        <p>${report.description}</p>
-        <p>
-          <small>
-            Status: <strong>${report.status || "Pending"}</strong><br/>
-            Submitted on: ${new Date(report.created_at).toLocaleString()}
-          </small>
-        </p>
-      `;
-
-      card.addEventListener("click", () => {
-        localStorage.setItem("selected_report_id", report.id);
-        window.location.href = "../html/admin_report.html";
-      });
-
-      container.appendChild(card);
+    const res = await fetch(`${API}/reports/`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
     });
 
-  } catch (error) {
-    console.error(error);
-    container.innerHTML = "<p>Error loading reports.</p>";
+    if (!res.ok) throw new Error();
+
+    reports = await res.json();
+    renderReports();
+  } catch {
+    alert("Failed to load reports");
   }
 }
+
+function renderReports() {
+  container.innerHTML = "";
+
+  const sorted = [...reports].sort((a, b) => {
+    return sortSelect.value === "latest"
+      ? new Date(b.created_at) - new Date(a.created_at)
+      : new Date(a.created_at) - new Date(b.created_at);
+  });
+
+  sorted.forEach(r => {
+    const card = document.createElement("div");
+    card.className = "history-card";
+    card.innerHTML = `
+      <h3>${r.title}</h3>
+      <p>${r.content}</p>
+      <small>Student ID: ${r.student_id}</small>
+      <button onclick="openReport(${r.id})">Open</button>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function openReport(id) {
+  location.href = `../html/admin_report.html?id=${id}`;
+}
+
+sortSelect.addEventListener("change", renderReports);
+
+loadAllReports();

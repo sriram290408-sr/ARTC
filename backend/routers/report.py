@@ -3,7 +3,7 @@ from sqlalchemy.orm import Session
 from sqlalchemy import func
 from database import SessionLocal
 from models.report import Report
-from schemas.report import ReportCreate,ReportOut, ReportUpdate
+from schemas.report import ReportCreate, ReportOut, ReportUpdate
 from dependencies.auth import get_current_user
 
 router = APIRouter()
@@ -23,7 +23,7 @@ def create_report(report: ReportCreate, db: Session = Depends(get_db)):
         title=report.title,
         description=report.description,
         status="Pending",
-        student_id=None   
+        student_id=None,
     )
 
     db.add(new_report)
@@ -33,14 +33,17 @@ def create_report(report: ReportCreate, db: Session = Depends(get_db)):
     return new_report
 
 
-@router.get("/reports")
-def get_reports(db: Session = Depends(get_db)):
-    return db.query(Report).order_by(Report.created_at.desc()).all()
+@router.get("/my")
+def view_my_reports(db: Session = Depends(get_db), user=Depends(get_current_user)):
+    return db.query(Report).filter(Report.student_id == user.id).all()
 
 
-@router.get("/my", response_model=list[ReportOut])
-def get_my_reports(db: Session = Depends(get_db), user=Depends(get_current_user)):
-    return db.query(Report).filter(Report.student_id == int(user["sub"])).all()
+@router.get("/")
+def view_all_reports(db: Session = Depends(get_db), user=Depends(get_current_user)):
+    if user.role != "admin":
+        raise HTTPException(status_code=403)
+    return db.query(Report).all()
+
 
 @router.get("/analytics")
 def report_analytics(db: Session = Depends(get_db)):
@@ -56,6 +59,24 @@ def report_analytics(db: Session = Depends(get_db)):
         "fake": fake,
     }
 
+
+@router.put("/{report_id}")
+def update_report(
+    report_id: int,
+    data: ReportUpdate,
+    db: Session = Depends(get_db),
+    user=Depends(get_current_user),
+):
+    if user.role != "admin":
+        raise HTTPException(status_code=403)
+
+    report = db.query(Report).get(report_id)
+    report.title = data.title
+    report.content = data.content
+    db.commit()
+    return {"message": "Report updated"}
+
+
 # @router.get("/{report_id}", response_model=ReportOut)
 # def get_report(
 #     report_id: int, db: Session = Depends(get_db), user=Depends(get_current_user)
@@ -70,25 +91,3 @@ def report_analytics(db: Session = Depends(get_db)):
 
 #     return report
 
-
-# @router.put("/{report_id}", response_model=ReportOut)
-# def update_report(
-#     report_id: int,
-#     data: ReportUpdate,
-#     db: Session = Depends(get_db),
-#     user=Depends(get_current_user),
-# ):
-#     if user["role"] != "faculty":
-#         raise HTTPException(status_code=403, detail="Unauthorized")
-
-#     report = db.query(Report).filter(Report.id == report_id).first()
-
-#     if not report:
-#         raise HTTPException(status_code=404, detail="Report not found")
-
-#     for key, value in data.dict(exclude_unset=True).items():
-#         setattr(report, key, value)
-
-#     db.commit()
-#     db.refresh(report)
-#     return report

@@ -1,40 +1,49 @@
 const API = "https://artc-backend.onrender.com";
-const container = document.getElementById("historyContainer");
+const token = localStorage.getItem("access_token");
 
-async function loadMyReports() {
+const container = document.getElementById("historyContainer");
+const sortSelect = document.getElementById("sortSelect");
+
+let reports = [];
+
+async function loadReports() {
   try {
-    const res = await fetch(`${API}/reports`, {
+    const res = await fetch(`${API}/reports/my`, {
       headers: {
-        "Authorization": `Bearer ${localStorage.getItem("token")}`
+        Authorization: `Bearer ${token}`
       }
     });
 
-    if (!res.ok) {
-      throw new Error("Failed to fetch reports");
-    }
+    if (!res.ok) throw new Error();
 
-    const reports = await res.json();
-    container.innerHTML = "";
-
-    if (!reports || reports.length === 0) {
-      container.innerHTML = "<p>No reports found.</p>";
-      return;
-    }
-
-    reports.forEach(r => {
-      container.innerHTML += `
-        <div class="report-card">
-          <h3>${r.title}</h3>
-          <p>${r.description}</p>
-          <span>Status: ${r.status}</span>
-        </div>
-      `;
-    });
-
-  } catch (err) {
-    console.error(err);
-    container.innerHTML = "<p>Error loading reports</p>";
+    reports = await res.json();
+    renderReports();
+  } catch {
+    alert("Failed to load reports");
   }
 }
 
-loadMyReports();
+function renderReports() {
+  container.innerHTML = "";
+
+  const sorted = [...reports].sort((a, b) => {
+    return sortSelect.value === "latest"
+      ? new Date(b.created_at) - new Date(a.created_at)
+      : new Date(a.created_at) - new Date(b.created_at);
+  });
+
+  sorted.forEach(r => {
+    const card = document.createElement("div");
+    card.className = "history-card";
+    card.innerHTML = `
+      <h3>${r.title}</h3>
+      <p>${r.content}</p>
+      <small>Status: ${r.status || "Pending"}</small>
+    `;
+    container.appendChild(card);
+  });
+}
+
+sortSelect.addEventListener("change", renderReports);
+
+loadReports();
