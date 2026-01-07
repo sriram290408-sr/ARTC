@@ -5,15 +5,17 @@ from models.committee import Committee
 from schemas.committee import CommitteeCreate, CommitteeOut
 from dependencies.auth import get_current_user
 
-router = APIRouter(prefix="/committee", tags=["Committee"])
+router = APIRouter(prefix="/committee")
 
-# Add member
+
 @router.post("/", response_model=CommitteeOut)
-def add_member(data: CommitteeCreate,
-               db: Session = Depends(get_db),
-               user=Depends(get_current_user)):
-    if user.role != "admin":
-        raise HTTPException(status_code=403, detail="Admins only")
+def add_member(
+    data: CommitteeCreate,
+    db: Session = Depends(get_db),
+    user=Depends(get_current_user)
+):
+    if user.role != "faculty":
+        raise HTTPException(status_code=403, detail="Faculty only")
 
     member = Committee(**data.dict())
     db.add(member)
@@ -21,23 +23,27 @@ def add_member(data: CommitteeCreate,
     db.refresh(member)
     return member
 
-# View members
+
 @router.get("/", response_model=list[CommitteeOut])
-def view_members(db: Session = Depends(get_db),
-                 user=Depends(get_current_user)):
+def view_members(
+    db: Session = Depends(get_db),
+    user=Depends(get_current_user)
+):
     return db.query(Committee).all()
 
-# Delete member
+
 @router.delete("/{id}")
-def delete_member(id: int,
-                  db: Session = Depends(get_db),
-                  user=Depends(get_current_user)):
-    if user.role != "admin":
-        raise HTTPException(status_code=403, detail="Admins only")
+def delete_member(
+    id: int,
+    db: Session = Depends(get_db),
+    user=Depends(get_current_user)
+):
+    if user.role != "faculty":
+        raise HTTPException(status_code=403, detail="Faculty only")
 
     member = db.query(Committee).filter(Committee.id == id).first()
     if not member:
-        raise HTTPException(status_code=404, detail="Member not found")
+        raise HTTPException(status_code=404, detail="Not found")
 
     db.delete(member)
     db.commit()
