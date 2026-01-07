@@ -3,15 +3,29 @@ const API = "https://artc-backend.onrender.com";
 const container = document.getElementById("cardContainer");
 const modal = document.getElementById("memberModal");
 const form = document.getElementById("memberForm");
+const addBtn = document.querySelector(".floating-add");
 
 const nameInput = document.getElementById("name");
 const roleInput = document.getElementById("role");
 const emailInput = document.getElementById("email");
 const linkedinInput = document.getElementById("linkedin");
 
+const token = localStorage.getItem("access_token");
+const role = localStorage.getItem("role");
+
 let selectedCard = null;
 
-document.addEventListener("DOMContentLoaded", loadMembers);
+document.addEventListener("DOMContentLoaded", () => {
+  ensureAdmin();
+  loadMembers();
+});
+
+function ensureAdmin() {
+  if (!token || role !== "faculty") {
+    alert("Admin access only");
+    window.location.href = "../html/login.html";
+  }
+}
 
 function openForm() {
   modal.style.display = "flex";
@@ -31,19 +45,14 @@ async function loadMembers() {
 
   try {
     const res = await fetch(`${API}/committee`, {
-      headers: {
-        Authorization: `Bearer ${localStorage.getItem("access_token")}`
-      }
+      headers: { Authorization: `Bearer ${token}` }
     });
 
-    if (!res.ok) throw new Error("Failed to load");
-
     const members = await res.json();
-    members.forEach(renderCard);
+    members.forEach(addCard);
 
-  } catch (err) {
-    console.error(err);
-    container.innerHTML = "<p>Failed to load committee members</p>";
+  } catch {
+    container.innerHTML = "<p>Failed to load committee</p>";
   }
 }
 
@@ -52,84 +61,53 @@ form.addEventListener("submit", async (e) => {
 
   const payload = {
     name: nameInput.value.trim(),
-    designation: roleInput.value.trim() || null,
-    email: emailInput.value.trim() || null,
-    linkedin: linkedinInput.value.trim() || null
+    designation: roleInput.value.trim(),
+    email: emailInput.value.trim(),
+    linkedin: linkedinInput.value.trim()
   };
 
-  try {
-    const res = await fetch(`${API}/committee`, {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("access_token")}`
-      },
-      body: JSON.stringify(payload)
-    });
+  const res = await fetch(`${API}/committee`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: `Bearer ${token}`
+    },
+    body: JSON.stringify(payload)
+  });
 
-    if (!res.ok) {
-      alert("Only faculty can add members");
-      return;
-    }
-
-    closeForm();
-    loadMembers();
-
-  } catch (err) {
-    console.error(err);
-    alert("Failed to add member");
+  if (!res.ok) {
+    alert("Only admin can add members");
+    return;
   }
+
+  closeForm();
+  loadMembers();
 });
 
-function renderCard(member) {
+function addCard(member) {
   const card = document.createElement("div");
   card.className = "card";
 
   card.innerHTML = `
-    <img src="../assets/profile.png" alt="${member.name}">
+    <img src="../assets/profile.png">
     <h3>${member.name}</h3>
     <p class="role">${member.designation || ""}</p>
-    ${member.email ? `<p>Email: ${member.email}</p>` : ""}
+    ${member.email ? `<p>${member.email}</p>` : ""}
     ${member.linkedin ? `<a href="${member.linkedin}" target="_blank">LinkedIn</a>` : ""}
-    <div class="card-actions">
-      <button class="delete-btn" style="display:none;">Delete</button>
-    </div>
+    <button class="delete-btn">Delete</button>
   `;
 
   const deleteBtn = card.querySelector(".delete-btn");
 
-  card.addEventListener("click", () => {
-    if (selectedCard && selectedCard !== card) {
-      selectedCard.querySelector(".delete-btn").style.display = "none";
-    }
-    selectedCard = card;
-    deleteBtn.style.display = "inline-flex";
-  });
+  deleteBtn.addEventListener("click", async () => {
+    if (!confirm("Delete member?")) return;
 
-  deleteBtn.addEventListener("click", async (e) => {
-    e.stopPropagation();
+    await fetch(`${API}/committee/${member.id}`, {
+      method: "DELETE",
+      headers: { Authorization: `Bearer ${token}` }
+    });
 
-    if (!confirm(`Delete ${member.name}?`)) return;
-
-    try {
-      const res = await fetch(`${API}/committee/${member.id}`, {
-        method: "DELETE",
-        headers: {
-          Authorization: `Bearer ${localStorage.getItem("access_token")}`
-        }
-      });
-
-      if (!res.ok) {
-        alert("Delete failed");
-        return;
-      }
-
-      card.remove();
-
-    } catch (err) {
-      console.error(err);
-      alert("Delete error");
-    }
+    card.remove();
   });
 
   container.appendChild(card);
