@@ -1,21 +1,38 @@
-const API = "https://artc-backend.onrender.com";
+const API = "https://artc-backend.onrender.com"; 
 const container = document.getElementById("historyContainer");
+const sortSelect = document.getElementById("sortSelect");
 
-document.addEventListener("DOMContentLoaded", loadReports);
+document.addEventListener("DOMContentLoaded", () => {
+  loadReports();
+  sortSelect.addEventListener("change", loadReports);
+});
 
 async function loadReports() {
   container.innerHTML = "<p>Loading reports...</p>";
+  console.log("Loading reports...");
 
   try {
     const res = await fetch(`${API}/reports`);
+    console.log("Fetch response:", res);
 
-    if (!res.ok) throw new Error("Failed to fetch reports");
+    if (!res.ok) throw new Error(`Failed to fetch reports: ${res.status}`);
 
-    const reports = await res.json();
+    let reports = await res.json();
+    console.log("Reports data:", reports);
+
+    // Handle sorting
+    const sortOrder = sortSelect.value;
+    reports.sort((a, b) => {
+      const dateA = new Date(a.created_at);
+      const dateB = new Date(b.created_at);
+      return sortOrder === "latest" ? dateB - dateA : dateA - dateB;
+    });
+
     container.innerHTML = "";
 
-    if (reports.length === 0) {
+    if (!reports || reports.length === 0) {
       container.innerHTML = "<p>No reports found.</p>";
+      console.log("No reports found.");
       return;
     }
 
@@ -38,7 +55,7 @@ async function loadReports() {
     });
 
   } catch (error) {
-    console.error(error);
-    container.innerHTML = "<p>Error loading reports.</p>";
+    console.error("Error loading reports:", error);
+    container.innerHTML = "<p>Error loading reports. Check console for details.</p>";
   }
 }
