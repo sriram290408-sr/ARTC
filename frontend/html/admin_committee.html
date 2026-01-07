@@ -9,7 +9,6 @@
     <link rel="stylesheet" href="../css/admin_committee.css" />
   </head>
   <body>
-
     <header>
       <div class="header-left">
         <img src="../assets/icon.png" alt="ARTC Logo" class="logo" />
@@ -54,17 +53,16 @@
       <div class="card-container" id="cardContainer"></div>
     </main>
 
+    <!-- Modal for Adding Members -->
     <div class="modal" id="memberModal">
       <div class="modal-content">
         <span class="close" onclick="closeForm()">×</span>
         <h3>Add Committee Member</h3>
         <form id="memberForm">
           <input type="text" id="name" placeholder="Name" required />
-          <input type="text" id="role" placeholder="Designation / Role" />
-          <input type="email" id="email" placeholder="Email" />
-          <input type="text" id="phone" placeholder="Phone" />
+          <input type="text" id="role" placeholder="Role" required />
           <input type="url" id="linkedin" placeholder="LinkedIn URL" />
-          <textarea id="desc" placeholder="Description / Bio" rows="3"></textarea>
+          <textarea id="desc" placeholder="Description" rows="3"></textarea>
           <button type="submit">Add Member</button>
         </form>
       </div>
