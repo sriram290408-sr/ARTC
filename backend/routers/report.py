@@ -1,8 +1,8 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
-from sqlalchemy import Function
+from sqlalchemy import func
 from database import SessionLocal
-from models.report import Report,Repo
+from models.report import Report
 from schemas.report import ReportCreate,ReportOut, ReportUpdate
 from dependencies.auth import get_current_user
 
