@@ -15,6 +15,7 @@ async function loadSchedules() {
     container.innerHTML += `
       <div class="schedule-card">
         <h3>${s.title}</h3>
+        <p>${s.venue}</p>
         <p>${s.date} | ${s.time}</p>
       </div>
     `;

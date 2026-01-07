@@ -3,7 +3,7 @@ const container = document.getElementById("scheduleContainer");
 const popup = document.getElementById("popup");
 const addBtn = document.getElementById("addBtn");
 
-const role = localStorage.getItem("role"); 
+const role = localStorage.getItem("role");
 
 addBtn.style.display = role === "faculty" ? "block" : "none";
 
@@ -42,8 +42,8 @@ async function loadSchedules() {
 }
 
 async function submitSchedule() {
-  const title = document.getElementById("title").value;
-  const venue = document.getElementById("venue").value;
+  const title = document.getElementById("title").value.trim();
+  const venue = document.getElementById("venue").value.trim();
   const date = document.getElementById("date").value;
   const time = document.getElementById("time").value;
 
@@ -52,7 +52,7 @@ async function submitSchedule() {
     return;
   }
 
-  await fetch(`${API}/schedules`, {
+  const res = await fetch(`${API}/schedules`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -60,6 +60,11 @@ async function submitSchedule() {
     },
     body: JSON.stringify({ title, venue, date, time })
   });
+
+  if (!res.ok) {
+    alert("Only faculty can add schedules");
+    return;
+  }
 
   closePopup();
   loadSchedules();
