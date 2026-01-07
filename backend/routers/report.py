@@ -5,7 +5,7 @@ from database import SessionLocal
 from models.report import Report
 from schemas.report import ReportCreate, ReportOut, ReportUpdate
 
-router = APIRouter(prefix="/reports", tags=["Reports"])
+router = APIRouter()
 
 def get_db():
     db = SessionLocal()
