@@ -1,72 +1,109 @@
 .profile-layout {
   max-width: 1000px;
-  margin: 50px auto;
-  padding: 0 20px 50px;
+  margin: 60px auto;
+  padding: 0 20px;
   font-family: "Poppins", sans-serif;
-  color: #333;
+  color: #374151;
 }
 
 .card {
-  background: #fff;
+  background: #ffffff;
   padding: 35px 30px;
   border-radius: 16px;
-  box-shadow: 0 8px 20px rgba(0,0,0,.08);
-  transition: transform 0.3s, box-shadow 0.3s;
-}
-
-.card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 12px 28px rgba(0,0,0,.12);
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
 }
 
 .card h2 {
-  color: #005fcc;
-  font-size: 26px;
   text-align: center;
-  margin-bottom: 30px;
+  font-size: 26px;
+  color: #005fcc;
+  margin-bottom: 10px;
+}
+
+#caseMeta {
+  text-align: center;
+  font-size: 14px;
+  color: #6b7280;
+  margin-bottom: 25px;
 }
 
 .card h3 {
-  color: #005fcc;
   font-size: 20px;
-  margin-bottom: 20px;
-  border-bottom: 1px solid #e0e0e0;
+  color: #005fcc;
+  margin: 25px 0 15px;
+  border-bottom: 1px solid #e5e7eb;
   padding-bottom: 5px;
 }
 
-input, textarea, select {
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: 600;
+  font-size: 14px;
+}
+
+input,
+textarea,
+select {
   width: 100%;
-  padding: 12px 15px;
+  padding: 12px 14px;
+  margin-bottom: 15px;
   border-radius: 10px;
-  border: 1px solid #ccc;
+  border: 1px solid #d1d5db;
   font-size: 14px;
   transition: border-color 0.25s, box-shadow 0.25s;
 }
 
-input[readonly], textarea[readonly] {
+input[readonly],
+textarea[readonly] {
   background-color: #f9fafb;
   color: #6b7280;
   cursor: not-allowed;
 }
 
-input:focus, textarea:focus, select:focus {
-  border-color: #005fcc;
-  box-shadow: 0 0 0 3px rgba(0,95,204,0.15);
+input:focus,
+textarea:focus,
+select:focus {
   outline: none;
+  border-color: #005fcc;
+  box-shadow: 0 0 0 3px rgba(0, 95, 204, 0.15);
 }
 
 textarea {
-  min-height: 80px;
   resize: vertical;
+  min-height: 90px;
+}
+
+hr {
+  border: none;
+  height: 1px;
+  background-color: #e5e7eb;
+  margin: 25px 0;
+}
+
+.admin-action {
+  background-color: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 14px;
+  padding: 22px;
+  margin-top: 20px;
+}
+
+.admin-action select {
+  background-color: #ffffff;
+  cursor: pointer;
 }
 
 .save-btn {
-  width: 200px;
-  margin: 15px auto 0;
-  background-color: #005fcc;
-  color: #fff;
-  border-radius: 50px;
+  display: block;
+  width: 220px;
+  margin: 20px auto 0;
   padding: 12px 0;
+  border: none;
+  border-radius: 50px;
+  background-color: #005fcc;
+  color: #ffffff;
+  font-size: 15px;
   font-weight: 600;
   cursor: pointer;
   transition: background 0.25s, transform 0.2s;
@@ -77,75 +114,23 @@ textarea {
   transform: translateY(-2px);
 }
 
-.history-btn {
-  position: absolute;
-  top: 30px;
-  right: 30px;
-  background: #005fcc;
-  color: #fff;
-  padding: 10px 22px;
-  border-radius: 10px;
-  font-weight: 600;
-  text-decoration: none;
-  transition: background 0.25s;
-}
-
-.history-btn:hover {
-  background: #003f8a;
-}
-
-.admin-action {
-  background-color: #f9fafb;
-  border: 1px solid #e5e7eb;
-  border-radius: 12px;
-  padding: 20px;
-  margin-top: 20px;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 15px;
-}
-
-.admin-action label {
-  font-weight: 600;
-  color: #374151;
-}
-
-.admin-action select {
-  padding: 12px 15px;
-  border-radius: 10px;
-  border: 1px solid #d1d5db;
+#formMessage {
+  margin-top: 12px;
+  text-align: center;
   font-size: 14px;
-  background-color: #fff;
-  appearance: none;
-  cursor: pointer;
-  transition: border-color 0.25s, box-shadow 0.25s;
+  font-weight: 500;
 }
 
-.admin-action textarea {
-  min-height: 100px;
-  resize: vertical;
-  padding: 12px 15px;
-  border-radius: 10px;
-  border: 1px solid #d1d5db;
-  font-size: 14px;
-  transition: border-color 0.25s, box-shadow 0.25s;
-}
-
-.status-pending { color: orange; }
-.status-under_review { color: #3b82f6; }
-.status-completed { color: green; }
-.status-fake { color: red; }
-
-
-@media (max-width:768px) {
+@media (max-width: 768px) {
   .profile-layout {
-    padding: 20px;
+    margin: 30px auto;
   }
 
-  .history-btn {
-    position: static;
-    margin: 20px auto;
-    display: block;
-    text-align: center;
+  .card {
+    padding: 25px 20px;
+  }
+
+  .save-btn {
+    width: 100%;
   }
 }
