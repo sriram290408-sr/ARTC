@@ -5,7 +5,7 @@ const container = document.getElementById("historyContainer");
 
 async function loadReports() {
   try {
-    const res = await fetch(`${API}/reports/my`, {
+    const res = await fetch(`${API}/reports`, {
       headers: {
         Authorization: `Bearer ${token}`
       }
