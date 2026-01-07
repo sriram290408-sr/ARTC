@@ -1,12 +1,7 @@
 const API_URL = "https://artc-backend.onrender.com";
-const token = localStorage.getItem("token");
 
 const reportForm = document.getElementById("reportForm");
 const messageBox = document.getElementById("formMessage");
-
-if (!token) {
-  window.location.href = "./login.html";
-}
 
 reportForm.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -41,8 +36,7 @@ reportForm.addEventListener("submit", async (e) => {
     const res = await fetch(`${API_URL}/reports`, {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
+        "Content-Type": "application/json"
       },
       body: JSON.stringify(payload)
     });
@@ -63,7 +57,7 @@ reportForm.addEventListener("submit", async (e) => {
 
   } catch (error) {
     console.error("Report submit error:", error);
-    showError(error.message);
+    showError("Something went wrong. Please try again.");
   } finally {
     resetButton(submitBtn);
   }

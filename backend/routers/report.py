@@ -19,10 +19,9 @@ def get_db():
 @router.post("/", response_model=ReportOut)
 def create_report(
     data: ReportCreate,
-    db: Session = Depends(get_db),
-    user=Depends(get_current_user)
+    db: Session = Depends(get_db)
 ):
-    report = Report(**data.dict(), student_id=int(user["sub"]))
+    report = Report(**data.dict())
     db.add(report)
     db.commit()
     db.refresh(report)
