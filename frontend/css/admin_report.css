@@ -1,18 +1,33 @@
 .profile-layout {
-  max-width: 1320px;
-  margin: 80px auto;
-  padding: 0 32px;
-  font-family: "Poppins", system-ui, sans-serif;
+  max-width: 1500px;   
+  margin: 70px auto;
+  padding: 0 40px;    
+  font-family: "Poppins", sans-serif;
   color: #1f2937;
 }
 
 .card {
   background: #ffffff;
-  padding: 50px 56px;
+  padding: 56px 64px;     
   border-radius: 20px;
-  box-shadow:
-    0 22px 48px rgba(0, 0, 0, 0.08),
-    0 8px 20px rgba(0, 0, 0, 0.05);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.08);
+}
+
+.history-btn {
+  position: absolute;
+  top: 320px;
+  right: 30px;
+  background: #005fcc;
+  color: #fff;
+  padding: 10px 22px;
+  border-radius: 10px;
+  font-weight: 600;
+  text-decoration: none;
+  transition: background 0.25s;
+}
+
+.history-btn:hover {
+  background: #003f8a;
 }
 
 .card h2 {
