@@ -3,16 +3,13 @@ const API = "https://artc-backend.onrender.com";
 const historyContainer = document.getElementById("historyContainer");
 const sortSelect = document.getElementById("sortSelect");
 
-// ---------------- LOAD MY REPORTS ----------------
+const userName = prompt("Enter your name to view reports");
+
 async function loadMyReports(sort = "latest") {
   try {
-    const res = await fetch(`${API}/reports/my`);
-
-    if (!res.ok) throw new Error("Failed to fetch");
-
+    const res = await fetch(`${API}/reports/my?name=${encodeURIComponent(userName)}`);
     let reports = await res.json();
 
-    // Sort by date
     reports.sort((a, b) =>
       sort === "latest"
         ? new Date(b.created_at) - new Date(a.created_at)
@@ -21,29 +18,20 @@ async function loadMyReports(sort = "latest") {
 
     historyContainer.innerHTML = "";
 
-    reports.forEach((r) => {
-      const card = document.createElement("div");
-      card.className = "history-card";
-
-      card.innerHTML = `
-        <h3>${r.title}</h3>
-        <p>${r.description}</p>
-        <span class="status status-${r.status.replace(" ", "_")}">
-          ${r.status}
-        </span>
+    reports.forEach(r => {
+      historyContainer.innerHTML += `
+        <div class="history-card">
+          <h3>${r.title}</h3>
+          <p>${r.description}</p>
+          <span class="status">${r.status}</span>
+        </div>
       `;
-
-      historyContainer.appendChild(card);
     });
-  } catch (err) {
+
+  } catch {
     historyContainer.innerHTML = "<p>Failed to load reports</p>";
   }
 }
 
-// ---------------- SORT ----------------
-sortSelect.addEventListener("change", (e) => {
-  loadMyReports(e.target.value);
-});
-
-// Initial load
+sortSelect.addEventListener("change", e => loadMyReports(e.target.value));
 loadMyReports();

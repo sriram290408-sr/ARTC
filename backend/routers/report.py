@@ -1,12 +1,11 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
+from typing import List
 from database import SessionLocal
 from models.report import Report
 from schemas.report import ReportCreate, ReportOut, ReportUpdate
-from dependencies.auth import get_current_user
 
-router = APIRouter()
-
+router = APIRouter(prefix="/reports", tags=["Reports"])
 
 def get_db():
     db = SessionLocal()
@@ -19,53 +18,42 @@ def get_db():
 def create_report(
     report: ReportCreate,
     db: Session = Depends(get_db),
-    user=Depends(get_current_user),
 ):
-    new_report = Report(
-        title=report.title,
-        description=report.description,
-        problem_type=report.problem_type,
-        incident_location=report.incident_location,
-        incident_date=report.incident_date,
-        name=report.name,
-        class_section=report.class_section,
-        people_involved=report.people_involved,
-        status="Pending",
-        student_id=user.id,
-    )
-
+    new_report = Report(**report.dict())  
     db.add(new_report)
     db.commit()
     db.refresh(new_report)
     return new_report
 
-@router.get("/")
+@router.get("/my", response_model=List[ReportOut])
+def view_my_reports(
+    name: str,
+    db: Session = Depends(get_db),
+):
+    return db.query(Report).filter(Report.name == name).all()
+
+@router.get("/", response_model=List[ReportOut])
 def view_all_reports(db: Session = Depends(get_db)):
     return db.query(Report).all()
 
-@router.get("/my")
-def view_my_reports(db: Session = Depends(get_db)):
-    return db.query(Report).all() 
-
-
+@router.get("/{report_id}", response_model=ReportOut)
+def get_report(report_id: int, db: Session = Depends(get_db)):
+    report = db.query(Report).filter(Report.id == report_id).first()
+    if not report:
+        raise HTTPException(status_code=404, detail="Report not found")
+    return report
+#
 @router.put("/{report_id}", response_model=ReportOut)
 def update_report(
     report_id: int,
     data: ReportUpdate,
     db: Session = Depends(get_db),
-    user=Depends(get_current_user),
 ):
-    if user.role != "admin":
-        raise HTTPException(status_code=403, detail="Admin access required")
-
     report = db.query(Report).filter(Report.id == report_id).first()
-
     if not report:
         raise HTTPException(status_code=404, detail="Report not found")
 
-    if data.status:
-        report.status = data.status
-
+    report.status = data.status
     db.commit()
     db.refresh(report)
     return report

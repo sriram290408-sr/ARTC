@@ -12,9 +12,8 @@ class ReportCreate(BaseModel):
     class_section: str
     people_involved: Optional[str] = None
 
-
 class ReportUpdate(BaseModel):
-    status: Optional[str] = None
+    status: str
 
 class ReportOut(BaseModel):
     id: int
@@ -27,7 +26,6 @@ class ReportOut(BaseModel):
     class_section: str
     people_involved: Optional[str]
     status: str
-    student_id: Optional[int]
     created_at: datetime
 
     class Config:
