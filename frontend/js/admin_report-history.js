@@ -34,6 +34,11 @@ async function loadReports() {
         </p>
       `;
 
+      card.addEventListener("click", () => {
+        localStorage.setItem("selected_report_id", report.id);
+        window.location.href = "../html/admin_report.html";
+      });
+
       container.appendChild(card);
     });
 
