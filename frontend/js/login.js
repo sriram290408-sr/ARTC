@@ -32,9 +32,9 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
 
     // ✅ Role-based redirect
     if (data.role === "admin" || data.role === "faculty") {
-      window.location.href = "./admin.html";
+      window.location.href = "../html/admin.html";
     } else {
-      window.location.href = "./home.html";
+      window.location.href = "../html/home.html";
     }
 
   } catch (err) {
