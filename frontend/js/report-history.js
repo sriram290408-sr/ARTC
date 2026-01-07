@@ -1,25 +1,49 @@
 const API = "https://artc-backend.onrender.com";
+const token = localStorage.getItem("token");
 const container = document.getElementById("historyContainer");
 
-async function loadMyReports() {
-  const res = await fetch(`${API}/reports/my`, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("token")}`
+const role = localStorage.getItem("role"); 
+
+async function loadReports() {
+  try {
+    const endpoint = role === "faculty" ? "/report" : "/report"; 
+    const res = await fetch(`${API}${endpoint}`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
+
+    if (!res.ok) throw new Error("Failed to fetch reports");
+
+    const reports = await res.json();
+    container.innerHTML = "";
+
+    if (!reports.length) {
+      container.innerHTML = "<p>No reports found</p>";
+      return;
     }
-  });
 
-  const reports = await res.json();
-  container.innerHTML = "";
+    reports.forEach(r => {
+      const card = document.createElement("div");
+      card.className = "report-card";
 
-  reports.forEach(r => {
-    container.innerHTML += `
-      <div class="report-card">
+      if (role === "faculty") {
+        card.onclick = () => location.href = `./admin_report.html?id=${r.id}`;
+      }
+
+      card.innerHTML = `
         <h3>${r.title}</h3>
         <p>${r.description}</p>
-        <span>Status: ${r.status}</span>
-      </div>
-    `;
-  });
+        <p><small>Status: ${r.status || "Pending"} | ${new Date(r.created_at).toLocaleString()}</small></p>
+      `;
+
+      container.appendChild(card);
+    });
+
+  } catch (err) {
+    console.error(err);
+    container.innerHTML = "<p>Error loading reports</p>";
+  }
 }
 
-loadMyReports();
+document.addEventListener("DOMContentLoaded", loadReports);

@@ -1,6 +1,5 @@
 const API = "https://artc-backend.onrender.com";
 const token = localStorage.getItem("token");
-
 const form = document.getElementById("reportForm");
 const message = document.getElementById("formMessage");
 const statusDropdown = document.getElementById("status");
@@ -13,18 +12,15 @@ if (!reportId) {
   location.href = "./admin_report-history.html";
 }
 
-// Load report data from backend
 async function loadReport() {
+  if (!token) return (window.location.href = "./login.html");
   try {
     const res = await fetch(`${API}/reports/${reportId}`, {
-      headers: { Authorization: `Bearer ${token}` }
+      headers: { Authorization: `Bearer ${token}` },
     });
-
     if (!res.ok) throw new Error("Failed to fetch report");
-
     const r = await res.json();
 
-    // Fill form fields
     form.title.value = r.title;
     form.description.value = r.description;
     form.problem_type.value = r.problem_type;
@@ -36,7 +32,6 @@ async function loadReport() {
     form.status.value = r.status;
     form.remarks.value = r.remarks || "";
 
-    // Set color for status
     setStatusColor(r.status);
   } catch (err) {
     alert("Failed to load report");
@@ -44,9 +39,8 @@ async function loadReport() {
   }
 }
 
-// Set color based on status
 function setStatusColor(status) {
-  statusDropdown.className = ""; // remove old class
+  statusDropdown.className = "";
   switch (status) {
     case "Pending":
       statusDropdown.classList.add("status-pending");
@@ -63,41 +57,33 @@ function setStatusColor(status) {
   }
 }
 
-// Listen to status change to update color immediately
-statusDropdown.addEventListener("change", () => {
-  setStatusColor(statusDropdown.value);
-});
+statusDropdown.addEventListener("change", () =>
+  setStatusColor(statusDropdown.value)
+);
 
-// Submit updated report to backend
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
+  if (!token) return (window.location.href = "./login.html");
 
-  const payload = {
-    status: form.status.value,
-    remarks: form.remarks.value
-  };
+  const payload = { status: form.status.value, remarks: form.remarks.value };
 
   try {
     const res = await fetch(`${API}/reports/${reportId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
+        Authorization: `Bearer ${token}`,
       },
-      body: JSON.stringify(payload)
+      body: JSON.stringify(payload),
     });
 
     if (!res.ok) throw new Error("Update failed");
 
     message.innerText = "Report updated successfully ✅";
     message.style.color = "green";
-
-    // Update color immediately
     setStatusColor(form.status.value);
 
-    setTimeout(() => {
-      location.href = "./admin_report-history.html";
-    }, 1200);
+    setTimeout(() => (location.href = "./admin_report-history.html"), 1200);
   } catch (err) {
     message.innerText = "Update failed ❌";
     message.style.color = "red";

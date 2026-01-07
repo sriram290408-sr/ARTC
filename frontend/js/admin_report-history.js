@@ -3,15 +3,13 @@ const token = localStorage.getItem("token");
 const container = document.getElementById("historyContainer");
 
 async function loadReports() {
-  const res = await fetch(`${API}/reports`, {
-    headers: {
-      Authorization: `Bearer ${token}`
-    }
-  });
+  if (!token) return window.location.href = "./login.html";
 
+  const res = await fetch(`${API}/reports`, { headers: { Authorization: `Bearer ${token}` } });
+  if (!res.ok) return alert("Failed to fetch reports");
   const reports = await res.json();
-  container.innerHTML = "";
 
+  container.innerHTML = "";
   reports.forEach(r => {
     container.innerHTML += `
       <div class="report-card" onclick="openReport(${r.id})">

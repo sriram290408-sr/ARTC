@@ -7,10 +7,14 @@ async function fetchReports() {
   const container = document.getElementById("reportContainer");
   container.innerHTML = "";
 
+  if (!token) return window.location.href = "./login.html";
+
   try {
-    const res = await fetch(`${API_URL}/reports/history`, {
+    const res = await fetch(`${API_URL}/reports/my`, {
       headers: { Authorization: `Bearer ${token}` }
     });
+
+    if (!res.ok) throw new Error("Failed to fetch reports");
     const reports = await res.json();
 
     if (!reports.length) {
@@ -21,13 +25,11 @@ async function fetchReports() {
     reports.forEach(r => {
       const card = document.createElement("div");
       card.className = "report-card";
-
       card.innerHTML = `
         <h3>${r.title}</h3>
         <p>${r.description}</p>
-        <p><small>By: ${r.created_by} | ${new Date(r.created_at).toLocaleString()}</small></p>
+        <p><small>By: ${r.created_by || 'You'} | ${new Date(r.created_at).toLocaleString()}</small></p>
       `;
-
       container.appendChild(card);
     });
 
@@ -37,8 +39,10 @@ async function fetchReports() {
   }
 }
 
+// Submit new report
 document.getElementById("reportForm")?.addEventListener("submit", async (e) => {
   e.preventDefault();
+  if (!token) return window.location.href = "./login.html";
 
   const data = {
     title: document.getElementById("report_title").value,
@@ -48,21 +52,19 @@ document.getElementById("reportForm")?.addEventListener("submit", async (e) => {
   try {
     const res = await fetch(`${API_URL}/reports`, {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`
-      },
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${token}` },
       body: JSON.stringify(data)
     });
 
-    if (res.ok) {
-      alert("Report submitted");
-      fetchReports();
-      e.target.reset();
-    } else {
+    if (!res.ok) {
       const err = await res.json();
       alert(err.detail || "Failed to submit report");
+      return;
     }
+
+    alert("Report submitted ✅");
+    e.target.reset();
+    fetchReports();
   } catch (err) {
     console.error(err);
     alert("Network error");
