@@ -1,5 +1,6 @@
 const API = "https://artc-backend.onrender.com";
 const token = localStorage.getItem("token");
+
 const form = document.getElementById("reportForm");
 const message = document.getElementById("formMessage");
 const statusDropdown = document.getElementById("status");
@@ -9,16 +10,17 @@ const reportId = params.get("id");
 
 if (!reportId) {
   alert("No report selected");
-  location.href = "../html/admin_report-history.html";
+  location.href = "./admin_report-history.html"; 
 }
 
 async function loadReport() {
-  if (!token) return (window.location.href = "../html/admin_report.js");
   try {
     const res = await fetch(`${API}/reports/${reportId}`, {
-      headers: { Authorization: `Bearer ${token}` },
+      headers: { Authorization: `Bearer ${token}` }
     });
+
     if (!res.ok) throw new Error("Failed to fetch report");
+
     const r = await res.json();
 
     form.title.value = r.title;
@@ -57,33 +59,38 @@ function setStatusColor(status) {
   }
 }
 
-statusDropdown.addEventListener("change", () =>
-  setStatusColor(statusDropdown.value)
-);
+statusDropdown.addEventListener("change", () => {
+  setStatusColor(statusDropdown.value);
+});
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
-  if (!token) return (window.location.href = "../html/admin_report-history.html");
 
-  const payload = { status: form.status.value, remarks: form.remarks.value };
+  const payload = {
+    status: form.status.value,
+    remarks: form.remarks.value
+  };
 
   try {
     const res = await fetch(`${API}/reports/${reportId}`, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${token}`,
+        Authorization: `Bearer ${token}`
       },
-      body: JSON.stringify(payload),
+      body: JSON.stringify(payload)
     });
 
     if (!res.ok) throw new Error("Update failed");
 
     message.innerText = "Report updated successfully ✅";
     message.style.color = "green";
+
     setStatusColor(form.status.value);
 
-    setTimeout(() => (location.href = "./admin_report-history.html"), 1200);
+    setTimeout(() => {
+      location.href = "./admin_report-history.html";
+    }, 1200);
   } catch (err) {
     message.innerText = "Update failed ❌";
     message.style.color = "red";

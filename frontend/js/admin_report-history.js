@@ -3,13 +3,15 @@ const token = localStorage.getItem("token");
 const container = document.getElementById("historyContainer");
 
 async function loadReports() {
-  if (!token) return window.location.href = "./login.html";
+  const res = await fetch(`${API}/reports`, {
+    headers: {
+      Authorization: `Bearer ${token}`
+    }
+  });
 
-  const res = await fetch(`${API}/reports`, { headers: { Authorization: `Bearer ${token}` } });
-  if (!res.ok) return alert("Failed to fetch reports");
   const reports = await res.json();
-
   container.innerHTML = "";
+
   reports.forEach(r => {
     container.innerHTML += `
       <div class="report-card" onclick="openReport(${r.id})">
@@ -20,6 +22,7 @@ async function loadReports() {
   });
 }
 
+// ✅ FIXED PATH
 function openReport(id) {
   location.href = `./admin_report.html?id=${id}`;
 }
