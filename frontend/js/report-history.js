@@ -2,7 +2,7 @@ const API = "https://artc-backend.onrender.com";
 const container = document.getElementById("historyContainer");
 
 async function loadMyReports() {
-  const res = await fetch(`${API}/reports/my`, {
+  const res = await fetch(`${API}/reports`, {
     headers: {
       Authorization: `Bearer ${localStorage.getItem("token")}`
     }
