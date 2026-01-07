@@ -3,6 +3,10 @@ const container = document.getElementById("scheduleContainer");
 const popup = document.getElementById("popup");
 const addBtn = document.getElementById("addBtn");
 
+const role = localStorage.getItem("role"); 
+
+addBtn.style.display = role === "faculty" ? "block" : "none";
+
 addBtn.onclick = () => popup.classList.remove("hidden");
 
 function closePopup() {
@@ -22,9 +26,16 @@ async function loadSchedules() {
   schedules.forEach(s => {
     container.innerHTML += `
       <div class="schedule-card">
-        <h3>${s.title}</h3>
-        <p>${s.date} | ${s.time}</p>
-        <button onclick="deleteSchedule(${s.id})">Delete</button>
+        <div>
+          <h3>${s.title}</h3>
+          <p>${s.venue}</p>
+          <p>${s.date} | ${s.time}</p>
+        </div>
+        ${
+          role === "faculty"
+            ? `<button onclick="deleteSchedule(${s.id})">Delete</button>`
+            : ""
+        }
       </div>
     `;
   });
@@ -32,27 +43,23 @@ async function loadSchedules() {
 
 async function submitSchedule() {
   const title = document.getElementById("title").value;
+  const venue = document.getElementById("venue").value;
   const date = document.getElementById("date").value;
   const time = document.getElementById("time").value;
 
-  if (!title || !date || !time) {
+  if (!title || !venue || !date || !time) {
     alert("Fill all fields");
     return;
   }
 
-  const res = await fetch(`${API}/schedules`, {
+  await fetch(`${API}/schedules`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
       Authorization: `Bearer ${localStorage.getItem("access_token")}`
     },
-    body: JSON.stringify({ title, date, time })
+    body: JSON.stringify({ title, venue, date, time })
   });
-
-  if (!res.ok) {
-    alert("Only admin can add");
-    return;
-  }
 
   closePopup();
   loadSchedules();

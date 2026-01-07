@@ -6,8 +6,7 @@ from models.schedule import Schedule
 from schemas.schedule import ScheduleCreate
 from dependencies.auth import get_current_user
 
-router = APIRouter()
-
+router = APIRouter(prefix="/schedules")
 
 @router.post("/")
 def create_schedule(
@@ -16,7 +15,7 @@ def create_schedule(
     user=Depends(get_current_user)
 ):
     if user.role != "faculty":
-        raise HTTPException(status_code=403, detail="Admins only")
+        raise HTTPException(403, "Faculty only")
 
     schedule = Schedule(**data.dict())
     db.add(schedule)
@@ -25,7 +24,6 @@ def create_schedule(
 
     return schedule
 
-
 @router.get("/")
 def get_schedules(
     db: Session = Depends(get_db),
@@ -33,22 +31,18 @@ def get_schedules(
 ):
     return db.query(Schedule).all()
 
-
-@router.delete("/{schedule_id}")
+@router.delete("/{id}")
 def delete_schedule(
-    schedule_id: int,
+    id: int,
     db: Session = Depends(get_db),
     user=Depends(get_current_user)
 ):
     if user.role != "faculty":
-        raise HTTPException(status_code=403, detail="Admins only")
+        raise HTTPException(403, "Faculty only")
 
-    schedule = db.query(Schedule).filter(
-        Schedule.id == schedule_id
-    ).first()
-
+    schedule = db.query(Schedule).filter(Schedule.id == id).first()
     if not schedule:
-        raise HTTPException(status_code=404, detail="Not found")
+        raise HTTPException(404, "Not found")
 
     db.delete(schedule)
     db.commit()
