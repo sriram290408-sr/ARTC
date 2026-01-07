@@ -5,7 +5,7 @@ from schemas.user import UserSignupSchema
 from models.user import User
 from core.hash import hash_password
 
-router = APIRouter()   
+router = APIRouter()
 
 @router.post("/signup")
 def signup(data: UserSignupSchema, db: Session = Depends(get_db)):
