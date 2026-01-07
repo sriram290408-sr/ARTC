@@ -15,7 +15,7 @@ def create_schedule(
     db: Session = Depends(get_db),
     user=Depends(get_current_user)
 ):
-    if user.role != "admin":
+    if user.role != "faculty":
         raise HTTPException(status_code=403, detail="Admins only")
 
     schedule = Schedule(**data.dict())
@@ -40,7 +40,7 @@ def delete_schedule(
     db: Session = Depends(get_db),
     user=Depends(get_current_user)
 ):
-    if user.role != "admin":
+    if user.role != "faculty":
         raise HTTPException(status_code=403, detail="Admins only")
 
     schedule = db.query(Schedule).filter(
