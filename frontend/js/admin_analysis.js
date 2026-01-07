@@ -1,20 +1,16 @@
 const API = "https://artc-backend.onrender.com";
-const token = localStorage.getItem("token");
+
+document.addEventListener("DOMContentLoaded", loadAnalysis);
 
 async function loadAnalysis() {
   try {
-    const res = await fetch(`${API}/reports/analytics`, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    });
+    const res = await fetch(`${API}/reports/analytics`);
 
-    if (!res.ok) {
-      throw new Error("Failed to load analytics");
-    }
+    if (!res.ok) throw new Error("Failed to load analytics");
 
     const data = await res.json();
     renderChart(data);
+
   } catch (err) {
     console.error(err);
     alert("Unable to load analysis data");
@@ -23,23 +19,27 @@ async function loadAnalysis() {
 
 function renderChart(data) {
   const canvas = document.getElementById("complaintChart");
-  if (!canvas) {
-    console.error("Canvas not found");
-    return;
-  }
+  if (!canvas) return;
 
   const ctx = canvas.getContext("2d");
 
   new Chart(ctx, {
     type: "pie",
     data: {
-      labels: ["Pending", "Verified"],
+      labels: ["Pending", "Under Review", "Completed", "Fake"],
       datasets: [{
         data: [
           data.pending || 0,
-          data.verified || 0
+          data.under_review || 0,
+          data.completed || 0,
+          data.fake || 0
         ],
-        backgroundColor: ["#e67e22", "#27ae60"]
+        backgroundColor: [
+          "#f39c12",
+          "#3498db",
+          "#2ecc71",
+          "#e74c3c"
+        ]
       }]
     },
     options: {
@@ -52,5 +52,3 @@ function renderChart(data) {
     }
   });
 }
-
-loadAnalysis();

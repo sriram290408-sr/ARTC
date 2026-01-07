@@ -1,49 +1,44 @@
 const API = "https://artc-backend.onrender.com";
-const token = localStorage.getItem("token");
 const container = document.getElementById("historyContainer");
 
-const role = localStorage.getItem("role"); 
+document.addEventListener("DOMContentLoaded", loadReports);
 
 async function loadReports() {
+  container.innerHTML = "<p>Loading reports...</p>";
+
   try {
-    const endpoint = role === "faculty" ? "/report" : "/report"; 
-    const res = await fetch(`${API}${endpoint}`, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
-    });
+    const res = await fetch(`${API}/reports`);
 
     if (!res.ok) throw new Error("Failed to fetch reports");
 
     const reports = await res.json();
     container.innerHTML = "";
 
-    if (!reports.length) {
-      container.innerHTML = "<p>No reports found</p>";
+    if (reports.length === 0) {
+      container.innerHTML = "<p>No reports found.</p>";
       return;
     }
 
-    reports.forEach(r => {
+    reports.forEach(report => {
       const card = document.createElement("div");
       card.className = "report-card";
 
-      if (role === "faculty") {
-        card.onclick = () => location.href = `./admin_report.html?id=${r.id}`;
-      }
-
       card.innerHTML = `
-        <h3>${r.title}</h3>
-        <p>${r.description}</p>
-        <p><small>Status: ${r.status || "Pending"} | ${new Date(r.created_at).toLocaleString()}</small></p>
+        <h3>${report.title}</h3>
+        <p>${report.description}</p>
+        <p>
+          <small>
+            Status: <strong>${report.status || "Pending"}</strong><br/>
+            Submitted on: ${new Date(report.created_at).toLocaleString()}
+          </small>
+        </p>
       `;
 
       container.appendChild(card);
     });
 
-  } catch (err) {
-    console.error(err);
-    container.innerHTML = "<p>Error loading reports</p>";
+  } catch (error) {
+    console.error(error);
+    container.innerHTML = "<p>Error loading reports.</p>";
   }
 }
-
-document.addEventListener("DOMContentLoaded", loadReports);

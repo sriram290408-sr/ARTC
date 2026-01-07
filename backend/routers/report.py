@@ -17,10 +17,7 @@ def get_db():
 
 
 @router.post("/", response_model=ReportOut)
-def create_report(
-    data: ReportCreate,
-    db: Session = Depends(get_db)
-):
+def create_report(data: ReportCreate, db: Session = Depends(get_db)):
     report = Report(**data.dict())
     db.add(report)
     db.commit()
@@ -28,34 +25,19 @@ def create_report(
     return report
 
 
-@router.get("/", response_model=list[ReportOut])
-def get_reports(
-    db: Session = Depends(get_db),
-    user=Depends(get_current_user)
-):
-    if user["role"] == "faculty":
-        return db.query(Report).all()
-
-    return db.query(Report).filter(
-        Report.student_id == int(user["sub"])
-    ).all()
+@router.get("/reports")
+def get_reports(db: Session = Depends(get_db)):
+    return db.query(Report).order_by(Report.created_at.desc()).all()
 
 
 @router.get("/my", response_model=list[ReportOut])
-def get_my_reports(
-    db: Session = Depends(get_db),
-    user=Depends(get_current_user)
-):
-    return db.query(Report).filter(
-        Report.student_id == int(user["sub"])
-    ).all()
+def get_my_reports(db: Session = Depends(get_db), user=Depends(get_current_user)):
+    return db.query(Report).filter(Report.student_id == int(user["sub"])).all()
 
 
 @router.get("/{report_id}", response_model=ReportOut)
 def get_report(
-    report_id: int,
-    db: Session = Depends(get_db),
-    user=Depends(get_current_user)
+    report_id: int, db: Session = Depends(get_db), user=Depends(get_current_user)
 ):
     report = db.query(Report).filter(Report.id == report_id).first()
 
@@ -89,3 +71,18 @@ def update_report(
     db.commit()
     db.refresh(report)
     return report
+
+
+@router.get("/analytics")
+def report_analytics(db: Session = Depends(get_db)):
+    pending = db.query(Report).filter(Report.status == "Pending").count()
+    under_review = db.query(Report).filter(Report.status == "Under Review").count()
+    completed = db.query(Report).filter(Report.status == "Completed").count()
+    fake = db.query(Report).filter(Report.status == "Fake").count()
+
+    return {
+        "pending": pending,
+        "under_review": under_review,
+        "completed": completed,
+        "fake": fake,
+    }

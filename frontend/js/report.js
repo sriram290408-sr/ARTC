@@ -49,11 +49,8 @@ reportForm.addEventListener("submit", async (e) => {
 
     messageBox.textContent = "Complaint submitted successfully ✅";
     messageBox.style.color = "green";
-    reportForm.reset();
 
-    setTimeout(() => {
-      window.location.href = "../html/report-history.html";
-    }, 1200);
+    reportForm.reset(); 
 
   } catch (error) {
     console.error("Report submit error:", error);

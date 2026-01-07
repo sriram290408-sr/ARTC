@@ -1,30 +1,44 @@
 const API = "https://artc-backend.onrender.com";
-const token = localStorage.getItem("token");
 const container = document.getElementById("historyContainer");
 
+document.addEventListener("DOMContentLoaded", loadReports);
+
 async function loadReports() {
-  const res = await fetch(`${API}/reports`, {
-    headers: {
-      Authorization: `Bearer ${token}`
+  container.innerHTML = "<p>Loading reports...</p>";
+
+  try {
+    const res = await fetch(`${API}/reports`);
+
+    if (!res.ok) throw new Error("Failed to fetch reports");
+
+    const reports = await res.json();
+    container.innerHTML = "";
+
+    if (reports.length === 0) {
+      container.innerHTML = "<p>No reports found.</p>";
+      return;
     }
-  });
 
-  const reports = await res.json();
-  container.innerHTML = "";
+    reports.forEach(report => {
+      const card = document.createElement("div");
+      card.className = "report-card";
 
-  reports.forEach(r => {
-    container.innerHTML += `
-      <div class="report-card" onclick="openReport(${r.id})">
-        <h3>${r.title}</h3>
-        <span>Status: ${r.status}</span>
-      </div>
-    `;
-  });
+      card.innerHTML = `
+        <h3>${report.title}</h3>
+        <p>${report.description}</p>
+        <p>
+          <small>
+            Status: <strong>${report.status || "Pending"}</strong><br/>
+            Submitted on: ${new Date(report.created_at).toLocaleString()}
+          </small>
+        </p>
+      `;
+
+      container.appendChild(card);
+    });
+
+  } catch (error) {
+    console.error(error);
+    container.innerHTML = "<p>Error loading reports.</p>";
+  }
 }
-
-// ✅ FIXED PATH
-function openReport(id) {
-  location.href = `./admin_report.html?id=${id}`;
-}
-
-loadReports();
