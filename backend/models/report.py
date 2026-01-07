@@ -1,20 +1,20 @@
-from sqlalchemy import Column, Integer, String, ForeignKey, Date, DateTime
+from sqlalchemy import Column, Integer, String, Text, Date, DateTime
 from sqlalchemy.sql import func
 from database import Base
+
 
 class Report(Base):
     __tablename__ = "reports"
 
     id = Column(Integer, primary_key=True, index=True)
-    title = Column(String, nullable=False)
-    description = Column(String, nullable=False)
-    problem_type = Column(String, nullable=True)
-    incident_location = Column(String, nullable=True)
-    incident_date = Column(Date, nullable=True)
-    name = Column(String, nullable=True)
-    class_section = Column(String, nullable=True)
-    people_involved = Column(String, nullable=True)
-    status = Column(String, default="Pending")
-    remarks = Column(String, nullable=True)
-    student_id = Column(Integer, ForeignKey("users.id"))
+    title = Column(String(255), nullable=False)
+    description = Column(Text, nullable=False)
+    problem_type = Column(String(100), nullable=False)
+    incident_location = Column(String(255), nullable=False)
+    incident_date = Column(Date, nullable=False)
+    name = Column(String(150), nullable=False)
+    class_section = Column(String(100), nullable=False)
+    people_involved = Column(String(255), nullable=True)
+    status = Column(String(50), default="Pending", nullable=False)
+    student_id = Column(Integer, nullable=True)
     created_at = Column(DateTime(timezone=True), server_default=func.now())

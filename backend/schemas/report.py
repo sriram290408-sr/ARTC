@@ -1,30 +1,34 @@
 from pydantic import BaseModel
-from datetime import datetime, date
 from typing import Optional
+from datetime import date, datetime
 
-class ReportBase(BaseModel):
+class ReportCreate(BaseModel):
     title: str
     description: str
-    problem_type: Optional[str] = None
-    incident_location: Optional[str] = None
-    incident_date: Optional[date] = None
-    name: Optional[str] = None
-    class_section: Optional[str] = None
+    problem_type: str
+    incident_location: str
+    incident_date: date
+    name: str
+    class_section: str
     people_involved: Optional[str] = None
 
-class ReportCreate(ReportBase):
-    pass
 
 class ReportUpdate(BaseModel):
-    status: str
-    remarks: Optional[str] = None
+    status: Optional[str] = None
 
-class ReportOut(ReportBase):
+class ReportOut(BaseModel):
     id: int
+    title: str
+    description: str
+    problem_type: str
+    incident_location: str
+    incident_date: date
+    name: str
+    class_section: str
+    people_involved: Optional[str]
     status: str
-    remarks: Optional[str]
+    student_id: Optional[int]
     created_at: datetime
-    student_id: int
 
     class Config:
         from_attributes = True
