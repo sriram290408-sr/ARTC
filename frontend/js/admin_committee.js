@@ -5,6 +5,7 @@ const form = document.getElementById("memberForm");
 const addBtn = document.querySelector(".floating-add");
 
 const role = localStorage.getItem("role");
+
 addBtn.style.display = role === "faculty" ? "block" : "none";
 
 function openForm() {
@@ -20,12 +21,34 @@ window.onclick = (e) => {
   if (e.target === modal) closeForm();
 };
 
+function getToken() {
+  const token = localStorage.getItem("access_token");
+  if (!token) {
+    alert("You are not logged in!");
+    window.location.href = "./login.html";
+    return null;
+  }
+  return token;
+}
+
 async function loadCommittee() {
+  const token = getToken();
+  if (!token) return;
+
   try {
     const res = await fetch(`${API}/committee`, {
-      headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` }
+      headers: { Authorization: `Bearer ${token}` }
     });
+
+    if (res.status === 401) {
+      alert("Unauthorized! Please login again.");
+      localStorage.removeItem("access_token");
+      window.location.href = "./login.html";
+      return;
+    }
+
     if (!res.ok) throw new Error("Failed to fetch members");
+
     const members = await res.json();
     container.innerHTML = "";
 
@@ -55,6 +78,8 @@ async function loadCommittee() {
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
+  const token = getToken();
+  if (!token) return;
 
   const data = {
     name: form.name.value,
@@ -70,14 +95,19 @@ form.addEventListener("submit", async (e) => {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${localStorage.getItem("access_token")}`
+        Authorization: `Bearer ${token}`
       },
       body: JSON.stringify(data)
     });
 
+    if (res.status === 401) {
+      alert("Unauthorized! Only faculty can add members.");
+      return;
+    }
+
     if (!res.ok) {
       const err = await res.json();
-      alert(err.detail || "Faculty only can add members");
+      alert(err.detail || "Failed to add member");
       return;
     }
 
@@ -90,11 +120,19 @@ form.addEventListener("submit", async (e) => {
 });
 
 async function deleteMember(id) {
+  const token = getToken();
+  if (!token) return;
+
   try {
     const res = await fetch(`${API}/committee/${id}`, {
       method: "DELETE",
-      headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` }
+      headers: { Authorization: `Bearer ${token}` }
     });
+
+    if (res.status === 401) {
+      alert("Unauthorized! Only faculty can delete members.");
+      return;
+    }
 
     if (!res.ok) {
       const err = await res.json();
@@ -102,7 +140,7 @@ async function deleteMember(id) {
       return;
     }
 
-    loadCommittee(); 
+    loadCommittee();
   } catch (err) {
     console.error(err);
     alert("Failed to delete member");
