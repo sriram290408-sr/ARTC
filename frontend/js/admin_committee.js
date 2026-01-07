@@ -6,7 +6,7 @@ const form = document.getElementById("memberForm");
 
 const nameInput = document.getElementById("name");
 const roleInput = document.getElementById("role");
-const descInput = document.getElementById("desc");
+const emailInput = document.getElementById("email");
 const linkedinInput = document.getElementById("linkedin");
 
 let selectedCard = null;
@@ -36,10 +36,10 @@ async function loadMembers() {
       }
     });
 
-    if (!res.ok) throw new Error("Failed to load members");
+    if (!res.ok) throw new Error("Failed to load");
 
     const members = await res.json();
-    members.forEach(addCard);
+    members.forEach(renderCard);
 
   } catch (err) {
     console.error(err);
@@ -52,9 +52,9 @@ form.addEventListener("submit", async (e) => {
 
   const payload = {
     name: nameInput.value.trim(),
-    designation: roleInput.value.trim(),
-    description: descInput.value.trim(),
-    linkedin: linkedinInput.value.trim()
+    designation: roleInput.value.trim() || null,
+    email: emailInput.value.trim() || null,
+    linkedin: linkedinInput.value.trim() || null
   };
 
   try {
@@ -73,7 +73,7 @@ form.addEventListener("submit", async (e) => {
     }
 
     closeForm();
-    loadMembers(); 
+    loadMembers();
 
   } catch (err) {
     console.error(err);
@@ -81,7 +81,7 @@ form.addEventListener("submit", async (e) => {
   }
 });
 
-function addCard(member) {
+function renderCard(member) {
   const card = document.createElement("div");
   card.className = "card";
 
@@ -89,8 +89,8 @@ function addCard(member) {
     <img src="../assets/profile.png" alt="${member.name}">
     <h3>${member.name}</h3>
     <p class="role">${member.designation || ""}</p>
-    <p>${member.description || ""}</p>
-    ${member.linkedin ? `<a href="${member.linkedin}" class="linkedin" target="_blank">LinkedIn</a>` : ""}
+    ${member.email ? `<p>Email: ${member.email}</p>` : ""}
+    ${member.linkedin ? `<a href="${member.linkedin}" target="_blank">LinkedIn</a>` : ""}
     <div class="card-actions">
       <button class="delete-btn" style="display:none;">Delete</button>
     </div>
@@ -120,7 +120,7 @@ function addCard(member) {
       });
 
       if (!res.ok) {
-        alert("Failed to delete member");
+        alert("Delete failed");
         return;
       }
 
@@ -128,7 +128,7 @@ function addCard(member) {
 
     } catch (err) {
       console.error(err);
-      alert("Delete failed");
+      alert("Delete error");
     }
   });
 

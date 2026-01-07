@@ -8,13 +8,15 @@
     <link rel="stylesheet" href="../css/nav-bar.css" />
     <link rel="stylesheet" href="../css/admin_committee.css" />
   </head>
+
   <body>
     <header>
       <div class="header-left">
         <img src="../assets/icon.png" alt="ARTC Logo" class="logo" />
       </div>
+
       <div class="user-icon">
-        <img src="../assets/profile.png" width="100px" height="100px" />
+        <img src="../assets/profile.png" width="100" height="100" />
         <span class="dropdown-arrow">▼</span>
 
         <div class="user-menu">
@@ -53,16 +55,37 @@
       <div class="card-container" id="cardContainer"></div>
     </main>
 
-    <!-- Modal for Adding Members -->
     <div class="modal" id="memberModal">
       <div class="modal-content">
         <span class="close" onclick="closeForm()">×</span>
         <h3>Add Committee Member</h3>
+
         <form id="memberForm">
-          <input type="text" id="name" placeholder="Name" required />
-          <input type="text" id="role" placeholder="Role" required />
-          <input type="url" id="linkedin" placeholder="LinkedIn URL" />
-          <textarea id="desc" placeholder="Description" rows="3"></textarea>
+          <input
+            type="text"
+            id="name"
+            placeholder="Name"
+            required
+          />
+
+          <input
+            type="text"
+            id="role"
+            placeholder="Designation"
+          />
+
+          <input
+            type="email"
+            id="email"
+            placeholder="Email"
+          />
+
+          <input
+            type="url"
+            id="linkedin"
+            placeholder="LinkedIn URL"
+          />
+
           <button type="submit">Add Member</button>
         </form>
       </div>
@@ -78,6 +101,7 @@
             action.
           </p>
         </div>
+
         <div class="footer-links">
           <h3>Quick Links</h3>
           <ul>
@@ -88,13 +112,14 @@
             <li><a href="./contact.html">Contact</a></li>
           </ul>
         </div>
+
         <div class="footer-contact">
           <h3>Contact</h3>
           <p>Email: support@artc.org.in</p>
-          <p>Phone: +91 98765 43210</p>
           <p>Chennai, India</p>
         </div>
       </div>
+
       <div class="footer-bottom">
         <p>&copy; 2025 Anti-Ragging Committee. All Rights Reserved.</p>
       </div>
