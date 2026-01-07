@@ -1,65 +1,41 @@
 const API_URL = "https://artc-backend.onrender.com";
 const token = localStorage.getItem("token");
 
-document.addEventListener("DOMContentLoaded", fetchReports);
+const reportForm = document.getElementById("reportForm");
+const messageBox = document.getElementById("formMessage");
 
-async function fetchReports() {
-  const container = document.getElementById("reportContainer");
-  container.innerHTML = "";
-
-  if (!token) {
-    window.location.href = "./report.html";
-    return;
-  }
-
-  try {
-    const res = await fetch(`${API_URL}/reports/my`, {
-      headers: { Authorization: `Bearer ${token}` }
-    });
-
-    if (!res.ok) throw new Error("Failed to fetch reports");
-
-    const reports = await res.json();
-
-    if (!reports.length) {
-      container.innerHTML = "<p>No reports submitted</p>";
-      return;
-    }
-
-    reports.forEach(r => {
-      const card = document.createElement("div");
-      card.className = "report-card";
-      card.innerHTML = `
-        <h3>${r.title}</h3>
-        <p>${r.description}</p>
-        <p>
-          <small>
-            By: ${r.created_by || "You"} |
-            ${new Date(r.created_at).toLocaleString()}
-          </small>
-        </p>
-      `;
-      container.appendChild(card);
-    });
-
-  } catch (err) {
-    console.error(err);
-    container.innerHTML = "<p>Error loading reports</p>";
-  }
+if (!token) {
+  window.location.href = "./login.html";
 }
 
-document.getElementById("reportForm")?.addEventListener("submit", async (e) => {
+reportForm.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  if (!token) {
-    window.location.href = "./report.html";
+  messageBox.textContent = "";
+  messageBox.style.color = "green";
+
+  const submitBtn = reportForm.querySelector("button[type='submit']");
+  submitBtn.disabled = true;
+  submitBtn.textContent = "Submitting...";
+
+  const formData = new FormData(reportForm);
+
+  const payload = {
+    title: formData.get("title")?.trim(),
+    description: formData.get("description")?.trim(),
+    problem_type: formData.get("problem_type"),
+    incident_location: formData.get("incident_location")?.trim(),
+    incident_date: formData.get("incident_date"),
+    name: formData.get("name")?.trim(),
+    class_section: formData.get("class_section")?.trim(),
+    people_involved: formData.get("people_involved")?.trim() || null
+  };
+
+  if (!payload.title || !payload.description) {
+    showError("Title and Description are required");
+    resetButton(submitBtn);
     return;
   }
-
-  const data = {
-    title: document.getElementById("report_title").value,
-    description: document.getElementById("report_description").value
-  };
 
   try {
     const res = await fetch(`${API_URL}/reports`, {
@@ -68,21 +44,37 @@ document.getElementById("reportForm")?.addEventListener("submit", async (e) => {
         "Content-Type": "application/json",
         Authorization: `Bearer ${token}`
       },
-      body: JSON.stringify(data)
+      body: JSON.stringify(payload)
     });
 
+    const result = await res.json();
+
     if (!res.ok) {
-      const err = await res.json();
-      alert(err.detail || "Failed to submit report");
-      return;
+      throw new Error(result.detail || "Failed to submit report");
     }
 
-    alert("Report submitted");
-    e.target.reset();
-    fetchReports();
+    messageBox.textContent = "Complaint submitted successfully ✅";
+    messageBox.style.color = "green";
+    reportForm.reset();
 
-  } catch (err) {
-    console.error(err);
-    alert("Network error");
+    setTimeout(() => {
+      window.location.href = "./report-history.html";
+    }, 1200);
+
+  } catch (error) {
+    console.error("Report submit error:", error);
+    showError(error.message);
+  } finally {
+    resetButton(submitBtn);
   }
 });
+
+function showError(msg) {
+  messageBox.textContent = msg;
+  messageBox.style.color = "red";
+}
+
+function resetButton(btn) {
+  btn.disabled = false;
+  btn.textContent = "Submit Complaint";
+}

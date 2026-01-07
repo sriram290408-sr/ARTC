@@ -8,15 +8,21 @@ const statusDropdown = document.getElementById("status");
 const params = new URLSearchParams(window.location.search);
 const reportId = params.get("id");
 
+if (!token) {
+  window.location.href = "./login.html";
+}
+
 if (!reportId) {
   alert("No report selected");
-  location.href = "./admin_report-history.html"; 
+  location.href = "./admin_report-history.html";
 }
 
 async function loadReport() {
   try {
     const res = await fetch(`${API}/reports/${reportId}`, {
-      headers: { Authorization: `Bearer ${token}` }
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
     });
 
     if (!res.ok) throw new Error("Failed to fetch report");
@@ -25,11 +31,11 @@ async function loadReport() {
 
     form.title.value = r.title;
     form.description.value = r.description;
-    form.problem_type.value = r.problem_type;
-    form.incident_location.value = r.incident_location;
-    form.incident_date.value = r.incident_date;
-    form.name.value = r.name;
-    form.class_section.value = r.class_section;
+    form.problem_type.value = r.problem_type || "";
+    form.incident_location.value = r.incident_location || "";
+    form.incident_date.value = r.incident_date || "";
+    form.name.value = r.name || "";
+    form.class_section.value = r.class_section || "";
     form.people_involved.value = r.people_involved || "";
     form.status.value = r.status;
     form.remarks.value = r.remarks || "";
@@ -43,6 +49,7 @@ async function loadReport() {
 
 function setStatusColor(status) {
   statusDropdown.className = "";
+
   switch (status) {
     case "Pending":
       statusDropdown.classList.add("status-pending");
@@ -83,7 +90,7 @@ form.addEventListener("submit", async (e) => {
 
     if (!res.ok) throw new Error("Update failed");
 
-    message.innerText = "Report updated successfully ✅";
+    message.textContent = "Report updated successfully ✅";
     message.style.color = "green";
 
     setStatusColor(form.status.value);
@@ -92,7 +99,7 @@ form.addEventListener("submit", async (e) => {
       location.href = "./admin_report-history.html";
     }, 1200);
   } catch (err) {
-    message.innerText = "Update failed ❌";
+    message.textContent = "Update failed ❌";
     message.style.color = "red";
     console.error(err);
   }

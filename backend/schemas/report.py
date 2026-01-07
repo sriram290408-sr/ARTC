@@ -22,8 +22,9 @@ class ReportUpdate(BaseModel):
 class ReportOut(ReportBase):
     id: int
     status: str
+    remarks: Optional[str]
     created_at: datetime
-    student_id: int  
+    student_id: int
 
     class Config:
         from_attributes = True
