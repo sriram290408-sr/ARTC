@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 from database import get_db
-from models.committee import CommitteeCreatea
+from models.committee import CommitteeCreate
 from schemas.committee import CommitteeCreate, CommitteeOut
 from dependencies.auth import get_current_user
 
