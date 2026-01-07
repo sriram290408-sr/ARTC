@@ -1,0 +1,10 @@
+from sqlalchemy import Column, Integer, DateTime, ForeignKey
+from datetime import datetime
+from database import Base
+
+class LoginLog(Base):
+    __tablename__ = "login_logs"
+
+    id = Column(Integer, primary_key=True, index=True)
+    user_id = Column(Integer, ForeignKey("users.id"), nullable=False)
+    login_time = Column(DateTime, default=datetime.utcnow, nullable=False)

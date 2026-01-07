@@ -9,7 +9,7 @@ from models.user import User
 from models.schedule import Schedule
 from models.committee import Committee
 from models.report import Report
-from models.login_log import LoginLog
+from backend.models.auth import LoginLog
 
 from routers.user import router as user_router
 from routers.schedule import router as schedule_router
