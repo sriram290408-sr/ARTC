@@ -10,6 +10,7 @@ async function loadAnalysis() {
   try {
     const res = await fetch(`${API}/reports/analytics`);
     if (!res.ok) throw new Error("Failed to load analytics");
+
     const data = await res.json();
 
     const total =
@@ -19,6 +20,9 @@ async function loadAnalysis() {
       (data.fake || 0);
 
     document.getElementById("totalCount").textContent = total;
+
+    if (total === 0) return; // avoid empty pie crash
+
     renderChart(data, total);
   } catch (err) {
     console.error(err);
@@ -38,6 +42,9 @@ function renderChart(data, total) {
     data.fake || 0
   ];
 
+  // 🔴 REQUIRED FOR Chart.js v4
+  Chart.register(ChartDataLabels);
+
   if (chartInstance) {
     chartInstance.data.datasets[0].data = chartData;
     chartInstance.update();
@@ -48,47 +55,27 @@ function renderChart(data, total) {
     type: "pie",
     data: {
       labels: ["Pending", "Under Review", "Completed", "Fake"],
-      datasets: [{
-        data: chartData,
-        backgroundColor: ["#f59e0b", "#3b82f6", "#10b981", "#ef4444"],
-        borderColor: "#fff",
-        borderWidth: 3
-      }]
+      datasets: [
+        {
+          data: chartData,
+          backgroundColor: ["#f59e0b", "#3b82f6", "#10b981", "#ef4444"],
+          borderColor: "#ffffff",
+          borderWidth: 3
+        }
+      ]
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
-
       animation: {
-        animateScale: true,
         animateRotate: true,
         duration: 1200,
         easing: "easeOutQuart"
       },
-
       plugins: {
         legend: {
-          position: "bottom",
-          labels: {
-            padding: 18,
-            font: { size: 14, weight: "500" }
-          }
+          position: "bottom"
         },
-
-        tooltip: {
-          backgroundColor: "#111827",
-          padding: 12,
-          callbacks: {
-            label: (ctx) => {
-              const value = ctx.raw;
-              const percent = total
-                ? ((value / total) * 100).toFixed(1)
-                : 0;
-              return `${ctx.label}: ${value} (${percent}%)`;
-            }
-          }
-        },
-
         datalabels: {
           color: "#fff",
           font: {
@@ -96,8 +83,8 @@ function renderChart(data, total) {
             size: 14
           },
           formatter: (value) => {
-            if (!total || value === 0) return "";
-            return `${((value / total) * 100).toFixed(1)}%`;
+            const percentage = ((value / total) * 100).toFixed(0);
+            return percentage + "%";
           }
         }
       }
