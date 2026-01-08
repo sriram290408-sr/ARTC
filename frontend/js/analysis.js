@@ -62,28 +62,47 @@ function renderChart(data, total) {
       }]
     },
     options: {
-      responsive: true,
-      maintainAspectRatio: false,
-      animation: {
-        duration: 1200,
-        easing: "easeOutQuart"
-      },
-      plugins: {
-        legend: {
-          position: "bottom"
+  responsive: true,
+  maintainAspectRatio: true,
+  animation: {
+    animateScale: true,
+    animateRotate: true,
+    duration: 1200,
+    easing: "easeOutQuart"
+  },
+  plugins: {
+    legend: {
+      display: true,
+      position: "bottom",
+      labels: {
+        usePointStyle: true,   
+        pointStyle: "circle",
+        padding: 20,
+        font: {
+          size: 14,
+          weight: "500"
         },
-        datalabels: {
-          color: "#fff",
-          font: {
-            weight: "bold",
-            size: 14
-          },
-          formatter: (value) => {
-            return Math.round((value / total) * 100) + "%";
-          }
-        }
+        color: "#111827"
       }
     },
-    plugins: [ChartDataLabels]
+    tooltip: {
+      backgroundColor: "#111827",
+      padding: 12
+    },
+    datalabels: {
+      color: "#fff",
+      font: {
+        weight: "bold",
+        size: 14
+      },
+      formatter: (value, ctx) => {
+        const total = ctx.chart.data.datasets[0].data
+          .reduce((a, b) => a + b, 0);
+        if (value === 0) return "";
+        return ((value / total) * 100).toFixed(1) + "%";
+      }
+    }
+  }
+}
   });
 }
