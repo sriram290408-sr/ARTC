@@ -21,7 +21,7 @@ async function loadAnalysis() {
 
     document.getElementById("totalCount").textContent = total;
 
-    if (total === 0) return; 
+    if (total === 0) return;
 
     renderChart(data, total);
   } catch (err) {
@@ -42,7 +42,6 @@ function renderChart(data, total) {
     data.fake || 0
   ];
 
-  // 🔴 REQUIRED FOR Chart.js v4
   Chart.register(ChartDataLabels);
 
   if (chartInstance) {
@@ -55,20 +54,17 @@ function renderChart(data, total) {
     type: "pie",
     data: {
       labels: ["Pending", "Under Review", "Completed", "Fake"],
-      datasets: [
-        {
-          data: chartData,
-          backgroundColor: ["#f59e0b", "#3b82f6", "#10b981", "#ef4444"],
-          borderColor: "#ffffff",
-          borderWidth: 3
-        }
-      ]
+      datasets: [{
+        data: chartData,
+        backgroundColor: ["#f59e0b", "#3b82f6", "#10b981", "#ef4444"],
+        borderColor: "#fff",
+        borderWidth: 3
+      }]
     },
     options: {
       responsive: true,
       maintainAspectRatio: false,
       animation: {
-        animateRotate: true,
         duration: 1200,
         easing: "easeOutQuart"
       },
@@ -83,8 +79,7 @@ function renderChart(data, total) {
             size: 14
           },
           formatter: (value) => {
-            const percentage = ((value / total) * 100).toFixed(0);
-            return percentage + "%";
+            return Math.round((value / total) * 100) + "%";
           }
         }
       }

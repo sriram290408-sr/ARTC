@@ -46,12 +46,18 @@ main.analysis-container {
   margin-top: 12px;
 }
 
-.analysis-section canvas {
-  max-width: 550px;
+.analysis-section {
   width: 100%;
-  height: 350px;
+  display: flex;
+  justify-content: center;
+  margin: 20px 0;
 }
 
+.analysis-section canvas {
+  width: 100%;
+  max-width: 550px;
+  height: 350px;   
+}
 #complaintChart {
   max-width: 550px;
   width: 100%;
