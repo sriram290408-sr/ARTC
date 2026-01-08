@@ -23,18 +23,13 @@ async function loadAnalysis() {
   }
 }
 
-function renderChart(data) {
-  const canvas = document.getElementById("complaintChart");
-  if (!canvas) return;
 
-  const ctx = canvas.getContext("2d");
+function renderChart(chartData) {
+  const ctx = document
+    .getElementById("complaintChart")
+    .getContext("2d");
 
-  const chartData = [
-    data.pending || 0,
-    data.under_review || 0,
-    data.completed || 0,
-    data.fake || 0
-  ];
+  Chart.register(ChartDataLabels);
 
   if (chartInstance) {
     chartInstance.data.datasets[0].data = chartData;
@@ -49,8 +44,7 @@ function renderChart(data) {
       datasets: [{
         data: chartData,
         backgroundColor: ["#f59e0b", "#3b82f6", "#10b981", "#ef4444"],
-        borderColor: "#fff",
-        borderWidth: 3
+        borderWidth: 2
       }]
     },
     options: {
@@ -58,7 +52,20 @@ function renderChart(data) {
       plugins: {
         legend: {
           position: "bottom",
-          labels: { usePointStyle: true }
+          labels: {
+            usePointStyle: true
+          }
+        },
+        datalabels: {
+          color: "#fff",
+          font: { weight: "bold" },
+          formatter: (value, ctx) => {
+            const total = ctx.chart.data.datasets[0].data
+              .reduce((a, b) => a + b, 0);
+            return value
+              ? ((value / total) * 100).toFixed(1) + "%"
+              : "";
+          }
         }
       }
     }
