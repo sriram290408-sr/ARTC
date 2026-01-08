@@ -1,8 +1,6 @@
 const API = "https://artc-backend.onrender.com";
 let chartInstance = null;
 
-Chart.register(ChartDataLabels);
-
 document.addEventListener("DOMContentLoaded", () => {
   loadAnalysis();
   setInterval(loadAnalysis, 10000);
@@ -15,13 +13,9 @@ async function loadAnalysis() {
 
     const data = await res.json();
 
-    const total =
-      (data.pending || 0) +
-      (data.under_review || 0) +
-      (data.completed || 0) +
-      (data.fake || 0);
+    document.getElementById("totalCount").textContent = data.total;
 
-    document.getElementById("totalCount").textContent = total;
+    if (data.total === 0) return;
 
     renderChart(data);
   } catch (err) {
@@ -36,17 +30,16 @@ function renderChart(data) {
   const ctx = canvas.getContext("2d");
 
   const chartData = [
-    data.pending || 0,
-    data.under_review || 0,
-    data.completed || 0,
-    data.fake || 0
+    data.pending,
+    data.under_review,
+    data.completed,
+    data.fake
   ];
 
-  const hasData = chartData.some(v => v > 0);
-  const finalData = hasData ? chartData : [1, 1, 1, 1];
+  Chart.register(ChartDataLabels);
 
   if (chartInstance) {
-    chartInstance.data.datasets[0].data = finalData;
+    chartInstance.data.datasets[0].data = chartData;
     chartInstance.update();
     return;
   }
@@ -56,7 +49,7 @@ function renderChart(data) {
     data: {
       labels: ["Pending", "Under Review", "Completed", "Fake"],
       datasets: [{
-        data: finalData,
+        data: chartData,
         backgroundColor: ["#f59e0b", "#3b82f6", "#10b981", "#ef4444"],
         borderColor: "#fff",
         borderWidth: 3
@@ -64,21 +57,28 @@ function renderChart(data) {
     },
     options: {
       responsive: true,
+      maintainAspectRatio: true,
+      animation: {
+        animateScale: true,
+        animateRotate: true,
+        duration: 1200,
+        easing: "easeOutQuart"
+      },
       plugins: {
         legend: {
           position: "bottom",
           labels: {
             usePointStyle: true,
-            pointStyle: "circle"
+            pointStyle: "circle",
+            padding: 20
           }
         },
         datalabels: {
           color: "#fff",
+          font: { weight: "bold", size: 14 },
           formatter: (value, ctx) => {
-            if (!hasData) return "";
-            const total = ctx.chart.data.datasets[0].data
-              .reduce((a, b) => a + b, 0);
-            return ((value / total) * 100).toFixed(1) + "%";
+            if (value === 0) return "";
+            return ((value / data.total) * 100).toFixed(1) + "%";
           }
         }
       }

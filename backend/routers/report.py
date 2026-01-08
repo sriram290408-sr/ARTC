@@ -44,13 +44,23 @@ def view_all_reports(db: Session = Depends(get_db)):
 
 @router.get("/analytics")
 def report_analytics(db: Session = Depends(get_db)):
-    statuses = ["pending", "under_review", "completed", "fake"]
+    results = (
+        db.query(Report.status, func.count(Report.id))
+        .group_by(Report.status)
+        .all()
+    )
 
-    analytics = {}
-    for status in statuses:
-        analytics[status] = (
-            db.query(func.count(Report.id)).filter(Report.status == status).scalar()
-        )
+    analytics = {
+        "pending": 0,
+        "under_review": 0,
+        "completed": 0,
+        "fake": 0,
+        "total": 0
+    }
+
+    for status, count in results:
+        analytics[status] = count
+        analytics["total"] += count
 
     return analytics
 
