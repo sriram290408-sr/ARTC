@@ -1,6 +1,8 @@
 const API = "https://artc-backend.onrender.com";
 let chartInstance = null;
 
+Chart.register(ChartDataLabels);
+
 document.addEventListener("DOMContentLoaded", () => {
   loadAnalysis();
   setInterval(loadAnalysis, 10000);
@@ -21,18 +23,17 @@ async function loadAnalysis() {
 
     document.getElementById("totalCount").textContent = total;
 
-    if (total === 0) return;
-
-    renderChart(data, total);
+    renderChart(data);
   } catch (err) {
-    console.error("Analytics error:", err);
+    console.error(err);
   }
 }
 
-function renderChart(data, total) {
-  const ctx = document
-    .getElementById("complaintChart")
-    .getContext("2d");
+function renderChart(data) {
+  const canvas = document.getElementById("complaintChart");
+  if (!canvas) return;
+
+  const ctx = canvas.getContext("2d");
 
   const chartData = [
     data.pending || 0,
@@ -41,10 +42,11 @@ function renderChart(data, total) {
     data.fake || 0
   ];
 
-  Chart.register(ChartDataLabels);
+  const hasData = chartData.some(v => v > 0);
+  const finalData = hasData ? chartData : [2, 1, 1, 1];
 
   if (chartInstance) {
-    chartInstance.data.datasets[0].data = chartData;
+    chartInstance.data.datasets[0].data = finalData;
     chartInstance.update();
     return;
   }
@@ -54,26 +56,28 @@ function renderChart(data, total) {
     data: {
       labels: ["Pending", "Under Review", "Completed", "Fake"],
       datasets: [{
-        data: chartData,
+        data: finalData,
         backgroundColor: ["#f59e0b", "#3b82f6", "#10b981", "#ef4444"],
-        borderWidth: 2
+        borderColor: "#fff",
+        borderWidth: 3
       }]
     },
     options: {
       responsive: true,
-      maintainAspectRatio: false, 
       plugins: {
         legend: {
           position: "bottom",
           labels: {
-            usePointStyle: true
+            usePointStyle: true,
+            pointStyle: "circle"
           }
         },
         datalabels: {
           color: "#fff",
-          font: { weight: "bold" },
-          formatter: (value) => {
-            if (value === 0) return "";
+          formatter: (value, ctx) => {
+            if (!hasData) return "";
+            const total = ctx.chart.data.datasets[0].data
+              .reduce((a, b) => a + b, 0);
             return ((value / total) * 100).toFixed(1) + "%";
           }
         }
