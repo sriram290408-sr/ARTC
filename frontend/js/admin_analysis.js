@@ -13,23 +13,17 @@ async function loadAnalysis() {
 
     const data = await res.json();
 
-    const total =
-      (data.pending || 0) +
-      (data.under_review || 0) +
-      (data.completed || 0) +
-      (data.fake || 0);
+    document.getElementById("totalCount").textContent = data.total ?? 0;
 
-    document.getElementById("totalCount").textContent = total;
+    if (!data.total || data.total === 0) return;
 
-    if (total === 0) return;
-
-    renderChart(data, total);
+    renderChart(data);
   } catch (err) {
-    console.error(err);
+    console.error("Analytics error:", err);
   }
 }
 
-function renderChart(data, total) {
+function renderChart(data) {
   const canvas = document.getElementById("complaintChart");
   if (!canvas) return;
 
@@ -41,8 +35,6 @@ function renderChart(data, total) {
     data.completed || 0,
     data.fake || 0
   ];
-
-  Chart.register(ChartDataLabels);
 
   if (chartInstance) {
     chartInstance.data.datasets[0].data = chartData;
@@ -63,29 +55,10 @@ function renderChart(data, total) {
     },
     options: {
       responsive: true,
-      maintainAspectRatio: false, 
-      animation: {
-        animateScale: true,
-        animateRotate: true,
-        duration: 1200,
-        easing: "easeOutQuart"
-      },
       plugins: {
         legend: {
           position: "bottom",
-          labels: {
-            usePointStyle: true,
-            pointStyle: "circle",
-            padding: 20
-          }
-        },
-        datalabels: {
-          color: "#fff",
-          font: { weight: "bold", size: 14 },
-          formatter: (value) => {
-            if (value === 0) return "";
-            return ((value / total) * 100).toFixed(1) + "%";
-          }
+          labels: { usePointStyle: true }
         }
       }
     }
