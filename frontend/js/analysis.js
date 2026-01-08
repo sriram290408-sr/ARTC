@@ -13,21 +13,33 @@ async function loadAnalysis() {
 
     const data = await res.json();
 
-    document.getElementById("totalCount").textContent = data.total ?? 0;
+    const total =
+      (data.pending || 0) +
+      (data.under_review || 0) +
+      (data.completed || 0) +
+      (data.fake || 0);
 
-    if (!data.total || data.total === 0) return;
+    document.getElementById("totalCount").textContent = total;
 
-    renderChart(data);
+    if (total === 0) return;
+
+    renderChart(data, total);
   } catch (err) {
     console.error("Analytics error:", err);
   }
 }
 
-
-function renderChart(chartData) {
+function renderChart(data, total) {
   const ctx = document
     .getElementById("complaintChart")
     .getContext("2d");
+
+  const chartData = [
+    data.pending || 0,
+    data.under_review || 0,
+    data.completed || 0,
+    data.fake || 0
+  ];
 
   Chart.register(ChartDataLabels);
 
@@ -49,6 +61,7 @@ function renderChart(chartData) {
     },
     options: {
       responsive: true,
+      maintainAspectRatio: false, 
       plugins: {
         legend: {
           position: "bottom",
@@ -59,12 +72,9 @@ function renderChart(chartData) {
         datalabels: {
           color: "#fff",
           font: { weight: "bold" },
-          formatter: (value, ctx) => {
-            const total = ctx.chart.data.datasets[0].data
-              .reduce((a, b) => a + b, 0);
-            return value
-              ? ((value / total) * 100).toFixed(1) + "%"
-              : "";
+          formatter: (value) => {
+            if (value === 0) return "";
+            return ((value / total) * 100).toFixed(1) + "%";
           }
         }
       }
