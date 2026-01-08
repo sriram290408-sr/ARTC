@@ -13,23 +13,13 @@ async function loadAnalysis() {
 
     const data = await res.json();
 
-    const total =
-      (data.pending || 0) +
-      (data.under_review || 0) +
-      (data.completed || 0) +
-      (data.fake || 0);
-
-    document.getElementById("totalCount").textContent = total;
-
-    if (total === 0) return;
-
-    renderChart(data, total);
+    renderChart(data);
   } catch (err) {
     console.error(err);
   }
 }
 
-function renderChart(data, total) {
+function renderChart(data) {
   const canvas = document.getElementById("complaintChart");
   if (!canvas) return;
 
@@ -56,53 +46,45 @@ function renderChart(data, total) {
       labels: ["Pending", "Under Review", "Completed", "Fake"],
       datasets: [{
         data: chartData,
-        backgroundColor: ["#f59e0b", "#3b82f6", "#10b981", "#ef4444"],
-        borderColor: "#fff",
+        backgroundColor: [
+          "#f59e0b", 
+          "#3b82f6", 
+          "#10b981", 
+          "#ef4444" 
+        ],
+        borderColor: "#ffffff",
         borderWidth: 3
       }]
     },
     options: {
-  responsive: true,
-  maintainAspectRatio: true,
-  animation: {
-    animateScale: true,
-    animateRotate: true,
-    duration: 1200,
-    easing: "easeOutQuart"
-  },
-  plugins: {
-    legend: {
-      display: true,
-      position: "bottom",
-      labels: {
-        usePointStyle: true,   
-        pointStyle: "circle",
-        padding: 20,
-        font: {
-          size: 14,
-          weight: "500"
+      responsive: true,
+      maintainAspectRatio: true,
+      plugins: {
+        legend: {
+          display: true,
+          position: "bottom",
+          labels: {
+            usePointStyle: true,
+            pointStyle: "circle"
+          }
         },
-        color: "#111827"
-      }
-    },
-    tooltip: {
-      backgroundColor: "#111827",
-      padding: 12
-    },
-    datalabels: {
-      color: "#fff",
-      font: {
-        weight: "bold",
-        size: 14
-      },
-      formatter: (value, ctx) => {
-        const total = ctx.chart.data.datasets[0].data
-          .reduce((a, b) => a + b, 0);
-        if (value === 0) return "";
-        return ((value / total) * 100).toFixed(1) + "%";
+        tooltip: {
+          backgroundColor: "#111827"
+        },
+        datalabels: {
+          color: "#ffffff",
+          font: {
+            weight: "bold",
+            size: 14
+          },
+          formatter: (value, ctx) => {
+            const total = ctx.chart.data.datasets[0].data
+              .reduce((a, b) => a + b, 0);
+            if (value === 0) return "";
+            return ((value / total) * 100).toFixed(1) + "%";
+          }
+        }
       }
     }
-  }
-}
   });
 }

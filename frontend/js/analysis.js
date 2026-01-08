@@ -1,8 +1,6 @@
 const API = "https://artc-backend.onrender.com";
 let chartInstance = null;
 
-Chart.register(ChartDataLabels);
-
 document.addEventListener("DOMContentLoaded", () => {
   loadAnalysis();
   setInterval(loadAnalysis, 10000);
@@ -14,14 +12,6 @@ async function loadAnalysis() {
     if (!res.ok) throw new Error("Failed to load analytics");
 
     const data = await res.json();
-
-    const total =
-      (data.pending || 0) +
-      (data.under_review || 0) +
-      (data.completed || 0) +
-      (data.fake || 0);
-
-    document.getElementById("totalCount").textContent = total;
 
     renderChart(data);
   } catch (err) {
@@ -42,11 +32,10 @@ function renderChart(data) {
     data.fake || 0
   ];
 
-  const hasData = chartData.some(v => v > 0);
-  const finalData = hasData ? chartData : [1, 1, 1, 1];
+  Chart.register(ChartDataLabels);
 
   if (chartInstance) {
-    chartInstance.data.datasets[0].data = finalData;
+    chartInstance.data.datasets[0].data = chartData;
     chartInstance.update();
     return;
   }
@@ -56,28 +45,42 @@ function renderChart(data) {
     data: {
       labels: ["Pending", "Under Review", "Completed", "Fake"],
       datasets: [{
-        data: finalData,
-        backgroundColor: ["#f59e0b", "#3b82f6", "#10b981", "#ef4444"],
-        borderColor: "#fff",
+        data: chartData,
+        backgroundColor: [
+          "#f59e0b", 
+          "#3b82f6", 
+          "#10b981", 
+          "#ef4444"  
+        ],
+        borderColor: "#ffffff",
         borderWidth: 3
       }]
     },
     options: {
       responsive: true,
+      maintainAspectRatio: true,
       plugins: {
         legend: {
+          display: true,
           position: "bottom",
           labels: {
             usePointStyle: true,
             pointStyle: "circle"
           }
         },
+        tooltip: {
+          backgroundColor: "#111827"
+        },
         datalabels: {
-          color: "#fff",
+          color: "#ffffff",
+          font: {
+            weight: "bold",
+            size: 14
+          },
           formatter: (value, ctx) => {
-            if (!hasData) return "";
             const total = ctx.chart.data.datasets[0].data
               .reduce((a, b) => a + b, 0);
+            if (value === 0) return "";
             return ((value / total) * 100).toFixed(1) + "%";
           }
         }
