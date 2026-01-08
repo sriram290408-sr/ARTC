@@ -19,13 +19,13 @@ async function loadAnalysis() {
       (data.fake || 0);
 
     document.getElementById("totalCount").textContent = total;
-    renderChart(data);
+    renderChart(data, total);
   } catch (err) {
     console.error(err);
   }
 }
 
-function renderChart(data) {
+function renderChart(data, total) {
   const canvas = document.getElementById("complaintChart");
   if (!canvas) return;
 
@@ -57,7 +57,15 @@ function renderChart(data) {
     },
     options: {
       responsive: true,
-      maintainAspectRatio: false,   /* ✅ FIX */
+      maintainAspectRatio: false,
+
+      animation: {
+        animateScale: true,
+        animateRotate: true,
+        duration: 1200,
+        easing: "easeOutQuart"
+      },
+
       plugins: {
         legend: {
           position: "bottom",
@@ -66,11 +74,34 @@ function renderChart(data) {
             font: { size: 14, weight: "500" }
           }
         },
+
         tooltip: {
           backgroundColor: "#111827",
-          padding: 12
+          padding: 12,
+          callbacks: {
+            label: (ctx) => {
+              const value = ctx.raw;
+              const percent = total
+                ? ((value / total) * 100).toFixed(1)
+                : 0;
+              return `${ctx.label}: ${value} (${percent}%)`;
+            }
+          }
+        },
+
+        datalabels: {
+          color: "#fff",
+          font: {
+            weight: "bold",
+            size: 14
+          },
+          formatter: (value) => {
+            if (!total || value === 0) return "";
+            return `${((value / total) * 100).toFixed(1)}%`;
+          }
         }
       }
-    }
+    },
+    plugins: [ChartDataLabels]
   });
 }
