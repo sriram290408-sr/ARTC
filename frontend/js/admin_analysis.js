@@ -27,7 +27,6 @@ async function loadAnalysis() {
 
     const chartData = [pending, underReview, completed, fake];
     renderChart(chartData, total);
-
   } catch (err) {
     console.error("Analytics load error:", err);
   }
@@ -64,17 +63,12 @@ function renderChart(chartData, total) {
       labels: ["Pending", "Under Review", "Completed", "Fake"],
       datasets: [
         {
-          data: chartData,
-          backgroundColor: [
-            "#f59e0b",
-            "#3b82f6",
-            "#10b981",
-            "#ef4444"
-          ],
-          borderColor: "#ffffff",
-          borderWidth: 2
-        }
-      ]
+          data: finalData,
+          backgroundColor: ["#f59e0b", "#3b82f6", "#10b981", "#ef4444"],
+          borderColor: "#fff",
+          borderWidth: 3,
+        },
+      ],
     },
     options: {
       responsive: true,
@@ -82,19 +76,22 @@ function renderChart(chartData, total) {
         legend: {
           position: "bottom",
           labels: {
-            usePointStyle: true
-          }
+            usePointStyle: true,
+            pointStyle: "circle",
+          },
         },
         datalabels: {
-          color: "#ffffff",
+          color: "#fff",
           formatter: (value, ctx) => {
-            const sum = ctx.chart.data.datasets[0].data
-              .reduce((a, b) => a + b, 0);
-            if (sum === 0) return "";
-            return ((value / sum) * 100).toFixed(1) + "%";
-          }
-        }
-      }
-    }
+            if (!hasData) return "";
+            const total = ctx.chart.data.datasets[0].data.reduce(
+              (a, b) => a + b,
+              0,
+            );
+            return ((value / total) * 100).toFixed(1) + "%";
+          },
+        },
+      },
+    },
   });
 }
