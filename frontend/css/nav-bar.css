@@ -51,7 +51,12 @@ header {
 .dropdown-arrow {
   font-size: 14px;
   color: #fff;
+  cursor: pointer;
   transition: transform 0.25s ease;
+}
+
+.user-icon.open .dropdown-arrow {
+  transform: rotate(180deg);
 }
 
 .user-menu {
@@ -67,6 +72,10 @@ header {
   overflow: hidden;
 }
 
+.user-icon.open .user-menu {
+  display: block;
+}
+
 .user-menu a {
   display: block;
   padding: 12px 16px;
@@ -79,9 +88,6 @@ header {
   background: #f2f2f2;
 }
 
-.user-icon:hover .user-menu {
-  display: block;
-}
 
 nav {
   background: #0a74da;
