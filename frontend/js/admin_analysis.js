@@ -15,38 +15,45 @@ async function loadAnalysis() {
 
     const data = await res.json();
 
-    const total =
-      (data.pending || 0) +
-      (data.under_review || 0) +
-      (data.completed || 0) +
-      (data.fake || 0);
+    const chartData = [
+      data.pending || 0,
+      data.under_review || 0,
+      data.completed || 0,
+      data.fake || 0
+    ];
 
+    const total = chartData.reduce((a, b) => a + b, 0);
     document.getElementById("totalCount").textContent = total;
 
-    renderChart(data);
+    renderChart(chartData);
   } catch (err) {
     console.error(err);
   }
 }
 
-function renderChart(data) {
+function renderChart(chartData) {
   const canvas = document.getElementById("complaintChart");
-  if (!canvas) return;
+  const noDataMsg = document.getElementById("noDataMsg");
+
+  const total = chartData.reduce((a, b) => a + b, 0);
+
+  if (total === 0) {
+    if (chartInstance) {
+      chartInstance.destroy();
+      chartInstance = null;
+    }
+    canvas.style.display = "none";
+    noDataMsg.style.display = "block";
+    return;
+  }
+
+  canvas.style.display = "block";
+  noDataMsg.style.display = "none";
 
   const ctx = canvas.getContext("2d");
 
-  const chartData = [
-    data.pending || 0,
-    data.under_review || 0,
-    data.completed || 0,
-    data.fake || 0
-  ];
-
-  const hasData = chartData.some(v => v > 0);
-  const finalData = hasData ? chartData : [2, 1, 1, 1];
-
   if (chartInstance) {
-    chartInstance.data.datasets[0].data = finalData;
+    chartInstance.data.datasets[0].data = chartData;
     chartInstance.update();
     return;
   }
@@ -55,12 +62,19 @@ function renderChart(data) {
     type: "pie",
     data: {
       labels: ["Pending", "Under Review", "Completed", "Fake"],
-      datasets: [{
-        data: finalData,
-        backgroundColor: ["#f59e0b", "#3b82f6", "#10b981", "#ef4444"],
-        borderColor: "#fff",
-        borderWidth: 3
-      }]
+      datasets: [
+        {
+          data: chartData,
+          backgroundColor: [
+            "#f59e0b",
+            "#3b82f6",
+            "#10b981",
+            "#ef4444"
+          ],
+          borderColor: "#ffffff",
+          borderWidth: 3
+        }
+      ]
     },
     options: {
       responsive: true,
@@ -73,11 +87,12 @@ function renderChart(data) {
           }
         },
         datalabels: {
-          color: "#fff",
+          color: "#ffffff",
           formatter: (value, ctx) => {
-            if (!hasData) return "";
             const total = ctx.chart.data.datasets[0].data
               .reduce((a, b) => a + b, 0);
+
+            if (total === 0) return "";
             return ((value / total) * 100).toFixed(1) + "%";
           }
         }
