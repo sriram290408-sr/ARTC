@@ -3,11 +3,9 @@ const API = "https://artc-backend.onrender.com";
 const historyContainer = document.getElementById("historyContainer");
 const sortSelect = document.getElementById("sortSelect");
 
-const userName = prompt("Enter your name to view reports");
-
 async function loadMyReports(sort = "latest") {
   try {
-    const res = await fetch(`${API}/reports/my?name=${encodeURIComponent(userName)}`);
+    const res = await fetch(`${API}/reports`);
     let reports = await res.json();
 
     reports.sort((a, b) =>
@@ -28,7 +26,8 @@ async function loadMyReports(sort = "latest") {
       `;
     });
 
-  } catch {
+  } catch (err) {
+    console.error(err);
     historyContainer.innerHTML = "<p>Failed to load reports</p>";
   }
 }
