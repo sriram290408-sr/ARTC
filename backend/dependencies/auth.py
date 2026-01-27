@@ -11,24 +11,33 @@ oauth2_scheme = OAuth2PasswordBearer(tokenUrl="/auth/login")
 SECRET_KEY = os.getenv("SECRET_KEY")
 ALGORITHM = "HS256"
 
+
 def get_current_user(
     token: str = Depends(oauth2_scheme),
-    db: Session = Depends(get_db)
+    db: Session = Depends(get_db),
 ):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        email = payload.get("sub")
-        role = payload.get("role")
+        email: str = payload.get("sub")
 
-        if email is None:
-            raise HTTPException(status_code=401, detail="Invalid token")
+        if not email:
+            raise HTTPException(
+                status_code=status.HTTP_401_UNAUTHORIZED,
+                detail="Invalid token",
+            )
 
     except JWTError:
-        raise HTTPException(status_code=401, detail="Invalid token")
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Invalid token",
+        )
 
     user = db.query(User).filter(User.email == email).first()
-    if not user:
-        raise HTTPException(status_code=401, detail="User not found")
 
-    user.role = role
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="User not found",
+        )
+
     return user
