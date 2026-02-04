@@ -1,4 +1,4 @@
-import API from "./config";
+const API = "https://artc-backend.onrender.com";
 
 document.getElementById("loginForm").addEventListener("submit", async (e) => {
   e.preventDefault();
