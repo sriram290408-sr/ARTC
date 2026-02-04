@@ -1,3 +1,4 @@
+import BASE_URL from "./config";
 import API from "./config";
 
 document.getElementById("loginForm").addEventListener("submit", async (e) => {
@@ -12,7 +13,7 @@ document.getElementById("loginForm").addEventListener("submit", async (e) => {
   }
 
   try {
-    const res = await fetch(`${API}/auth/login`, {
+    const res = await fetch(`${BASE_URL}/auth/login`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ email, password }),
