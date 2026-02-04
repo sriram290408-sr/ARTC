@@ -1,4 +1,4 @@
-import API from "./config";
+import API from "./config.js";
 
 document.getElementById("loginForm").addEventListener("submit", async (e) => {
   e.preventDefault();
