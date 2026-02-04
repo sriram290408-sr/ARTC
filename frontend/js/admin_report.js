@@ -48,7 +48,7 @@ document.getElementById("reportForm").addEventListener("submit", async (e) => {
 
     if (res.ok) {
       // ✅ Redirect to report history after successful update
-      window.location.href = "./report-history.html";
+      window.location.href = "./admin_report-history.html";
     } else {
       formMessage.style.color = "red";
       formMessage.textContent = "Update failed";
