@@ -1,3 +1,5 @@
+import API from "./config";
+
 const profileName = document.getElementById("profileName");
 const profileInitials = document.getElementById("profileInitials");
 
@@ -77,8 +79,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function loadReportCounts() {
   try {
-    const response = await fetch(
-      "https://artc-backend.onrender.com/reports/count",
+    const response = await fetch(`${API}`,
       { credentials: "include" }
     );
 

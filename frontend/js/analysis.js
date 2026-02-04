@@ -1,4 +1,5 @@
-const API = "https://artc-backend.onrender.com";
+import API from "./config";
+
 let chartInstance = null;
 
 Chart.register(ChartDataLabels);

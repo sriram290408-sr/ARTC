@@ -1,4 +1,4 @@
-const API = "https://artc-backend.onrender.com";
+import API from "./config";
 
 // Get report ID from URL
 const params = new URLSearchParams(window.location.search);

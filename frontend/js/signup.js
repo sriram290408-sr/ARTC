@@ -1,4 +1,4 @@
-const BASE_URL = "https://artc-backend.onrender.com";
+import API from "./config";
 
 document.getElementById("signupForm").addEventListener("submit", async (e) => {
   e.preventDefault();

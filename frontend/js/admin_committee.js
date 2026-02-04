@@ -1,4 +1,4 @@
-const API = "https://artc-backend.onrender.com";
+import API from "./config";
 
 const container = document.getElementById("cardContainer");
 const modal = document.getElementById("memberModal");

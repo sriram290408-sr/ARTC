@@ -1,4 +1,4 @@
-const API = "https://artc-backend.onrender.com";
+import API from "./config";
 
 const historyContainer = document.getElementById("historyContainer");
 const sortSelect = document.getElementById("sortSelect");

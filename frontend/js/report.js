@@ -1,4 +1,4 @@
-const API_URL = "https://artc-backend.onrender.com";
+import API from "./config";
 
 const reportForm = document.getElementById("reportForm");
 const messageBox = document.getElementById("formMessage");

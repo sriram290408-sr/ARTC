@@ -1,4 +1,5 @@
-const API = "https://artc-backend.onrender.com";
+import API from "./config";
+
 const container = document.getElementById("scheduleContainer");
 const popup = document.getElementById("popup");
 const addBtn = document.getElementById("addBtn");

@@ -1,4 +1,5 @@
-const API = "https://artc-backend.onrender.com";
+import API from "./config";
+
 const container = document.getElementById("committeeContainer");
 
 document.addEventListener("DOMContentLoaded", loadCommittee);
