@@ -1,4 +1,3 @@
-import BASE_URL from "./config";
 import API from "./config";
 
 document.getElementById("loginForm").addEventListener("submit", async (e) => {
