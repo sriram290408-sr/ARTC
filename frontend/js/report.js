@@ -1,4 +1,4 @@
-import API from "./config";
+import API from "./config.js";
 
 const reportForm = document.getElementById("reportForm");
 const messageBox = document.getElementById("formMessage");
@@ -16,7 +16,7 @@ reportForm.addEventListener("submit", async (e) => {
   const payload = Object.fromEntries(formData.entries());
 
   try {
-    const res = await fetch(`${API_URL}/reports`, {
+    const res = await fetch(`${API}/reports`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify(payload)

@@ -1,4 +1,5 @@
-import API from "./config";
+import API from "./config.js";
+
 const container = document.getElementById("scheduleContainer");
 
 async function loadSchedules() {

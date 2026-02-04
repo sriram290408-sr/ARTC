@@ -1,4 +1,4 @@
-import API from "./config";
+import API from "./config.js";
 
 const historyContainer = document.getElementById("historyContainer");
 const sortSelect = document.getElementById("sortSelect");

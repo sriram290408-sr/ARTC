@@ -1,4 +1,4 @@
-import API from "./config";
+import API from "./config.js";
 
 // Get report ID from URL
 const params = new URLSearchParams(window.location.search);

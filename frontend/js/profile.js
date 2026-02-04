@@ -1,4 +1,4 @@
-import API from "./config";
+import API from "./config.js";
 
 const profileName = document.getElementById("profileName");
 const profileInitials = document.getElementById("profileInitials");
