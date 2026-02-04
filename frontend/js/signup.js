@@ -14,7 +14,7 @@ document.getElementById("signupForm").addEventListener("submit", async (e) => {
   }
 
   try {
-    const res = await fetch(`${BASE_URL}/users/signup`, {
+    const res = await fetch(`${API}/users/signup`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ full_name, email, password, role })
