@@ -2,7 +2,8 @@ import API from "./config.js";
 
 let chartInstance = null;
 
-Chart.register(ChartDataLabels);
+// Register plugin from CDN safely
+window.Chart.register(window.ChartDataLabels);
 
 document.addEventListener("DOMContentLoaded", () => {
   loadAnalysis();
@@ -12,7 +13,10 @@ document.addEventListener("DOMContentLoaded", () => {
 async function loadAnalysis() {
   try {
     const res = await fetch(`${API}/reports/analytics`);
-    if (!res.ok) throw new Error("Failed to load analytics");
+
+    if (!res.ok) {
+      throw new Error(`Analytics failed: ${res.status}`);
+    }
 
     const data = await res.json();
 
@@ -26,7 +30,7 @@ async function loadAnalysis() {
 
     renderChart(data);
   } catch (err) {
-    console.error(err);
+    console.error("ANALYTICS ERROR:", err);
   }
 }
 
@@ -44,7 +48,7 @@ function renderChart(data) {
   ];
 
   const hasData = chartData.some(v => v > 0);
-  const finalData = hasData ? chartData : [2, 1, 1, 1];
+  const finalData = hasData ? chartData : [1, 1, 1, 1];
 
   if (chartInstance) {
     chartInstance.data.datasets[0].data = finalData;
@@ -52,7 +56,7 @@ function renderChart(data) {
     return;
   }
 
-  chartInstance = new Chart(ctx, {
+  chartInstance = new window.Chart(ctx, {
     type: "pie",
     data: {
       labels: ["Pending", "Under Review", "Completed", "Fake"],

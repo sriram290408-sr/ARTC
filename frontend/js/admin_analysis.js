@@ -1,8 +1,9 @@
-import API from "./config.js";
+import { apiFetch } from "./apiClient.js";
 
 let chartInstance = null;
 
-Chart.register(ChartDataLabels);
+// Register plugin from CDN
+window.Chart.register(window.ChartDataLabels);
 
 document.addEventListener("DOMContentLoaded", () => {
   loadAnalysis();
@@ -11,10 +12,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function loadAnalysis() {
   try {
-    const res = await fetch(`${API}/reports/analytics`);
-    if (!res.ok) throw new Error("Failed to load analytics");
-
-    const data = await res.json();
+    const data = await apiFetch("/reports/analytics");
 
     const total =
       (data.pending || 0) +
@@ -25,8 +23,9 @@ async function loadAnalysis() {
     document.getElementById("totalCount").textContent = total;
 
     renderChart(data);
+
   } catch (err) {
-    console.error(err);
+    console.error("Analytics failed:", err.message);
   }
 }
 
@@ -36,15 +35,17 @@ function renderChart(data) {
 
   const ctx = canvas.getContext("2d");
 
-  const chartData = [
+  const values = [
     data.pending || 0,
     data.under_review || 0,
     data.completed || 0,
     data.fake || 0
   ];
 
-  const hasData = chartData.some(v => v > 0);
-  const finalData = hasData ? chartData : [2, 1, 1, 1];
+  const hasData = values.some(v => v > 0);
+  const finalData = hasData ? values : [1, 1, 1, 1];
+
+  const total = finalData.reduce((a, b) => a + b, 0);
 
   if (chartInstance) {
     chartInstance.data.datasets[0].data = finalData;
@@ -52,7 +53,7 @@ function renderChart(data) {
     return;
   }
 
-  chartInstance = new Chart(ctx, {
+  chartInstance = new window.Chart(ctx, {
     type: "pie",
     data: {
       labels: ["Pending", "Under Review", "Completed", "Fake"],
@@ -73,25 +74,11 @@ function renderChart(data) {
     options: {
       responsive: true,
       plugins: {
-        legend: {
-          position: "bottom",
-          labels: {
-            usePointStyle: true,
-            pointStyle: "circle"
-          }
-        },
+        legend: { position: "bottom" },
         datalabels: {
           color: "#fff",
-          formatter: (value, ctx) => {
-            if (!hasData) return "";
-
-            const total = ctx.chart.data.datasets[0].data.reduce(
-              (a, b) => a + b,
-              0
-            );
-
-            return ((value / total) * 100).toFixed(1) + "%";
-          }
+          formatter: value =>
+            total ? ((value / total) * 100).toFixed(1) + "%" : ""
         }
       }
     }
