@@ -1,4 +1,4 @@
-import { apiFetch } from "./apiClient.js";
+import apiFetch from "./apiClient.js";
 
 let chartInstance = null;
 
@@ -25,7 +25,7 @@ async function loadAnalysis() {
     renderChart(data);
 
   } catch (err) {
-    console.error("Analytics failed:", err.message);
+    console.error("Analytics failed:", err);
   }
 }
 

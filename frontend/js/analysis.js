@@ -1,36 +1,53 @@
-import API from "./config.js";
+import apiFetch from "./apiClient.js";
 
 let chartInstance = null;
 
-// Register plugin from CDN safely
+// Register plugin from CDN
 window.Chart.register(window.ChartDataLabels);
 
 document.addEventListener("DOMContentLoaded", () => {
-  loadAnalysis();
-  setInterval(loadAnalysis, 10000);
+  loadUserAnalysis();
+  setInterval(loadUserAnalysis, 10000);
 });
 
-async function loadAnalysis() {
+async function loadUserAnalysis() {
   try {
-    const res = await fetch(`${API}/reports/analytics`);
+    const username = localStorage.getItem("name");
 
-    if (!res.ok) {
-      throw new Error(`Analytics failed: ${res.status}`);
+    if (!username) {
+      throw new Error("User not logged in");
     }
 
-    const data = await res.json();
+    // Fetch only this user's reports
+    const reports = await apiFetch(
+      `/reports/my?name=${encodeURIComponent(username)}`
+    );
+
+    const counts = {
+      pending: 0,
+      under_review: 0,
+      completed: 0,
+      fake: 0
+    };
+
+    reports.forEach(r => {
+      if (counts[r.status] !== undefined) {
+        counts[r.status]++;
+      }
+    });
 
     const total =
-      (data.pending || 0) +
-      (data.under_review || 0) +
-      (data.completed || 0) +
-      (data.fake || 0);
+      counts.pending +
+      counts.under_review +
+      counts.completed +
+      counts.fake;
 
     document.getElementById("totalCount").textContent = total;
 
-    renderChart(data);
+    renderChart(counts);
+
   } catch (err) {
-    console.error("ANALYTICS ERROR:", err);
+    console.error("USER ANALYTICS ERROR:", err);
   }
 }
 
@@ -40,15 +57,15 @@ function renderChart(data) {
 
   const ctx = canvas.getContext("2d");
 
-  const chartData = [
-    data.pending || 0,
-    data.under_review || 0,
-    data.completed || 0,
-    data.fake || 0
+  const values = [
+    data.pending,
+    data.under_review,
+    data.completed,
+    data.fake
   ];
 
-  const hasData = chartData.some(v => v > 0);
-  const finalData = hasData ? chartData : [1, 1, 1, 1];
+  const hasData = values.some(v => v > 0);
+  const finalData = hasData ? values : [1, 1, 1, 1];
 
   if (chartInstance) {
     chartInstance.data.datasets[0].data = finalData;
@@ -77,25 +94,11 @@ function renderChart(data) {
     options: {
       responsive: true,
       plugins: {
-        legend: {
-          position: "bottom",
-          labels: {
-            usePointStyle: true,
-            pointStyle: "circle"
-          }
-        },
+        legend: { position: "bottom" },
         datalabels: {
           color: "#fff",
-          formatter: (value, ctx) => {
-            if (!hasData) return "";
-
-            const total = ctx.chart.data.datasets[0].data.reduce(
-              (a, b) => a + b,
-              0
-            );
-
-            return ((value / total) * 100).toFixed(1) + "%";
-          }
+          formatter: value =>
+            total ? ((value / total) * 100).toFixed(1) + "%" : ""
         }
       }
     }
