@@ -2,50 +2,66 @@ import apiFetch from "./apiClient.js";
 
 let chartInstance = null;
 
-// Register plugin from CDN
 window.Chart.register(window.ChartDataLabels);
 
 document.addEventListener("DOMContentLoaded", () => {
-  loadAnalysis();
-  setInterval(loadAnalysis, 10000);
+  loadUserAnalysis();
+  setInterval(loadUserAnalysis, 10000);
 });
 
-async function loadAnalysis() {
+async function loadUserAnalysis() {
   try {
-    const data = await apiFetch("/reports/analytics");
+    const username = localStorage.getItem("name");
+
+    if (!username) throw new Error("No username in storage");
+
+    const reports = await apiFetch(
+      `/reports/my?name=${encodeURIComponent(username)}`
+    );
+
+    const counts = {
+      pending: 0,
+      under_review: 0,
+      completed: 0,
+      fake: 0
+    };
+
+    reports.forEach(r => {
+      if (counts[r.status] !== undefined) {
+        counts[r.status]++;
+      }
+    });
 
     const total =
-      (data.pending || 0) +
-      (data.under_review || 0) +
-      (data.completed || 0) +
-      (data.fake || 0);
+      counts.pending +
+      counts.under_review +
+      counts.completed +
+      counts.fake;
 
     document.getElementById("totalCount").textContent = total;
 
-    renderChart(data);
+    renderChart(counts, total);
 
   } catch (err) {
-    console.error("Analytics failed:", err);
+    console.error("USER ANALYTICS ERROR:", err);
   }
 }
 
-function renderChart(data) {
+function renderChart(data, total) {
   const canvas = document.getElementById("complaintChart");
   if (!canvas) return;
 
   const ctx = canvas.getContext("2d");
 
   const values = [
-    data.pending || 0,
-    data.under_review || 0,
-    data.completed || 0,
-    data.fake || 0
+    data.pending,
+    data.under_review,
+    data.completed,
+    data.fake
   ];
 
   const hasData = values.some(v => v > 0);
   const finalData = hasData ? values : [1, 1, 1, 1];
-
-  const total = finalData.reduce((a, b) => a + b, 0);
 
   if (chartInstance) {
     chartInstance.data.datasets[0].data = finalData;

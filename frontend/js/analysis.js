@@ -2,7 +2,6 @@ import apiFetch from "./apiClient.js";
 
 let chartInstance = null;
 
-// Register plugin from CDN
 window.Chart.register(window.ChartDataLabels);
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -14,11 +13,8 @@ async function loadUserAnalysis() {
   try {
     const username = localStorage.getItem("name");
 
-    if (!username) {
-      throw new Error("User not logged in");
-    }
+    if (!username) throw new Error("No username in storage");
 
-    // Fetch only this user's reports
     const reports = await apiFetch(
       `/reports/my?name=${encodeURIComponent(username)}`
     );
@@ -44,14 +40,14 @@ async function loadUserAnalysis() {
 
     document.getElementById("totalCount").textContent = total;
 
-    renderChart(counts);
+    renderChart(counts, total);
 
   } catch (err) {
     console.error("USER ANALYTICS ERROR:", err);
   }
 }
 
-function renderChart(data) {
+function renderChart(data, total) {
   const canvas = document.getElementById("complaintChart");
   if (!canvas) return;
 
