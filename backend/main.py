@@ -30,28 +30,6 @@ app.add_middleware(
 )
 
 
-class CSPMiddleware(BaseHTTPMiddleware):
-    async def dispatch(self, request, call_next):
-        response: Response = await call_next(request)
-
-        response.headers["Content-Security-Policy"] = (
-            "default-src 'self'; "
-            "script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdn.jsdelivr.net; "
-            "style-src 'self' 'unsafe-inline'; "
-            "img-src 'self' data:; "
-            "font-src 'self' data:; "
-            "connect-src *; "
-            "frame-ancestors 'none'; "
-            "base-uri 'self'; "
-            "form-action 'self';"
-        )
-
-        return response
-
-
-app.add_middleware(CSPMiddleware)
-
-
 @app.on_event("startup")
 def startup():
     Base.metadata.create_all(bind=engine)
