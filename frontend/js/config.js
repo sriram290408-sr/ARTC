@@ -1,3 +1,3 @@
-const API = "https://artc-seven.vercel.app/";
+const API = "https://artc-backend.onrender.com";
 
 export default API;
