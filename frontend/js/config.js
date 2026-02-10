@@ -1,3 +1,3 @@
-const API = "https://artc-backend.onrender.com";
+const API = "https://artcbackend.netlify.app/";
 
 export default API;
