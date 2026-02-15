@@ -1,103 +1,72 @@
 import API from "./config.js";
 
-let chartInstance = null;
+let chart;
 
-// Register plugin from CDN safely
-window.Chart.register(window.ChartDataLabels);
+// Register DataLabels plugin
+Chart.register(ChartDataLabels);
 
 document.addEventListener("DOMContentLoaded", () => {
-  loadAnalysis();
-  setInterval(loadAnalysis, 10000);
+  loadData();
 });
 
-async function loadAnalysis() {
+async function loadData() {
   try {
     const res = await fetch(`${API}/reports/analytics`);
-
-    if (!res.ok) {
-      throw new Error(`Analytics failed: ${res.status}`);
-    }
-
     const data = await res.json();
 
-    const total =
-      (data.pending || 0) +
-      (data.under_review || 0) +
-      (data.completed || 0) +
-      (data.fake || 0);
+    const values = [
+      data.pending || 0,
+      data.under_review || 0,
+      data.completed || 0,
+      data.fake || 0,
+    ];
 
+    const total = values.reduce((a, b) => a + b, 0);
     document.getElementById("totalCount").textContent = total;
 
-    renderChart(data);
+    drawChart(values);
   } catch (err) {
-    console.error("ANALYTICS ERROR:", err);
+    console.error("Error loading analytics:", err);
   }
 }
 
-function renderChart(data) {
-  const canvas = document.getElementById("complaintChart");
-  if (!canvas) return;
+function drawChart(values) {
+  const ctx = document.getElementById("complaintChart").getContext("2d");
 
-  const ctx = canvas.getContext("2d");
-
-  const chartData = [
-    data.pending || 0,
-    data.under_review || 0,
-    data.completed || 0,
-    data.fake || 0
-  ];
-
-  const hasData = chartData.some(v => v > 0);
-  const finalData = hasData ? chartData : [1, 1, 1, 1];
-
-  if (chartInstance) {
-    chartInstance.data.datasets[0].data = finalData;
-    chartInstance.update();
+  if (chart) {
+    chart.data.datasets[0].data = values;
+    chart.update();
     return;
   }
 
-  chartInstance = new window.Chart(ctx, {
+  chart = new Chart(ctx, {
     type: "pie",
     data: {
       labels: ["Pending", "Under Review", "Completed", "Fake"],
       datasets: [
         {
-          data: finalData,
-          backgroundColor: [
-            "#f59e0b",
-            "#3b82f6",
-            "#10b981",
-            "#ef4444"
-          ],
-          borderColor: "#fff",
-          borderWidth: 3
-        }
-      ]
+          data: values,
+          backgroundColor: ["#f59e0b", "#3b82f6", "#10b981", "#ef4444"],
+        },
+      ],
     },
     options: {
-      responsive: true,
       plugins: {
         legend: {
           position: "bottom",
-          labels: {
-            usePointStyle: true,
-            pointStyle: "circle"
-          }
         },
         datalabels: {
           color: "#fff",
           formatter: (value, ctx) => {
-            if (!hasData) return "";
-
             const total = ctx.chart.data.datasets[0].data.reduce(
               (a, b) => a + b,
-              0
+              0,
             );
-
+            if (total === 0) return "";
             return ((value / total) * 100).toFixed(1) + "%";
-          }
-        }
-      }
-    }
+          },
+        },
+      },
+    },
   });
 }
