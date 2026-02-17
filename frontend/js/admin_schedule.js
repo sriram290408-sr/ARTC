@@ -1,8 +1,8 @@
 import API from "./config.js";
 
 const popup = document.getElementById("popup");
-const scheduleContainer = document.getElementById("scheduleContainer");
 const addBtn = document.getElementById("addBtn");
+const scheduleContainer = document.getElementById("scheduleContainer");
 
 addBtn.addEventListener("click", () => {
   popup.classList.remove("hidden");
@@ -13,23 +13,16 @@ window.closePopup = function () {
 };
 
 window.submitSchedule = async function () {
-  const title = document.getElementById("title").value.trim();
-  const venue = document.getElementById("venue").value.trim();
+  const title = document.getElementById("title").value;
+  const venue = document.getElementById("venue").value;
   const date = document.getElementById("date").value;
   const time = document.getElementById("time").value;
-  const link = document.getElementById("link").value.trim();
+  const link = document.getElementById("link").value;
 
   if (!title || !venue || !date || !time) {
-    alert("All required fields must be filled.");
+    alert("Fill all required fields");
     return;
   }
-
-  const data = {
-    event_name: title,
-    venue: venue,
-    datetime: `${date} ${time}`,
-    link: link
-  };
 
   await fetch(`${API}/schedule`, {
     method: "POST",
@@ -37,7 +30,12 @@ window.submitSchedule = async function () {
       "Content-Type": "application/json",
       Authorization: `Bearer ${localStorage.getItem("token")}`
     },
-    body: JSON.stringify(data)
+    body: JSON.stringify({
+      event_name: title,
+      venue: venue,
+      datetime: `${date} ${time}`,
+      link: link
+    })
   });
 
   popup.classList.add("hidden");
@@ -50,29 +48,25 @@ async function loadSchedule() {
 
   scheduleContainer.innerHTML = "";
 
-  data.forEach(s => {
+  data.forEach(item => {
     const card = document.createElement("div");
-    card.classList.add("schedule-card");
+    card.className = "schedule-card";
 
     card.innerHTML = `
       <div class="schedule-left">
-        <h3>${s.event_name}</h3>
-        <p><strong>Venue:</strong> ${s.venue}</p>
-        <p><strong>Date & Time:</strong> ${s.datetime}</p>
-        ${s.link ? `<p><a href="${s.link}" target="_blank">View Link</a></p>` : ""}
+        <h3>${item.event_name}</h3>
+        <p>Venue: ${item.venue}</p>
+        <p>Date & Time: ${item.datetime}</p>
+        ${item.link ? `<p><a href="${item.link}" target="_blank">View Link</a></p>` : ""}
       </div>
-      <button class="delete-btn">Delete</button>
+      <button onclick="deleteSchedule(${item.id})">Delete</button>
     `;
-
-    card.querySelector(".delete-btn").addEventListener("click", () => {
-      deleteSchedule(s.id);
-    });
 
     scheduleContainer.appendChild(card);
   });
 }
 
-async function deleteSchedule(id) {
+window.deleteSchedule = async function (id) {
   await fetch(`${API}/schedule/${id}`, {
     method: "DELETE",
     headers: {
@@ -81,6 +75,6 @@ async function deleteSchedule(id) {
   });
 
   loadSchedule();
-}
+};
 
 loadSchedule();
