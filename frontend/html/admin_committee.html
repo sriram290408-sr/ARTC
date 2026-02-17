@@ -50,42 +50,21 @@
 
       <h2 class="admin-title">Admin – Committee Management</h2>
 
-      <button class="floating-add" onclick="openForm()">+</button>
+      <button class="floating-add">+</button>
 
       <div class="card-container" id="cardContainer"></div>
     </main>
 
     <div class="modal" id="memberModal">
       <div class="modal-content">
-        <span class="close" onclick="closeForm()">×</span>
+        <span class="close" id="closeModal">×</span>
         <h3>Add Committee Member</h3>
 
         <form id="memberForm">
-          <input
-            type="text"
-            id="name"
-            placeholder="Name"
-            required
-          />
-
-          <input
-            type="text"
-            id="role"
-            placeholder="Designation"
-          />
-
-          <input
-            type="email"
-            id="email"
-            placeholder="Email"
-          />
-
-          <input
-            type="url"
-            id="linkedin"
-            placeholder="LinkedIn URL"
-          />
-
+          <input type="text" id="name" placeholder="Name" required />
+          <input type="text" id="role" placeholder="Designation" />
+          <input type="email" id="email" placeholder="Email" />
+          <input type="url" id="linkedin" placeholder="LinkedIn URL" />
           <button type="submit">Add Member</button>
         </form>
       </div>
@@ -101,27 +80,6 @@
             action.
           </p>
         </div>
-
-        <div class="footer-links">
-          <h3>Quick Links</h3>
-          <ul>
-            <li><a href="./about.html">About</a></li>
-            <li><a href="./laws.html">Laws</a></li>
-            <li><a href="./admin_committee.html">Committee</a></li>
-            <li><a href="./admin_report.html">Report</a></li>
-            <li><a href="./contact.html">Contact</a></li>
-          </ul>
-        </div>
-
-        <div class="footer-contact">
-          <h3>Contact</h3>
-          <p>Email: support@artc.org.in</p>
-          <p>Chennai, India</p>
-        </div>
-      </div>
-
-      <div class="footer-bottom">
-        <p>&copy; 2025 Anti-Ragging Committee. All Rights Reserved.</p>
       </div>
     </footer>
 

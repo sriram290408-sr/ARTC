@@ -1,9 +1,10 @@
-import API from "./config";
+import API from "./config.js";
 
 const container = document.getElementById("cardContainer");
 const modal = document.getElementById("memberModal");
 const form = document.getElementById("memberForm");
 const addBtn = document.querySelector(".floating-add");
+const closeBtn = document.getElementById("closeModal");
 
 const nameInput = document.getElementById("name");
 const roleInput = document.getElementById("role");
@@ -13,11 +14,11 @@ const linkedinInput = document.getElementById("linkedin");
 const token = localStorage.getItem("access_token");
 const role = localStorage.getItem("role");
 
-let selectedCard = null;
-
 document.addEventListener("DOMContentLoaded", () => {
   ensureAdmin();
   loadMembers();
+  addBtn.addEventListener("click", openForm);
+  closeBtn.addEventListener("click", closeForm);
 });
 
 function ensureAdmin() {
@@ -36,22 +37,40 @@ function closeForm() {
   form.reset();
 }
 
-window.onclick = (e) => {
-  if (e.target === modal) closeForm();
-};
+window.addEventListener("click", (e) => {
+  if (e.target === modal) {
+    closeForm();
+  }
+});
 
 async function loadMembers() {
   container.innerHTML = "";
 
   try {
     const res = await fetch(`${API}/committee`, {
-      headers: { Authorization: `Bearer ${token}` }
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
     });
 
-    const members = await res.json();
+    if (!res.ok) {
+      throw new Error("Failed to fetch members");
+    }
+
+    const data = await res.json();
+    console.log("Committee Data:", data);
+
+    const members = Array.isArray(data) ? data : data.data;
+
+    if (!members || members.length === 0) {
+      container.innerHTML = "<p>No committee members found</p>";
+      return;
+    }
+
     members.forEach(addCard);
 
-  } catch {
+  } catch (err) {
+    console.error(err);
     container.innerHTML = "<p>Failed to load committee</p>";
   }
 }
@@ -66,22 +85,28 @@ form.addEventListener("submit", async (e) => {
     linkedin: linkedinInput.value.trim()
   };
 
-  const res = await fetch(`${API}/committee`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${token}`
-    },
-    body: JSON.stringify(payload)
-  });
+  try {
+    const res = await fetch(`${API}/committee`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify(payload)
+    });
 
-  if (!res.ok) {
-    alert("Only admin can add members");
-    return;
+    if (!res.ok) {
+      alert("Only admin can add members");
+      return;
+    }
+
+    closeForm();
+    loadMembers();
+
+  } catch (err) {
+    console.error(err);
+    alert("Error adding member");
   }
-
-  closeForm();
-  loadMembers();
 });
 
 function addCard(member) {
@@ -89,12 +114,14 @@ function addCard(member) {
   card.className = "card";
 
   card.innerHTML = `
-    <img src="../assets/profile.png">
+    <img src="../assets/profile.png" alt="Profile">
     <h3>${member.name}</h3>
     <p class="role">${member.designation || ""}</p>
     ${member.email ? `<p>${member.email}</p>` : ""}
     ${member.linkedin ? `<a href="${member.linkedin}" target="_blank">LinkedIn</a>` : ""}
-    <button class="delete-btn">Delete</button>
+    <div class="card-actions">
+      <button class="delete-btn">Delete</button>
+    </div>
   `;
 
   const deleteBtn = card.querySelector(".delete-btn");
@@ -102,12 +129,24 @@ function addCard(member) {
   deleteBtn.addEventListener("click", async () => {
     if (!confirm("Delete member?")) return;
 
-    await fetch(`${API}/committee/${member.id}`, {
-      method: "DELETE",
-      headers: { Authorization: `Bearer ${token}` }
-    });
+    try {
+      const res = await fetch(`${API}/committee/${member.id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
 
-    card.remove();
+      if (res.ok) {
+        card.remove();
+      } else {
+        alert("Delete failed");
+      }
+
+    } catch (err) {
+      console.error(err);
+      alert("Error deleting member");
+    }
   });
 
   container.appendChild(card);

@@ -155,7 +155,12 @@ h2 {
   inset: 0;
   background: rgba(0,0,0,0.5);
   z-index: 2000;
+
+  display: none;
+  align-items: center;
+  justify-content: center;
 }
+
 
 .modal-content {
   background: #fff;
