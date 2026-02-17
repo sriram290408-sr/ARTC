@@ -100,6 +100,7 @@ async function submitSchedule() {
   }
 }
 
+
 function createCard(schedule) {
   const card = document.createElement("div");
   card.className = "schedule-card";

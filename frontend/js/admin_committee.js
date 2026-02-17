@@ -12,8 +12,6 @@ const linkedinInput = document.getElementById("linkedin");
 const token = localStorage.getItem("access_token");
 const role = localStorage.getItem("role");
 
-/* -------------------- PAGE LOAD -------------------- */
-
 document.addEventListener("DOMContentLoaded", () => {
   if (!token || role !== "faculty") {
     alert("Admin access only");
@@ -23,8 +21,6 @@ document.addEventListener("DOMContentLoaded", () => {
 
   loadMembers();
 });
-
-/* -------------------- LOAD MEMBERS -------------------- */
 
 async function loadMembers() {
   container.innerHTML = "";
@@ -52,8 +48,6 @@ async function loadMembers() {
     container.innerHTML = "<p>Something went wrong</p>";
   }
 }
-
-/* -------------------- ADD MEMBER -------------------- */
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
@@ -86,8 +80,6 @@ form.addEventListener("submit", async (e) => {
   modal.style.display = "none";
   loadMembers();
 });
-
-/* -------------------- CREATE CARD -------------------- */
 
 function createCard(member) {
   const card = document.createElement("div");
