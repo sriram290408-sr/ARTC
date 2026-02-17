@@ -3,7 +3,6 @@ import API from "./config.js";
 const container = document.getElementById("cardContainer");
 const modal = document.getElementById("memberModal");
 const form = document.getElementById("memberForm");
-const addBtn = document.querySelector(".floating-add");
 
 const nameInput = document.getElementById("name");
 const roleInput = document.getElementById("role");
@@ -13,58 +12,61 @@ const linkedinInput = document.getElementById("linkedin");
 const token = localStorage.getItem("access_token");
 const role = localStorage.getItem("role");
 
-let selectedCard = null;
+/* -------------------- PAGE LOAD -------------------- */
 
 document.addEventListener("DOMContentLoaded", () => {
-  ensureAdmin();
-  loadMembers();
-});
-
-function ensureAdmin() {
   if (!token || role !== "faculty") {
     alert("Admin access only");
     window.location.href = "../html/login.html";
+    return;
   }
-}
 
-function openForm() {
-  modal.style.display = "flex";
-}
+  loadMembers();
+});
 
-function closeForm() {
-  modal.style.display = "none";
-  form.reset();
-}
-
-window.onclick = (e) => {
-  if (e.target === modal) closeForm();
-};
+/* -------------------- LOAD MEMBERS -------------------- */
 
 async function loadMembers() {
   container.innerHTML = "";
 
   try {
     const res = await fetch(`${API}/committee`, {
-      headers: { Authorization: `Bearer ${token}` }
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
     });
 
-    const members = await res.json();
-    members.forEach(addCard);
+    if (!res.ok) {
+      container.innerHTML = "<p>Failed to load members</p>";
+      return;
+    }
 
-  } catch {
-    container.innerHTML = "<p>Failed to load committee</p>";
+    const members = await res.json();
+
+    members.forEach(member => {
+      const card = createCard(member);
+      container.appendChild(card);
+    });
+
+  } catch (error) {
+    container.innerHTML = "<p>Something went wrong</p>";
   }
 }
+
+/* -------------------- ADD MEMBER -------------------- */
 
 form.addEventListener("submit", async (e) => {
   e.preventDefault();
 
-  const payload = {
-    name: nameInput.value.trim(),
-    designation: roleInput.value.trim(),
-    email: emailInput.value.trim(),
-    linkedin: linkedinInput.value.trim()
-  };
+  const name = nameInput.value.trim();
+  const designation = roleInput.value.trim();
+  const email = emailInput.value.trim();
+  const linkedin = linkedinInput.value.trim();
+
+  if (!name || !designation) {
+    alert("Name and designation are required");
+    return;
+  }
 
   const res = await fetch(`${API}/committee`, {
     method: "POST",
@@ -72,19 +74,22 @@ form.addEventListener("submit", async (e) => {
       "Content-Type": "application/json",
       Authorization: `Bearer ${token}`
     },
-    body: JSON.stringify(payload)
+    body: JSON.stringify({ name, designation, email, linkedin })
   });
 
   if (!res.ok) {
-    alert("Only admin can add members");
+    alert("Failed to add member");
     return;
   }
 
-  closeForm();
+  form.reset();
+  modal.style.display = "none";
   loadMembers();
 });
 
-function addCard(member) {
+/* -------------------- CREATE CARD -------------------- */
+
+function createCard(member) {
   const card = document.createElement("div");
   card.className = "card";
 
@@ -102,13 +107,20 @@ function addCard(member) {
   deleteBtn.addEventListener("click", async () => {
     if (!confirm("Delete member?")) return;
 
-    await fetch(`${API}/committee/${member.id}`, {
+    const res = await fetch(`${API}/committee/${member.id}`, {
       method: "DELETE",
-      headers: { Authorization: `Bearer ${token}` }
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
     });
+
+    if (!res.ok) {
+      alert("Failed to delete member");
+      return;
+    }
 
     card.remove();
   });
 
-  container.appendChild(card);
+  return card;
 }
