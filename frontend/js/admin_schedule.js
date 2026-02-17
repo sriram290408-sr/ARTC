@@ -4,54 +4,54 @@ const container = document.getElementById("scheduleContainer");
 const popup = document.getElementById("popup");
 const addBtn = document.getElementById("addBtn");
 const dateInput = document.getElementById("date");
+const submitBtn = document.getElementById("submitBtn");
 
+const token = localStorage.getItem("access_token");
 const role = localStorage.getItem("role");
 
-addBtn.style.display = role === "faculty" ? "block" : "none";
-addBtn.onclick = () => popup.classList.remove("hidden");
+if (role === "faculty") {
+  addBtn.style.display = "block";
+} else {
+  addBtn.style.display = "none";
+}
+
+addBtn.addEventListener("click", () => {
+  popup.classList.remove("hidden");
+});
 
 function closePopup() {
   popup.classList.add("hidden");
 }
 
-
 const todayISO = new Date().toISOString().split("T")[0];
 dateInput.setAttribute("min", todayISO);
 
-
 async function loadSchedules() {
-  const res = await fetch(`${API}/schedules`, {
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("access_token")}`
+  try {
+    const res = await fetch(`${API}/schedules/`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    });
+
+    if (!res.ok) {
+      container.innerHTML = "<p>Failed to load schedules</p>";
+      return;
     }
-  });
 
-  const schedules = await res.json();
-  container.innerHTML = "";
+    const schedules = await res.json();
+    container.innerHTML = "";
 
-  schedules.forEach(s => {
-    container.innerHTML += `
-      <div class="schedule-card" id="schedule-${s.id}">
-        <div>
-          <h3>${s.title}</h3>
-          <p>${s.venue}</p>
-          <p>${s.date} | ${s.time}</p>
-          ${
-            s.link
-              ? `<p><a href="${s.link}" target="_blank">Link</a></p>`
-              : ""
-          }
-        </div>
-        ${
-          role === "faculty"
-            ? `<button onclick="deleteSchedule(${s.id})">Delete</button>`
-            : ""
-        }
-      </div>
-    `;
-  });
+    schedules.forEach((schedule) => {
+      const card = createCard(schedule);
+      container.appendChild(card);
+    });
+  } catch (error) {
+    container.innerHTML = "<p>Error loading schedules</p>";
+  }
 }
 
+submitBtn.addEventListener("click", submitSchedule);
 
 async function submitSchedule() {
   const title = document.getElementById("title").value.trim();
@@ -61,72 +61,84 @@ async function submitSchedule() {
   const link = document.getElementById("link").value.trim();
 
   if (!title || !venue || !date || !time) {
-    alert("Fill all fields except link (optional)");
+    alert("Fill all required fields");
     return;
   }
 
-  // 🔥 reject past dates
   const selectedDate = new Date(date);
   const today = new Date();
   today.setHours(0, 0, 0, 0);
 
   if (selectedDate < today) {
-    alert("Past dates are not allowed.");
+    alert("Past dates not allowed");
     return;
   }
 
-  const res = await fetch(`${API}/schedules`, {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem("access_token")}`
-    },
-    body: JSON.stringify({ title, venue, date, time, link })
-  });
+  try {
+    const res = await fetch(`${API}/schedules/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`,
+      },
+      body: JSON.stringify({ title, venue, date, time, link }),
+    });
 
-  if (!res.ok) {
-    alert("Only faculty can add");
-    return;
+    if (!res.ok) {
+      alert("Only faculty can add schedules");
+      return;
+    }
+
+    const schedule = await res.json();
+    const card = createCard(schedule);
+    container.appendChild(card);
+
+    closePopup();
+    clearForm();
+  } catch (error) {
+    alert("Error adding schedule");
   }
-
-  const schedule = await res.json();
-  addCard(schedule);
-  closePopup();
-  clearForm();
 }
 
-function addCard(schedule) {
-  container.innerHTML += `
-    <div class="schedule-card" id="schedule-${schedule.id}">
-      <div>
-        <h3>${schedule.title}</h3>
-        <p>${schedule.venue}</p>
-        <p>${schedule.date} | ${schedule.time}</p>
-        ${
-          schedule.link
-            ? `<p><a href="${schedule.link}" target="_blank">Link</a></p>`
-            : ""
-        }
-      </div>
-      ${
-        role === "faculty"
-          ? `<button onclick="deleteSchedule(${schedule.id})">Delete</button>`
-          : ""
-      }
+function createCard(schedule) {
+  const card = document.createElement("div");
+  card.className = "schedule-card";
+  card.id = `schedule-${schedule.id}`;
+
+  card.innerHTML = `
+    <div>
+      <h3>${schedule.title}</h3>
+      <p>${schedule.venue}</p>
+      <p>${schedule.date} | ${schedule.time}</p>
+      ${schedule.link ? `<p><a href="${schedule.link}" target="_blank">Link</a></p>` : ""}
     </div>
   `;
-}
 
-async function deleteSchedule(id) {
-  await fetch(`${API}/schedules/${id}`, {
-    method: "DELETE",
-    headers: {
-      Authorization: `Bearer ${localStorage.getItem("access_token")}`
-    }
-  });
+  if (role === "faculty") {
+    const deleteBtn = document.createElement("button");
+    deleteBtn.textContent = "Delete";
 
-  const card = document.getElementById(`schedule-${id}`);
-  if (card) card.remove();
+    deleteBtn.addEventListener("click", async () => {
+      if (!confirm("Delete schedule?")) return;
+
+      const res = await fetch(`${API}/schedules/${schedule.id}`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      if (res.ok) {
+        card.remove();
+      } else {
+        alert("Failed to delete");
+      }
+    });
+
+    card.appendChild(deleteBtn);
+  }
+
+  return card;
 }
 
 function clearForm() {
