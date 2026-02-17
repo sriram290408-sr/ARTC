@@ -1,22 +1,34 @@
 import API from "./config.js";
 
-function openPopup() {
-  document.querySelector(".popup").style.display = "block";
-  document.querySelector(".overlay").style.display = "block";
-}
+const popup = document.getElementById("popup");
+const scheduleContainer = document.getElementById("scheduleContainer");
+const addBtn = document.getElementById("addBtn");
 
-function closePopup() {
-  document.querySelector(".popup").style.display = "none";
-  document.querySelector(".overlay").style.display = "none";
-}
+addBtn.addEventListener("click", () => {
+  popup.classList.remove("hidden");
+});
 
-document.getElementById("scheduleForm").addEventListener("submit", async e => {
-  e.preventDefault();
+window.closePopup = function () {
+  popup.classList.add("hidden");
+};
+
+window.submitSchedule = async function () {
+  const title = document.getElementById("title").value.trim();
+  const venue = document.getElementById("venue").value.trim();
+  const date = document.getElementById("date").value;
+  const time = document.getElementById("time").value;
+  const link = document.getElementById("link").value.trim();
+
+  if (!title || !venue || !date || !time) {
+    alert("All required fields must be filled.");
+    return;
+  }
 
   const data = {
-    event_name: event_name.value,
-    venue: venue.value,
-    datetime: datetime.value
+    event_name: title,
+    venue: venue,
+    datetime: `${date} ${time}`,
+    link: link
   };
 
   await fetch(`${API}/schedule`, {
@@ -28,23 +40,35 @@ document.getElementById("scheduleForm").addEventListener("submit", async e => {
     body: JSON.stringify(data)
   });
 
-  closePopup();
+  popup.classList.add("hidden");
   loadSchedule();
-});
+};
 
 async function loadSchedule() {
   const res = await fetch(`${API}/schedule`);
   const data = await res.json();
 
-  const list = document.getElementById("scheduleList");
-  list.innerHTML = "";
+  scheduleContainer.innerHTML = "";
 
   data.forEach(s => {
-    list.innerHTML += `
-      <li>
-        ${s.event_name} - ${s.venue} - ${s.datetime}
-        <button onclick="deleteSchedule(${s.id})">X</button>
-      </li>`;
+    const card = document.createElement("div");
+    card.classList.add("schedule-card");
+
+    card.innerHTML = `
+      <div class="schedule-left">
+        <h3>${s.event_name}</h3>
+        <p><strong>Venue:</strong> ${s.venue}</p>
+        <p><strong>Date & Time:</strong> ${s.datetime}</p>
+        ${s.link ? `<p><a href="${s.link}" target="_blank">View Link</a></p>` : ""}
+      </div>
+      <button class="delete-btn">Delete</button>
+    `;
+
+    card.querySelector(".delete-btn").addEventListener("click", () => {
+      deleteSchedule(s.id);
+    });
+
+    scheduleContainer.appendChild(card);
   });
 }
 
@@ -55,6 +79,7 @@ async function deleteSchedule(id) {
       Authorization: `Bearer ${localStorage.getItem("token")}`
     }
   });
+
   loadSchedule();
 }
 
