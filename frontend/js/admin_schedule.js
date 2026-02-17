@@ -1,35 +1,97 @@
-import API from "./config";
+import API from "./config.js";
 
 const container = document.getElementById("scheduleContainer");
 const popup = document.getElementById("popup");
 const addBtn = document.getElementById("addBtn");
+const saveBtn = document.getElementById("saveBtn");
+const cancelBtn = document.getElementById("cancelBtn");
 
-const role = localStorage.getItem("role"); 
-addBtn.style.display = role === "faculty" ? "block" : "none";
-addBtn.onclick = () => popup.classList.remove("hidden");
+const role = localStorage.getItem("role");
+const token = localStorage.getItem("access_token");
 
-function closePopup() { popup.classList.add("hidden"); }
+if (role !== "faculty") {
+  addBtn.style.display = "none";
+}
+
+document.addEventListener("DOMContentLoaded", loadSchedules);
+
+addBtn.addEventListener("click", () => {
+  popup.classList.remove("hidden");
+});
+
+cancelBtn.addEventListener("click", () => {
+  popup.classList.add("hidden");
+});
+
+saveBtn.addEventListener("click", submitSchedule);
 
 async function loadSchedules() {
-  const res = await fetch(`${API}/schedules`, {
-    headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` }
-  });
-  const schedules = await res.json();
-  container.innerHTML = "";
+  try {
+    const res = await fetch(`${API}/schedules/`, {
+      headers: {
+        Authorization: `Bearer ${token}`
+      }
+    });
 
-  schedules.forEach(s => {
-    container.innerHTML += `
-      <div class="schedule-card" id="schedule-${s.id}">
-        <div>
-          <h3>${s.title}</h3>
-          <p>${s.venue}</p>
-          <p>${s.date} | ${s.time}</p>
-          ${s.link ? `<p><a href="${s.link}" target="_blank">Link</a></p>` : ""}
-        </div>
-        ${role === "faculty" ? `<button onclick="deleteSchedule(${s.id})">Delete</button>` : ""}
-      </div>
-    `;
-  });
+    if (!res.ok) throw new Error("Failed to load");
+
+    const data = await res.json();
+    const schedules = Array.isArray(data) ? data : data.data;
+
+    container.innerHTML = "";
+
+    if (!schedules || schedules.length === 0) {
+      container.innerHTML = "<p>No schedules available</p>";
+      return;
+    }
+
+    schedules.forEach(addCard);
+
+  } catch (err) {
+    console.error(err);
+    container.innerHTML = "<p>Error loading schedules</p>";
+  }
+}
+
+function addCard(schedule) {
+  const card = document.createElement("div");
+  card.className = "schedule-card";
+  card.id = `schedule-${schedule.id}`;
+
+  card.innerHTML = `
+    <div>
+      <h3>${schedule.title}</h3>
+      <p>${schedule.venue}</p>
+      <p>${schedule.date} | ${schedule.time}</p>
+      ${schedule.link ? `<p><a href="${schedule.link}" target="_blank">Link</a></p>` : ""}
+    </div>
+  `;
+
+  if (role === "faculty") {
+    const delBtn = document.createElement("button");
+    delBtn.textContent = "Delete";
+
+    delBtn.addEventListener("click", async () => {
+      if (!confirm("Delete this schedule?")) return;
+
+      const res = await fetch(`${API}/schedules/${schedule.id}/`, {
+        method: "DELETE",
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+
+      if (res.ok) {
+        card.remove();
+      } else {
+        alert("Delete failed");
+      }
+    });
+
+    card.appendChild(delBtn);
+  }
+
+  container.appendChild(card);
 }
 
 async function submitSchedule() {
@@ -37,51 +99,38 @@ async function submitSchedule() {
   const venue = document.getElementById("venue").value.trim();
   const date = document.getElementById("date").value;
   const time = document.getElementById("time").value;
-  const link = document.getElementById("link").value.trim(); 
+  const link = document.getElementById("link").value.trim();
 
   if (!title || !venue || !date || !time) {
-    alert("Fill all fields except link (optional)");
+    alert("Fill required fields");
     return;
   }
 
-  const res = await fetch(`${API}/schedules`, {
-    method: "POST",
-    headers: { 
-      "Content-Type": "application/json",
-      Authorization: `Bearer ${localStorage.getItem("access_token")}` 
-    },
-    body: JSON.stringify({ title, venue, date, time, link })
-  });
+  try {
+    const res = await fetch(`${API}/schedules/`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${token}`
+      },
+      body: JSON.stringify({ title, venue, date, time, link })
+    });
 
-  if (!res.ok) { alert("Only faculty can add"); return; }
+    if (!res.ok) {
+      alert("Only faculty allowed");
+      return;
+    }
 
-  const schedule = await res.json();
-  addCard(schedule);
-  closePopup();
-  clearForm();
-}
+    const newSchedule = await res.json();
+    addCard(newSchedule);
 
-function addCard(schedule) {
-  container.innerHTML += `
-    <div class="schedule-card" id="schedule-${schedule.id}">
-      <div>
-        <h3>${schedule.title}</h3>
-        <p>${schedule.venue}</p>
-        <p>${schedule.date} | ${schedule.time}</p>
-        ${schedule.link ? `<p><a href="${schedule.link}" target="_blank">Link</a></p>` : ""}
-      </div>
-      ${role === "faculty" ? `<button onclick="deleteSchedule(${schedule.id})">Delete</button>` : ""}
-    </div>
-  `;
-}
+    popup.classList.add("hidden");
+    clearForm();
 
-async function deleteSchedule(id) {
-  await fetch(`${API}/schedules/${id}`, {
-    method: "DELETE",
-    headers: { Authorization: `Bearer ${localStorage.getItem("access_token")}` }
-  });
-  const card = document.getElementById(`schedule-${id}`);
-  if (card) card.remove();
+  } catch (err) {
+    console.error(err);
+    alert("Error saving schedule");
+  }
 }
 
 function clearForm() {
@@ -89,7 +138,5 @@ function clearForm() {
   document.getElementById("venue").value = "";
   document.getElementById("date").value = "";
   document.getElementById("time").value = "";
-  document.getElementById("link").value = ""; 
+  document.getElementById("link").value = "";
 }
-
-loadSchedules();
