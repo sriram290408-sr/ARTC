@@ -31,9 +31,10 @@ window.submitSchedule = async function () {
       Authorization: `Bearer ${localStorage.getItem("token")}`
     },
     body: JSON.stringify({
-      event_name: title,
+      title: title,
       venue: venue,
-      datetime: `${date} ${time}`,
+      date: date,
+      time: time,
       link: link
     })
   });
@@ -54,10 +55,10 @@ async function loadSchedule() {
 
     card.innerHTML = `
       <div class="schedule-left">
-        <h3>${item.event_name}</h3>
+        <h3>${item.title}</h3>
         <p>Venue: ${item.venue}</p>
-        <p>Date & Time: ${item.datetime}</p>
-        ${item.link ? `<p><a href="${item.link}" target="_blank">View Link</a></p>` : ""}
+        <p>Date: ${item.date}</p>
+        <p>Time: ${item.time}</p>
       </div>
       <button onclick="deleteSchedule(${item.id})">Delete</button>
     `;
