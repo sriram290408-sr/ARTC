@@ -1,4 +1,4 @@
-import API from "./config.js";
+import API from "./config";
 
 const container = document.getElementById("cardContainer");
 const modal = document.getElementById("memberModal");
