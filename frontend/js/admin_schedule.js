@@ -14,16 +14,10 @@ function closePopup() {
   popup.classList.add("hidden");
 }
 
-/* -----------------------------
-   BLOCK PAST DATES IN PICKER
------------------------------ */
 
 const todayISO = new Date().toISOString().split("T")[0];
 dateInput.setAttribute("min", todayISO);
 
-/* -----------------------------
-   LOAD SCHEDULES
------------------------------ */
 
 async function loadSchedules() {
   const res = await fetch(`${API}/schedules`, {
@@ -58,9 +52,6 @@ async function loadSchedules() {
   });
 }
 
-/* -----------------------------
-   SUBMIT SCHEDULE
------------------------------ */
 
 async function submitSchedule() {
   const title = document.getElementById("title").value.trim();
@@ -104,10 +95,6 @@ async function submitSchedule() {
   clearForm();
 }
 
-/* -----------------------------
-   ADD CARD
------------------------------ */
-
 function addCard(schedule) {
   container.innerHTML += `
     <div class="schedule-card" id="schedule-${schedule.id}">
@@ -130,10 +117,6 @@ function addCard(schedule) {
   `;
 }
 
-/* -----------------------------
-   DELETE
------------------------------ */
-
 async function deleteSchedule(id) {
   await fetch(`${API}/schedules/${id}`, {
     method: "DELETE",
@@ -145,10 +128,6 @@ async function deleteSchedule(id) {
   const card = document.getElementById(`schedule-${id}`);
   if (card) card.remove();
 }
-
-/* -----------------------------
-   CLEAR FORM
------------------------------ */
 
 function clearForm() {
   document.getElementById("title").value = "";
