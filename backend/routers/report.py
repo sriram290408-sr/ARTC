@@ -46,9 +46,7 @@ def view_all_reports(db: Session = Depends(get_db)):
 @router.get("/analytics")
 def report_analytics(db: Session = Depends(get_db)):
     results = (
-        db.query(Report.status, func.count(Report.id))
-        .group_by(Report.status)
-        .all()
+        db.query(Report.status, func.count(Report.id)).group_by(Report.status).all()
     )
 
     analytics = {
@@ -56,12 +54,12 @@ def report_analytics(db: Session = Depends(get_db)):
         "under_review": 0,
         "completed": 0,
         "fake": 0,
-        "total": 0
     }
 
     for status, count in results:
-        analytics[status] = count
-        analytics["total"] += count
+        normalized = status.lower().replace(" ", "_")
+        if normalized in analytics:
+            analytics[normalized] = count
 
     return analytics
 

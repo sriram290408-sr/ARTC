@@ -1,8 +1,11 @@
-import API from "./config.js";
+// for local host
+const API = "http://127.0.0.1:8000"; 
+// for render
+// const API = "https://artc-backend.onrender.com";
+
 
 let chart;
 
-// Register DataLabels plugin
 Chart.register(ChartDataLabels);
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -21,8 +24,8 @@ async function loadData() {
       data.fake || 0,
     ];
 
-    const total = values.reduce((a, b) => a + b, 0);
-    document.getElementById("totalCount").textContent = total;
+    document.getElementById("totalCount").textContent =
+      values.reduce((a, b) => a + b, 0);
 
     drawChart(values);
   } catch (err) {
@@ -31,7 +34,9 @@ async function loadData() {
 }
 
 function drawChart(values) {
-  const ctx = document.getElementById("complaintChart").getContext("2d");
+  const ctx = document.getElementById("complaintChart");
+
+  if (!ctx) return;
 
   if (chart) {
     chart.data.datasets[0].data = values;
@@ -52,17 +57,15 @@ function drawChart(values) {
     },
     options: {
       plugins: {
-        legend: {
-          position: "bottom",
-        },
+        legend: { position: "bottom" },
         datalabels: {
           color: "#fff",
           formatter: (value, ctx) => {
             const total = ctx.chart.data.datasets[0].data.reduce(
               (a, b) => a + b,
-              0,
+              0
             );
-            if (total === 0) return "";
+            if (!total) return "";
             return ((value / total) * 100).toFixed(1) + "%";
           },
         },
