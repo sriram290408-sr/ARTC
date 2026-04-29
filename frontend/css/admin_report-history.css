@@ -54,65 +54,51 @@ body {
 
 .sort-select:focus {
   border-color: #005fcc;
-  box-shadow: 0 0 0 3px rgba(0,95,204,.15);
+  box-shadow: 0 0 0 3px rgba(0, 95, 204, .15);
   outline: none;
 }
 
-#historyContainer {
+.history-container {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(340px, 1fr));
+  grid-template-columns: 1fr 2fr 3fr;
   gap: 25px;
 }
 
-.report-card {
-  background: #fff;
-  border-radius: 15px;
-  padding: 24px 26px;
-  box-shadow: 0 8px 22px rgba(0,0,0,.06);
+.history-card {
   display: flex;
-  justify-content: space-between;
-  gap: 20px;
-  cursor: pointer;
-  transition: .3s;
-  position: relative;
+  flex-direction: column;
+  gap: 8px;
+  border: 2px solid black;
+  padding: 10px;
+  border-radius: 20px;
+  background-color: #ededed;
+  transition: .25s;
+  width: 100%;
+  box-sizing: border-box;
 }
 
-.report-card:hover {
-  transform: translateY(-6px);
-  box-shadow: 0 14px 32px rgba(0,0,0,.12);
+.history-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 8px 18px rgba(0, 0, 0, 0.25);
 }
 
-.report-card h3 {
+.history-card h3 {
   font-size: 18px;
-  font-weight: 700;
-  color: #005fcc;
-  margin-bottom: 6px;
+  color: #000000;
+  margin: 0;
 }
 
-.report-card p {
+.history-card p {
   font-size: 14px;
-  color: #555;
-  margin-bottom: 10px;
+  margin: 5px 0;
 }
 
-.report-card small {
-  font-size: 13px;
-  color: #777;
-  line-height: 1.6;
-}
-
-.report-meta {
-  text-align: right;
-  font-size: 13px;
-  color: #555;
-  min-width: 120px;
-}
-
-.report-meta b {
-  display: block;
+.status {
+  padding: 4px 10px;
+  border-radius: 8px;
   font-size: 14px;
-  color: #333;
-  margin-bottom: 4px;
+  width: fit-content;
+  margin-top: 5px;
 }
 
 .status-pending {
@@ -135,12 +121,24 @@ body {
   font-weight: 700;
 }
 
-@media (max-width:768px) {
-  .report-card {
-    flex-direction: column;
-  }
+.rev-btn {
+  color: white;
+  background-color: rgb(0, 88, 28);
+  padding: 7px 14px;
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  align-self: flex-end;
+  margin-top: auto;
+}
 
-  .report-meta {
-    text-align: left;
+.rev-btn:hover {
+  background-color: rgb(0, 110, 40);
+}
+
+@media (max-width:768px) {
+  .history-header {
+    flex-direction: column;
+    align-items: flex-start;
   }
 }

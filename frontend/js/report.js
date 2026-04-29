@@ -12,8 +12,10 @@ reportForm.addEventListener("submit", async (e) => {
   submitBtn.textContent = "Submitting...";
 
   const formData = new FormData(reportForm);
+  console.log(formData)
 
   const payload = Object.fromEntries(formData.entries());
+  console.log(payload)
 
   try {
     const res = await fetch(`${API}/reports`, {
@@ -25,7 +27,7 @@ reportForm.addEventListener("submit", async (e) => {
     if (!res.ok) throw new Error();
 
     messageBox.style.color = "green";
-    messageBox.textContent = "Complaint submitted successfully ✅";
+    messageBox.textContent = "Complaint submitted successfully";
     reportForm.reset();
 
   } catch {

@@ -1,13 +1,10 @@
 import API from "./config.js";
 
-// Get report ID from URL
 const params = new URLSearchParams(window.location.search);
 const reportId = params.get("id");
 
-// Message container
 const formMessage = document.getElementById("formMessage");
 
-// Load report details and populate form
 async function loadReport() {
   try {
     const res = await fetch(`${API}/reports/${reportId}`);
@@ -33,7 +30,6 @@ async function loadReport() {
 
 loadReport();
 
-// Handle status update
 document.getElementById("reportForm").addEventListener("submit", async (e) => {
   e.preventDefault();
 
@@ -47,7 +43,6 @@ document.getElementById("reportForm").addEventListener("submit", async (e) => {
     });
 
     if (res.ok) {
-      // ✅ Redirect to report history after successful update
       window.location.href = "./admin_report-history.html";
     } else {
       formMessage.style.color = "red";
